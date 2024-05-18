@@ -11,7 +11,7 @@
     </div>
 
     <!-- Menu -->
-    <nav class="hidden md:flex space-x-20 ">
+    <nav class="hidden md:flex space-x-20 font-medium ">
       <NuxtLink to="/o-nas" class="text-neutral-700 hover:text-gray-300">O nas</NuxtLink>
       <NuxtLink to="/treningi" class="text-neutral-700 hover:text-gray-300">Treningi</NuxtLink>
       <NuxtLink to="/zajecia-grupowe" class="text-neutral-700 hover:text-gray-300">Zajęcia Grupowe</NuxtLink>
