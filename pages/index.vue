@@ -200,7 +200,6 @@
         <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
         <img class="absolute right-40 -top-20 -z-50" src="/public/images/home-opinions/apostrof-left.svg" alt="">
         <img class="absolute left-40 top-10 -z-50" src="/public/images/home-opinions/apostrof-right.svg" alt="">
-            
         <div id="opinion-box" class="flex flex-row gap-[7%] justify-between mt-10 w-[80%] mx-auto">
             <UCard class="w-[30%] mt-12">
                 <template #header>
@@ -242,9 +241,64 @@
                 </template>
             </UCard>
         </div>
-            
-    
     </div>
+
+    <div id="history" class="relative flex flex-col justify-center align-middle gap-6 mt-6 pb-20">
+        <img class="absolute z-0 -top-28 right-32" src="/public/images/home-history/avocado.svg" alt="">
+        <img class="absolute z-0 -top-20 left-56" src="/public/images/home-history/avocado-left.svg" alt="">
+        <img class="absolute z-0 top-20 left-1/3" src="/public/images/home-history/avocado-left.svg" alt="">
+        <img class="absolute z-0 bottom-8 right-40" src="/public/images/home-history/avocado-left.svg" alt="">
+
+        <UButton label="Zmień swoje życie, zacznij od siłowni!" class="z-10 bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff] w-fit mx-auto" />
+        <h3 class="z-10 mb-3 text-4xl font-bold text-center">Historie naszych podopiecznych</h3>
+        <p class="z-10 text-center w-3/5 mx-auto">Dołącz do naszej społeczności i poczuj motywację, która pobudzi Cię do działania każdego dnia. Razem osiągniemy więcej niż kiedykolwiek moglibyśmy osiągnąć sami. </p>
+        <div class="z-10 single-story flex flex-row justify-center w-2/3 mx-auto shadow-2xl rounded-[30px] overflow-hidden">
+            <div class="col1 w-1/2 z-10">
+                <img src="/public/images/home-history/image 32.png" alt="">
+            </div>
+            <div class="col2 w-1/2 flex flex-col justify-center gap-10 pl-9 pr-20 z-10 bg-white">
+                <h5 class="font-bold text-gray-500 text-3xl z-10">--Kamil</h5>
+                <p class="leading-relaxed z-10">Nasze środowisko motywacyjne, nowoczesne sprzęty treningowe i spersonalizowane podejście sprawiły, że nasz podopieczny przekroczył swoje własne oczekiwania i osiągnął cele, o których wcześniej tylko marzył. Jego historia jest dowodem na to, że siłownia to nie tylko miejsce do pracy nad ciałem, ale także platforma do osobistego rozwoju i przekraczania własnych granic.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-white flex flex-row justify-between w-[100%] px-[10%] py-12 align-middle bg-[#001333] z-10" >
+        <img src="/public/images/logo-white.svg" alt="">
+        <div class="col1 flex flex-col justify-center">
+            <h5 class="text-2xl font-bold pb-3 ">O nas</h5>
+            <ul>
+                <li>Historia</li>
+                <li>Kompleks</li>
+                <li>Galeria</li>
+            </ul>
+        </div>
+        <div class="col2 flex flex-col justify-center">
+            <h5 class="text-2xl font-bold pb-3 ">Specyfikacja</h5>
+            <ul>
+                <li>Siłownia</li>
+                <li>Treningi</li>
+                <li>Zajęcia grupowe</li>
+            </ul>
+        </div>
+        <div class="col3  flex flex-col justify-center">
+            <h5 class="text-2xl font-bold pb-3 ">Social Media</h5>
+            <ul>
+                <li>Instagram</li>
+                <li>Facebook</li>
+                <li>Youtube</li>
+            </ul>
+        </div>
+        <div class="col4 flex flex-col justify-center">
+            <h5 class="text-2xl font-bold pb-3 ">Kontakt</h5>
+            <ul class="">
+                <li>Jabłonowa 11, Białystok</li>
+                <li>hej@pbgym.pl</li>
+                <li>tel: 123 654 879</li>
+            </ul>
+        </div>
+    </footer>
+    
 
     
 
