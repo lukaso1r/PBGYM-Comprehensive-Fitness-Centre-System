@@ -76,24 +76,24 @@
             
     </div>
 
-    <div id="list-benefits" class="flex flex-row gap-[20%] justify-center align-middle w-1/2 ml-[10%]">
-        <div class="benefit flex flex-row  justify-center items-center gap-3 ">
+    <div id="list-benefits" class="flex flex-row gap-[7%] justify-center align-middle w-1/2 ml-[10%]">
+        <div class="benefit flex flex-row  justify-center items-center gap-3">
             <div class="benefit-card">
-                <UIcon name="i-ic-outline-speed" class="bg-[#2878FF] size-9 " />
+                <UIcon name="i-ic-round-insert-chart" class="bg-[#2878FF] size-9 " />
             </div>
-            <h3 class="text-lg font-bold">Szybka obsługa</h3>
+            <h3 class="text-base font-bold w-fit">Twoje sportowe statystyki</h3>
         </div>
         <div class="benefit flex flex-row  justify-center items-center gap-3">
             <div class="benefit-card">
-                <UIcon name="i-material-symbols-swipe-up-outline-rounded" class="bg-[#2878FF] size-9 "/>
+                <UIcon name="i-ph-box-arrow-down-fill" class="bg-[#2878FF] size-9 "/>
             </div>
-            <h3 class="text-lg font-bold">Łatwe w użyciu</h3>
+            <h3 class="text-base font-bold">Wszystkie dokumenty w jednym miejscu</h3>
         </div>
         <div class="benefit flex flex-row  justify-center items-center gap-3">
             <div class="benefit-card">
-                <UIcon name="i-ph-number-circle-one-fill" class="bg-[#2878FF] size-9 " />
+                <UIcon name="i-ic-baseline-add-chart" class="bg-[#2878FF] size-9 " />
             </div>
-            <h3 class="text-lg font-bold">Jedno miejsce</h3>
+            <h3 class="text-base font-bold">Śledź swoje postępy!</h3>
         </div>
     </div>
     
@@ -128,10 +128,10 @@
             <UCard >
                 <template #header>
                   <Placeholder class="h-8" />
-                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - Normalny</h4>
                 </template>
                 <Placeholder class="h-32" />
-                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <p> <span class="text-6xl font-bold">85</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
                         <li>dostęp do klubu w godzinach otwarcia</li>
@@ -150,14 +150,14 @@
             </UCard><UCard >
                 <template #header>
                   <Placeholder class="h-8" />
-                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                  <h4 class="text-xl font-bold">Karnet 12 Miesięcy - STUDENT</h4>
                 </template>
                 <Placeholder class="h-32" />
-                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <p> <span class="text-6xl font-bold">70</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
                         <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>30 dni ważności</li>
+                        <li>365 dni ważności</li>
                         <li>panel użytkownika online</li>
                         <li>konsultacja trenerska</li>
                         <li>dostęp do zajęć</li>
@@ -172,14 +172,14 @@
             </UCard><UCard >
                 <template #header>
                   <Placeholder class="h-8" />
-                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                  <h4 class="text-xl font-bold">Karnet 12 Miesięcy - Normalny</h4>
                 </template>
                 <Placeholder class="h-32" />
-                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <p> <span class="text-6xl font-bold">75</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
                         <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>30 dni ważności</li>
+                        <li>365 dni ważności</li>
                         <li>panel użytkownika online</li>
                         <li>konsultacja trenerska</li>
                         <li>dostęp do zajęć</li>
@@ -193,8 +193,57 @@
                 </template>
             </UCard>
         </div>
-        
+    </div>
 
+    <div id="opinions" class="relative pb-32">
+        <h3 class="mb-7 text-4xl font-bold text-center">Sprawdź co o nas mówią!</h3>
+        <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
+        <img class="absolute right-40 -top-20 -z-50" src="/public/images/home-opinions/apostrof-left.svg" alt="">
+        <img class="absolute left-40 top-10 -z-50" src="/public/images/home-opinions/apostrof-right.svg" alt="">
+            
+        <div id="opinion-box" class="flex flex-row gap-[7%] justify-between mt-10 w-[80%] mx-auto">
+            <UCard class="w-[30%] mt-12">
+                <template #header>
+                <Placeholder class="h-8" />
+                <img src="/public/images/home-opinions/person1.png" alt="">
+                </template>
+            
+                <Placeholder class="h-32" />
+                <p>To miejsce zmieniło moje podejście do treningu. Wcześniej bałem się siłowni, ale tutaj czuję się komfortowo i doceniany. Trenerzy są profesjonalni i zawsze chętni do udzielenia pomocy. </p>
+                <template #footer>
+                <Placeholder class="h-8" />
+                <p>--- Jan Kowalski</p>
+                </template>
+            </UCard>
+            <UCard class="w-[30%] mb-12">
+                <template #header>
+                <Placeholder class="h-8" />
+                <img src="/public/images/home-opinions/person2.png" alt="">
+                </template>
+            
+                <Placeholder class="h-32" />
+                <p>Jestem zachwycony tą siłownią! Sprzęt jest nowoczesny, sale są czyste, a trenerzy naprawdę zaangażowani w pomoc swoim podopiecznym. </p>
+                <template #footer>
+                <Placeholder class="h-8" />
+                <p>--- Max Verstappen</p>
+                </template>
+            </UCard>
+            <UCard class="w-[30%] mt-12">
+                <template #header>
+                <Placeholder class="h-8" />
+                <img src="/public/images/home-opinions/person3.png" alt="">
+                </template>
+            
+                <Placeholder class="h-32" />
+                <p>Siłownia, która przekracza moje oczekiwania! Bardzo miło zaskoczyła mnie atmosfera - panuje tutaj przyjazna rywalizacja i wzajemne wsparcie. </p>
+                <template #footer>
+                <Placeholder class="h-8" />
+                <p>--- Magdalena Maria Monika</p>
+                </template>
+            </UCard>
+        </div>
+            
+    
     </div>
 
     
