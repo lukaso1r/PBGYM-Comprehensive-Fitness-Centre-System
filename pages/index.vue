@@ -74,8 +74,6 @@
             <img class="absolute top-0 right-0 -z-50" src="/public/images/home-community/community-bubble.svg" alt="" srcset="">
         </div>
             
-       
-
     </div>
 
     <div id="list-benefits" class="flex flex-row gap-[20%] justify-center align-middle w-1/2 ml-[10%]">
@@ -98,6 +96,110 @@
             <h3 class="text-lg font-bold">Jedno miejsce</h3>
         </div>
     </div>
+    
+
+    <div id="pricing-section" class="flex flex-col align-middle justify-center py-32 mx-[10%]  ">
+        <h3 class="mb-7 text-4xl font-bold text-center">Cennik Karnetów</h3>
+        <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
+        <div id="price-list" class="flex flex-row gap-12 my-7">
+            <UCard >
+                <template #header>
+                  <Placeholder class="h-8" />
+                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                </template>
+                <Placeholder class="h-32" />
+                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <div class="list-pass mx-auto mt-7 pl-7" >
+                    <ul class="list-disc" >
+                        <li>dostęp do klubu w godzinach otwarcia</li>
+                        <li>30 dni ważności</li>
+                        <li>panel użytkownika online</li>
+                        <li>konsultacja trenerska</li>
+                        <li>dostęp do zajęć</li>
+                        <li>udogodnienia klubowe</li>
+                    </ul>
+                </div>
+                <template #footer>
+                  <div class="flex flex-column justify-center">
+                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
+                  </div>
+                </template>
+            </UCard>
+            <UCard >
+                <template #header>
+                  <Placeholder class="h-8" />
+                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                </template>
+                <Placeholder class="h-32" />
+                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <div class="list-pass mx-auto mt-7 pl-7" >
+                    <ul class="list-disc" >
+                        <li>dostęp do klubu w godzinach otwarcia</li>
+                        <li>30 dni ważności</li>
+                        <li>panel użytkownika online</li>
+                        <li>konsultacja trenerska</li>
+                        <li>dostęp do zajęć</li>
+                        <li>udogodnienia klubowe</li>
+                    </ul>
+                </div>
+                <template #footer>
+                  <div class="flex flex-column justify-center">
+                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
+                  </div>
+                </template>
+            </UCard><UCard >
+                <template #header>
+                  <Placeholder class="h-8" />
+                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                </template>
+                <Placeholder class="h-32" />
+                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <div class="list-pass mx-auto mt-7 pl-7" >
+                    <ul class="list-disc" >
+                        <li>dostęp do klubu w godzinach otwarcia</li>
+                        <li>30 dni ważności</li>
+                        <li>panel użytkownika online</li>
+                        <li>konsultacja trenerska</li>
+                        <li>dostęp do zajęć</li>
+                        <li>udogodnienia klubowe</li>
+                    </ul>
+                </div>
+                <template #footer>
+                  <div class="flex flex-column justify-center">
+                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
+                  </div>
+                </template>
+            </UCard><UCard >
+                <template #header>
+                  <Placeholder class="h-8" />
+                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
+                </template>
+                <Placeholder class="h-32" />
+                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
+                <div class="list-pass mx-auto mt-7 pl-7" >
+                    <ul class="list-disc" >
+                        <li>dostęp do klubu w godzinach otwarcia</li>
+                        <li>30 dni ważności</li>
+                        <li>panel użytkownika online</li>
+                        <li>konsultacja trenerska</li>
+                        <li>dostęp do zajęć</li>
+                        <li>udogodnienia klubowe</li>
+                    </ul>
+                </div>
+                <template #footer>
+                  <div class="flex flex-column justify-center">
+                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
+                  </div>
+                </template>
+            </UCard>
+        </div>
+        
+
+    </div>
+
+    
+
+
 
 
 </template>
@@ -105,9 +207,9 @@
 <script setup lang="ts">
 
     const scrollDown = () =>{
-        const targetElement = document.querySelector('#promo-section'); // Zastąp 'targetElement' ID elementu, do którego chcesz przewinąć stronę
+        const targetElement = document.querySelector('#promo-section'); 
         if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' }); // Przewijaj do elementu z efektem płynnego przewijania
+            targetElement.scrollIntoView({ behavior: 'smooth' }); 
         }
     }
 
