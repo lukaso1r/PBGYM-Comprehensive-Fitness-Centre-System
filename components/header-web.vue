@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 </script>
 
 <template>
@@ -21,21 +19,28 @@
 
     <!-- Button -->
     <div>
-      <UButton class="btn-gradient text-white font-bold py-2 px-4 rounded">
+      <NuxtLink to="/login" class="btn-gradient text-white font-bold py-2 px-4 rounded">
         Zaloguj się lub załóż konto
-      </UButton>
+      </NuxtLink>
     </div>
   </header>
 </template>
 
-
 <style scoped>
-/* Additional styles if needed */
-    .btn-gradient{
-        background: linear-gradient(45deg, #2878FF, #2C65C8);
-    }
-    .btn-gradient:hover{
-        background: linear-gradient(20deg, #2C65C8, #2878FF);
-        box-shadow:0px 0px 5px -2px rgba(66, 68, 90, 1);
-    }
+.btn-gradient {
+  @apply bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+
+.btn-gradient:hover,
+.btn-gradient:focus,
+.btn-gradient:active,
+.btn-gradient:visited {
+  @apply bg-gradient-to-r from-blue-600 to-blue-800 shadow-md;
+}
+
+.btn-gradient:link,
+.btn-gradient:visited {
+  color: white; /* Ensuring text color remains white */
+  text-decoration: none; /* Removing any text decoration */
+}
 </style>

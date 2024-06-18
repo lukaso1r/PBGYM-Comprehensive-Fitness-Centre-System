@@ -15,3 +15,4 @@ module.exports = plugin(function({ addUtilities }) {
 
   addUtilities(newUtilities, ['responsive', 'hover'])
 })
+
