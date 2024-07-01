@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-
-
 const onSubmit = (event: any) => {
     console.log(event)
 }
@@ -17,27 +15,31 @@ const onSubmit = (event: any) => {
 
     <main class="flex flex-row w-[100%] float-right h-[100svh] justify-end">
         <div class="col1 flex flex-col justify-center gap-5 pr-40">
-            <h1 class="text-3xl font-bold  text-[#203983]">Dzień dobry!</h1>
-            <h5 class="font-bold text-slate-500 text-base">Wprowadź adres mailowy i hasło aby się zalogować.</h5>
+            <h1 class="text-3xl font-bold  text-[#203983]">Dołącz do nas!</h1>
+            <h5 class="font-bold text-slate-500 text-base">Załóż swoje konto, aby cieszyć się ułatwieniami naszego systemu.</h5>
 
             <UForm  class="space-y-4" @submit="onSubmit">
 
                 <UFormGroup label="Email">
-                    <UInput placeholder="you@example.com" icon="i-heroicons-envelope" />
+                    <UInput placeholder="Twój adres email" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
                 <UFormGroup label="Hasło">
                     <UInput placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
+                <UFormGroup label="Powtórz hasło">
+                    <UInput placeholder="Powtórzone hasło" icon="i-heroicons-lock-closed" />
+                </UFormGroup>
+
                 <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
-                    Zaloguj
+                    Zarejestruj
                 </UButton>
                 
             </UForm>
 
             
-            <NuxtLink to="/register" class="text-slate-500"><h6>Nie posiadasz konta? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zarejestruj się</span></h6></NuxtLink>
+            <NuxtLink to="/login" class="text-slate-500"><h6>Posiadasz konto? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zaloguj się</span></h6></NuxtLink>
 
         </div>
         <div class="col2 ">
