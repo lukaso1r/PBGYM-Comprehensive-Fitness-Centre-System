@@ -4,6 +4,7 @@
 
 const onSubmit = (event: any) => {
     console.log(event)
+    navigateTo('/twoj-profil')
 }
 
 </script>
@@ -30,7 +31,7 @@ const onSubmit = (event: any) => {
                     <UInput placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
+                <UButton @click="onSubmit" type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
                     Zaloguj
                 </UButton>
                 
