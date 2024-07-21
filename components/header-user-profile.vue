@@ -13,10 +13,6 @@
         router.push('/')
     }
 
-    const test = () =>{
-        console.log(route.path)
-    }
-
 
 </script>
 

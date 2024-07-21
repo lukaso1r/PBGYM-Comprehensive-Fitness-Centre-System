@@ -8,6 +8,7 @@ const items = [
         slot: 'checkoffer',
         color: 'orange',
         class: 'py-4 hover:bg-orange-100',
+        to: '/twoj-profil/oferta'
         
     },
     {
@@ -57,13 +58,13 @@ const instructions = [
 
     <nav class="px-6 -mt-[5%]">
         <div class="bg-white px-4 py-4 rounded-2xl flex flex-col gap-y-3 ">
-            <NuxtLink to="/twoj-profil"><img class="max-w-[80%] my-0 mx-auto " src="/images/logo-blue.svg"/></NuxtLink>
+            <NuxtLink to="/"><img class="max-w-[80%] my-0 mx-auto " src="/images/logo-blue.svg"/></NuxtLink>
             <hr/>
             <div class="navigationContainer flex flex-col gap-y-0">
                 <UButton  class="w-full py-4 " to="/twoj-profil" icon="i-ic-sharp-home" variant="ghost" color="blue">
                     Kokpit
                 </UButton>
-                <!-- TODO: change text color to -->
+                <!-- TODO: change text color to black -->
                 <UAccordion :items="items" size="sm" >
                     <template #checkoffer>
                         <div >
