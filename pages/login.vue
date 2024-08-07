@@ -1,11 +1,30 @@
 <script setup lang="ts">
 
+const email = ref('')
+const password = ref('')
 
+const store = useLoginStore();
 
-const onSubmit = (event: any) => {
-    console.log(event)
-    navigateTo('/twoj-profil')
+// const onSubmit = (event: any) => {
+//     console.log(event)
+//     navigateTo('/twoj-profil')
+// }
+
+const test = () => {
+    console.log('test')
+    console.log(store.testMethod())
 }
+
+const onSubmitLogin = () => {
+    console.log('submit')
+    store.memberToLogin = {
+        email: email.value,
+        password: password.value
+    }
+    store.login()
+    
+}
+
 
 </script>
 
@@ -16,19 +35,21 @@ const onSubmit = (event: any) => {
         <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
     </header>
 
+    <UButton @click="test">test</UButton>
+
     <main class="flex flex-row w-[100%] float-right h-[100svh] justify-end">
         <div class="col1 flex flex-col justify-center gap-5 pr-40">
             <h1 class="text-3xl font-bold  text-[#203983]">Dzień dobry!</h1>
             <h5 class="font-bold text-slate-500 text-base">Wprowadź adres mailowy i hasło aby się zalogować.</h5>
 
-            <UForm  class="space-y-4" @submit="onSubmit">
+            <UForm  class="space-y-4" @submit="onSubmitLogin">
 
                 <UFormGroup label="Email">
-                    <UInput placeholder="you@example.com" icon="i-heroicons-envelope" />
+                    <UInput v-model="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
                 <UFormGroup label="Hasło">
-                    <UInput placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
+                    <UInput v-model="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
                 <UButton @click="onSubmit" type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
