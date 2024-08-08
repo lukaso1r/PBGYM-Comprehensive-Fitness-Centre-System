@@ -1,6 +1,10 @@
 import type { MemberToRegister } from "~/types";
+import { useLoginStore } from './loginStore';
 
 export const useRegisterStore = defineStore('register', () => {
+
+    // TODO: not sure if it stays here like that
+    const loginStore = useLoginStore();
     
     const memberToRegister = useState<MemberToRegister>('memberToRegister', () => ({
         email: "",
@@ -19,15 +23,10 @@ export const useRegisterStore = defineStore('register', () => {
         }
     }));
 
+    const status = ref("idle");
+
+    // TODO: zrobić to w try catch
     const register = () => {
-        // register logic
-        console.log("register store working");
-        console.log(toRaw(memberToRegister.value));
-
-        // próba fetchowania
-        console.log("próba fetchowania");
-        console.log(toRaw(memberToRegister.value));
-
         async function registerMember() {
             const response = await fetch('https://pbgym.onrender.com/auth/registerMember', {
                 headers: {
@@ -37,11 +36,16 @@ export const useRegisterStore = defineStore('register', () => {
                 body: JSON.stringify(memberToRegister.value)
             });
             const data = response;
-            console.log(data);
+            if(data.status === 201) {
+                status.value = "success";
+            }
         }
         registerMember();
-        
-        console.log("koniec register funcition");
+        loginStore.memberToLogin = {
+            email: memberToRegister.value.email,
+            password: memberToRegister.value.password
+        };
+        loginStore.login();
         clearData();
     };
 
@@ -66,6 +70,7 @@ export const useRegisterStore = defineStore('register', () => {
 
     return {
         memberToRegister,
+        status,
         register,
         clearData
     };

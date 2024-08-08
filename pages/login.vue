@@ -2,29 +2,40 @@
 
 const email = ref('')
 const password = ref('')
-
 const store = useLoginStore();
-
-// const onSubmit = (event: any) => {
-//     console.log(event)
-//     navigateTo('/twoj-profil')
-// }
 
 const test = () => {
     console.log('test')
-    console.log(store.testMethod())
 }
+
+const toast = useToast()
 
 const onSubmitLogin = () => {
-    console.log('submit')
-    store.memberToLogin = {
-        email: email.value,
-        password: password.value
+    if (validateEmail() || validatePassword()) {
+        toast.add({ title: 'Nie podano danych logowania' })
+    }else{
+        console.log('submit')
+        store.memberToLogin = {
+            email: email.value,
+            password: password.value
+        }
+        store.login()
     }
-    store.login()
-    
 }
 
+const validateEmail = () => {
+    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(email.value)) && email.value !== '') {
+        return false
+    }
+    return true
+}
+
+const validatePassword = () => {
+    if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password.value)) && password.value !== '') {
+        return false
+    }
+    return true
+}
 
 </script>
 
@@ -35,29 +46,29 @@ const onSubmitLogin = () => {
         <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
     </header>
 
-    <UButton @click="test">test</UButton>
+    <!-- <UButton @click="test">test</UButton> -->
 
     <main class="flex flex-row w-[100%] float-right h-[100svh] justify-end">
         <div class="col1 flex flex-col justify-center gap-5 pr-40">
             <h1 class="text-3xl font-bold  text-[#203983]">Dzień dobry!</h1>
             <h5 class="font-bold text-slate-500 text-base">Wprowadź adres mailowy i hasło aby się zalogować.</h5>
 
-            <UForm  class="space-y-4" @submit="onSubmitLogin">
-
-                <UFormGroup label="Email">
-                    <UInput v-model="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
+            <!-- TODO: create more optimal validation -->
+            <UForm class="space-y-4" @submit="onSubmitLogin">
+                <UFormGroup label="Email" required :error="!validateEmail()">
+                    <p v-show="!validateEmail()" class="text-red-500 py-1 text-sm">Wprowadź prawidłowy adres email</p>
+                    <UInput v-model="email" type="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
-                <UFormGroup label="Hasło">
+                <UFormGroup label="Hasło" required :error="!validatePassword()">
+                    <p v-show="!validatePassword()" class="text-red-500 py-1 text-sm">Hasło musi mieć conajmniej 8 znaków, w tym liczbę i znak specjalny</p>
                     <UInput v-model="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton @click="onSubmit" type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
+                <UButton type="submit" :disabled="!(validatePassword() && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">
                     Zaloguj
                 </UButton>
-                
             </UForm>
-
             
             <NuxtLink to="/register" class="text-slate-500"><h6>Nie posiadasz konta? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zarejestruj się</span></h6></NuxtLink>
 

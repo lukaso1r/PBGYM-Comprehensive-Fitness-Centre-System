@@ -7,20 +7,7 @@ export const useLoginStore = defineStore('login', () => {
         password: ""
     }));
 
-    const testMethod = () => {
-        console.log("login store working");
-        console.log(toRaw(memberToLogin.value));
-    };
-
     const login = () => {
-        // login logic
-        console.log("login function working");
-        console.log(toRaw(memberToLogin.value));
-
-        // próba fetchowania
-        console.log("próba fetchowania");
-        console.log(toRaw(memberToLogin.value));
-
         async function loginMember() {
             const response = await fetch('https://pbgym.onrender.com/auth/authenticate', {
                 headers: {
@@ -29,21 +16,27 @@ export const useLoginStore = defineStore('login', () => {
                 method: 'POST',
                 body: JSON.stringify(memberToLogin.value)
             });
-            const data = response;
-            console.log(data);
+            const data = response
+            console.log(data)
+            navigateTo('/twoj-profil')
+            
         }
         loginMember();
-
-        navigateTo('/twoj-profil')
+        
         console.log("koniec login funcition");
-        // clearData();
+        clearData();
+    };
+
+    const clearData = () => {
+        memberToLogin.value = {
+            email: "",
+            password: ""
+        };
     };
 
     return {
         memberToLogin,
-        testMethod,
         login
     };
-
 
 });

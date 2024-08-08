@@ -10,6 +10,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 const store = useRegisterStore();
 
+// TODO: przerobić to na obiekt reactive
 const email = ref('')
 const password = ref('')
 const repeatPassword = ref('')
@@ -18,6 +19,7 @@ const name = ref('')
 const surname = ref('')
 
 const date = ref<Date>();
+// TODO: rozwiązać ten warning z datą idk
 const birthdate = computed(() => {
         return `${format(date.value, 'yyyy-MM-dd')}`
     })
@@ -33,12 +35,7 @@ const postalCode = ref('')
 const registerStep = ref(1)
 const flow = ref(['year', 'month', 'day']);
 const maxDate = ref(currentDate.value)
-
-
-const test = () => {
-    console.log('test')
-    console.log(birthdate.value)
-}
+const registerStatus = computed(() => store.status)
 
 const onSubmitFirstForm = () => {
     if(password.value !== repeatPassword.value){
@@ -53,7 +50,6 @@ const onSubmitFirstForm = () => {
             password: password.value
         }
     }
-    // store.register()
 }
 
 const onSubmitSecondForm = () => {
