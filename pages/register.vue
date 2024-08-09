@@ -1,9 +1,5 @@
 <script setup lang="ts">
 
-// const onSubmit = (event: any) => {
-//     console.log(event)
-// }
-
 import { format } from 'date-fns'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -36,10 +32,11 @@ const registerStep = ref(1)
 const flow = ref(['year', 'month', 'day']);
 const maxDate = ref(currentDate.value)
 const registerStatus = computed(() => store.status)
+const toast = useToast()
 
 const onSubmitFirstForm = () => {
-    if(password.value !== repeatPassword.value){
-        console.log('Hasła muszą być takie same')
+    if(validateEmail() || validatePassword() || password.value !== repeatPassword.value){
+        toast.add({ title: 'Podano niepoprawne dane' })
     }else{
         console.log('Hasła są takie same')
         registerStep.value = 2
@@ -53,23 +50,44 @@ const onSubmitFirstForm = () => {
 }
 
 const onSubmitSecondForm = () => {
-    console.log('submit')
-    store.memberToRegister = {
-        ...store.memberToRegister,
-        name: name.value,
-        surname: surname.value,
-        birthdate: birthdate.value,
-        pesel: pesel.value,
-        phoneNumber: phoneNumber.value,
-        address: {
-            city: city.value,
-            streetName: streetName.value,
-            buildingNumber: buildingNumber.value,
-            apartmentNumber: apartmentNumber.value,
-            postalCode: postalCode.value
+
+    if(validateEmail() || validatePassword() || password !== repeatPassword){
+        toast.add({ title: 'Podano niepoprawne dane' })
+    }else{
+        console.log('submit')
+        store.memberToRegister = {
+            ...store.memberToRegister,
+            name: name.value,
+            surname: surname.value,
+            birthdate: birthdate.value,
+            pesel: pesel.value,
+            phoneNumber: phoneNumber.value,
+            address: {
+                city: city.value,
+                streetName: streetName.value,
+                buildingNumber: buildingNumber.value,
+                apartmentNumber: apartmentNumber.value,
+                postalCode: postalCode.value
+            }
         }
+        store.register()
     }
-    store.register()
+
+    
+}
+
+const validateEmail = () => {
+    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(email.value)) && email.value !== '') {
+        return false
+    }
+    return true
+}
+
+const validatePassword = () => {
+    if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password.value)) && password.value !== '') {
+        return false
+    }
+    return true
 }
 
 </script>
@@ -88,21 +106,23 @@ const onSubmitSecondForm = () => {
             <h1 class="text-3xl font-bold  text-[#203983]">Dołącz do nas!</h1>
             <h5 class="font-bold text-slate-500 text-base">Załóż swoje konto, aby cieszyć się ułatwieniami naszego systemu.</h5>
 
-            <!-- TODO: validation -->
+            <!-- TODO: create more optimal validation -->
             <UForm v-if="registerStep===1" id="firstRegisterForm" class="space-y-4" :state="{}" @submit="onSubmitFirstForm">
-                <UFormGroup label="Email">
+                <UFormGroup label="Email" required :error="!validateEmail()">
+                    <p v-show="!validateEmail()" class="text-red-500 py-1 text-sm">Wprowadź prawidłowy adres email</p>
                     <UInput v-model="email" type="text" placeholder="Twój adres email" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
-                <UFormGroup label="Hasło">
+                <UFormGroup label="Hasło" required :error="!validatePassword()">
+                    <p v-show="!validatePassword()" class="text-red-500 py-1 text-sm">Hasło musi mieć conajmniej 8 znaków, w tym liczbę i znak specjalny</p>
                     <UInput v-model="password" type="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UFormGroup label="Powtórz hasło">
+                <UFormGroup label="Powtórz hasło" required :error="password!==repeatPassword">
                     <UInput v-model="repeatPassword" type="password" placeholder="Powtórzone hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B]">
+                <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B]" :disabled="password===repeatPassword && validatePassword() && !validateEmail() ">
                     Zarejestruj
                 </UButton>
             </UForm>

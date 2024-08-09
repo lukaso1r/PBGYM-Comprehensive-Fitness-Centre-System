@@ -6,12 +6,15 @@ const store = useLoginStore();
 
 const test = () => {
     console.log('test')
+    if(password.value !== ''){
+        console.log('password')
+    }
 }
 
 const toast = useToast()
 
 const onSubmitLogin = () => {
-    if (validateEmail() || validatePassword()) {
+    if (email.value === '' || password.value === '') {
         toast.add({ title: 'Nie podano danych logowania' })
     }else{
         console.log('submit')
@@ -30,13 +33,6 @@ const validateEmail = () => {
     return true
 }
 
-const validatePassword = () => {
-    if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password.value)) && password.value !== '') {
-        return false
-    }
-    return true
-}
-
 </script>
 
 <template>
@@ -46,7 +42,7 @@ const validatePassword = () => {
         <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
     </header>
 
-    <!-- <UButton @click="test">test</UButton> -->
+    <UButton @click="test">test</UButton>
 
     <main class="flex flex-row w-[100%] float-right h-[100svh] justify-end">
         <div class="col1 flex flex-col justify-center gap-5 pr-40">
@@ -60,12 +56,11 @@ const validatePassword = () => {
                     <UInput v-model="email" type="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
-                <UFormGroup label="Hasło" required :error="!validatePassword()">
-                    <p v-show="!validatePassword()" class="text-red-500 py-1 text-sm">Hasło musi mieć conajmniej 8 znaków, w tym liczbę i znak specjalny</p>
+                <UFormGroup label="Hasło" required>
                     <UInput v-model="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton type="submit" :disabled="!(validatePassword() && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">
+                <UButton type="submit" :disabled="!(password!='' && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">
                     Zaloguj
                 </UButton>
             </UForm>

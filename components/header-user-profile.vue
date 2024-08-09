@@ -2,17 +2,17 @@
 
     const router = useRouter()
     const route = useRoute()
+    
+    const store = useLoginStore();
 
     onBeforeMount(() => {
         console.log(route.path)
     })
 
-    const logout = () => {
+    const logoutt = () => {
         console.log('logout')
-        //dummy logout
-        router.push('/')
+        store.logOut()
     }
-
 
 </script>
 
@@ -29,14 +29,13 @@
         <div class="col2">
             <UButton
                 class="bg-[#203983] hover:bg-[#617F9B]"
-                @click="logout"
+                @click="logoutt"
                 icon="i-ic-baseline-logout"
             >
                 Wyloguj
             </UButton>
         </div>
     </header>
-   
 
 </template>
 

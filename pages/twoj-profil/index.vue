@@ -3,10 +3,20 @@
 const selectedTrue = ref(false)
 const selected = ref(true)
 
+const store = useLoginStore();
+
+const test = () => {
+    console.log('test')
+    console.log(toRaw(store.loggedUserData))
+}
+
 </script>
 
 <template>
+    <UButton @click="test">test</UButton>
+    
     <header-user-profile></header-user-profile>
+
     <div class="flex bg-[#F5F7F8]">
         <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
         <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap content-start justify-start gap-8 pb-10">
