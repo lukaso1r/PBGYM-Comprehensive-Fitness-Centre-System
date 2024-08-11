@@ -1,19 +1,23 @@
 <script setup lang="ts">
+import { useLocalStorage } from '@vueuse/core';
+
 
 const selectedTrue = ref(false)
 const selected = ref(true)
-
 const store = useLoginStore();
+const testo = useCookie('defaultLoginData')
 
 const test = () => {
     console.log('test')
-    console.log(toRaw(store.loggedUserData))
+    console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
+    console.log("toRaw(store.defaultLoginData))", toRaw(store.defaultLoginData))
 }
 
 </script>
 
 <template>
     <UButton @click="test">test</UButton>
+    <UButton @click="store.defaultLoginData.jwt='XDdddddddddddddd'">testo = XD</UButton>
     
     <header-user-profile></header-user-profile>
 

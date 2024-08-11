@@ -15,7 +15,30 @@ export interface MemberToRegister {
     };
 }
 
-export interface MemberToLogin {
+export interface UserToLoginCredentials {
     email: string;
     password: string;
+}
+
+export interface LoggedMemberData {
+    id: number,
+    email: string,
+    name: string,
+    surname: string,
+    birthdate: string,
+    pesel: string,
+    phoneNumber: number,
+    address: {
+        id: number,
+        city: string,
+        streetName: string,
+        buildingNumber: string,
+        apartmentNumber: number,
+        postalCode: string
+    }
+}
+
+export interface DefaultLoginData {
+    jwt: string,
+    userType: string
 }

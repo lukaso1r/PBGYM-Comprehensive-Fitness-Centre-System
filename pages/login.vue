@@ -1,33 +1,28 @@
 <script setup lang="ts">
+import type {UserToLoginCredentials} from '~/types'
 
-const email = ref('')
-const password = ref('')
 const store = useLoginStore();
+const loginState = useState<UserToLoginCredentials>(() => ({email: "test1@member.com", password: "12345678"}))
+const toast = useToast()
 
 const test = () => {
     console.log('test')
-    if(password.value !== ''){
-        console.log('password')
-    }
 }
 
-const toast = useToast()
-
 const onSubmitLogin = () => {
-    if (email.value === '' || password.value === '') {
+    if (loginState.value.email === '' || loginState.value.password === '') {
         toast.add({ title: 'Nie podano danych logowania' })
     }else{
         console.log('submit')
-        store.memberToLogin = {
-            email: email.value,
-            password: password.value
+        store.userToLoginCredentials = {
+            ...loginState.value
         }
         store.login()
     }
 }
 
 const validateEmail = () => {
-    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(email.value)) && email.value !== '') {
+    if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(loginState.value.email)) && loginState.value.email !== '') {
         return false
     }
     return true
@@ -50,17 +45,17 @@ const validateEmail = () => {
             <h5 class="font-bold text-slate-500 text-base">Wprowadź adres mailowy i hasło aby się zalogować.</h5>
 
             <!-- TODO: create more optimal validation -->
-            <UForm class="space-y-4" @submit="onSubmitLogin">
+            <UForm class="space-y-4" :state="loginState" @submit="onSubmitLogin">
                 <UFormGroup label="Email" required :error="!validateEmail()">
                     <p v-show="!validateEmail()" class="text-red-500 py-1 text-sm">Wprowadź prawidłowy adres email</p>
-                    <UInput v-model="email" type="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
+                    <UInput v-model="loginState.email" type="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
                 <UFormGroup label="Hasło" required>
-                    <UInput v-model="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
+                    <UInput v-model="loginState.password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton type="submit" :disabled="!(password!='' && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">
+                <UButton type="submit" :disabled="!(loginState.password!='' && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">
                     Zaloguj
                 </UButton>
             </UForm>

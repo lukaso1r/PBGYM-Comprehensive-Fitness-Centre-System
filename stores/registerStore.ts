@@ -41,7 +41,7 @@ export const useRegisterStore = defineStore('register', () => {
             }
         }
         registerMember();
-        loginStore.memberToLogin = {
+        loginStore.userToLoginCredentials = {
             email: memberToRegister.value.email,
             password: memberToRegister.value.password
         };

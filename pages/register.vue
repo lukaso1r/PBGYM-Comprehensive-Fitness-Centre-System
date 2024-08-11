@@ -37,6 +37,7 @@ const toast = useToast()
 const onSubmitFirstForm = () => {
     if(validateEmail() || validatePassword() || password.value !== repeatPassword.value){
         toast.add({ title: 'Podano niepoprawne dane' })
+        alert('Podano niepoprawne dane')
     }else{
         console.log('Hasła są takie same')
         registerStep.value = 2
@@ -50,9 +51,9 @@ const onSubmitFirstForm = () => {
 }
 
 const onSubmitSecondForm = () => {
-
-    if(validateEmail() || validatePassword() || password !== repeatPassword){
+    if(!validateEmail() || !validatePassword() || password !== repeatPassword){
         toast.add({ title: 'Podano niepoprawne dane' })
+        alert('Podano niepoprawne dane')
     }else{
         console.log('submit')
         store.memberToRegister = {
@@ -72,21 +73,23 @@ const onSubmitSecondForm = () => {
         }
         store.register()
     }
-
-    
 }
 
 const validateEmail = () => {
     if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(email.value)) && email.value !== '') {
-        return false
+        console.log('email dobry')
+        return true
     }
-    return true
+    console.log('email zły')
+    return false
 }
 
 const validatePassword = () => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password.value)) && password.value !== '') {
+        console.log('hasło dobry')
         return false
     }
+    console.log('hasło zły')
     return true
 }
 
@@ -189,9 +192,7 @@ const validatePassword = () => {
                 <UButton @click="registerStep=1" class="bg-[#203983] hover:bg-[#617F9B]">
                     Wróć do poprzedniego kroku
                 </UButton>
-                
             </UForm>
-
             
             <NuxtLink to="/login" class="text-slate-500"><h6>Posiadasz konto? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zaloguj się</span></h6></NuxtLink>
 
