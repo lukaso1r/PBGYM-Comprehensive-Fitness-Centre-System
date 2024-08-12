@@ -61,19 +61,15 @@ const onSubmitSecondForm = () => {
 
 const validateEmail = (): boolean => {
     if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,8}$/.test(memberToRegisterData.value.email)) && memberToRegisterData.value.email !== '') {
-        // console.log('email zły', memberToRegisterData.value.email)
         return false
     }
-    // console.log('email dobry', memberToRegisterData.value.email)
     return true
 }
 
 const validatePassword = () => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(memberToRegisterData.value.password)) && memberToRegisterData.value.password !== '') {
-        // console.log('hasło zły', memberToRegisterData.value.password)
         return false
     }
-    // console.log('hasło dobry', memberToRegisterData.value.password)
     return true
 }
 

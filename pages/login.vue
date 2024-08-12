@@ -37,8 +37,6 @@ const validateEmail = () => {
         <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
     </header>
 
-    <UButton @click="test">test</UButton>
-
     <main class="flex flex-row w-[100%] float-right h-[100svh] justify-end">
         <div class="col1 flex flex-col justify-center gap-5 pr-40">
             <h1 class="text-3xl font-bold  text-[#203983]">Dzień dobry!</h1>

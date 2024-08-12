@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core';
+import type { DefaultLoginData, LoggedMemberData  } from "~/types";
 
+const store = useLoginStore();
+
+const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
+const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
 
 const selectedTrue = ref(false)
 const selected = ref(true)
-const store = useLoginStore();
-const testo = useCookie('defaultLoginData')
 
 const test = () => {
     console.log('test')
-    console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
-    console.log("toRaw(store.defaultLoginData))", toRaw(store.defaultLoginData))
+    console.log("useCookie('loggedMemberData')", toRaw(useCookie('loggedMemberData').value))
 }
 
 </script>
 
 <template>
-    <UButton @click="test">test</UButton>
-    <UButton @click="store.defaultLoginData.jwt='XDdddddddddddddd'">testo = XD</UButton>
-    
+    <UButton @click="test" label="test" />
+
     <header-user-profile></header-user-profile>
 
     <div class="flex bg-[#F5F7F8]">
@@ -31,7 +32,7 @@ const test = () => {
                 <div class="row flex place-content-between">
                     <div class="owner flex flex-col gap-2">
                         <span class="text-slate-200 font-medium" style="text-shadow: 1px 1px 1px black;">Właściciel karty</span>
-                        <span class="text-slate-50 font-semibold" style="text-shadow: 1px 1px 4px black;">Komar Jakubowski</span>
+                        <span class="text-slate-50 font-semibold" style="text-shadow: 1px 1px 4px black;">{{ loggedMemberData?.name + " " + loggedMemberData?.surname}}</span>
                     </div>
                     <div class="expire flex flex-col gap-2">
                         <span class="text-slate-200 font-medium" style="text-shadow: 1px 1px 1px black;">Ważność</span>
@@ -59,7 +60,7 @@ const test = () => {
             </div>
 
             <div class="payment-methods flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Metody płatności</span>
+                <span class="font-semibold text-lg">Metody płatności ***TODO***</span>
                 <div class="methods-container flex flex-row flex-wrap w-full">
                     <ul class="flex flex-row flex-nowrap place-items-center gap-2 justify-between w-full">
                         <li class="flex flex-row flex-nowrap place-items-center gap-5 border-solid border-2 border-gray-400 py-1 px-3 rounded-xl" >
@@ -89,7 +90,7 @@ const test = () => {
             </div>
 
             <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Dokumenty</span>
+                <span class="font-semibold text-lg">Dokumenty ***TODO***</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <li class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
@@ -108,13 +109,11 @@ const test = () => {
                 </ul>
             </div>
 
-           
-
             <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Informacje</span>
+                <span class="font-semibold text-lg">Informacje ***TODO***</span>
                 <div class="information-container w-full bg-slate-50 py-3 px-5 flex flex-col rounded-xl">
                     <div class="inf-row-title flex flex-row justify-between items-center">
-                        <span class="font-medium ">Łukasz Kaliszewicz</span>
+                        <span class="font-medium ">{{ loggedMemberData?.name + " " + loggedMemberData?.surname}}</span>
                         <UButton
                             icon="i-ic-baseline-create"
                             size="sm"
@@ -127,39 +126,34 @@ const test = () => {
                     <div class="inf-row-info">
                         <ul class="flex flex-col gap-1 py-3">
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Główna siłownia:</span> PBGYM Białystok
+                                <span class="font-medium text-gray-500 pr-3">Adres Email:</span> {{loggedMemberData?.email}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Adres Email:</span> luk.kaliszewicz011109@gmail.com
+                                <span class="font-medium text-gray-500 pr-3">Miasto:</span> {{loggedMemberData?.address.city}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Miasto:</span> Białystok
+                                <span class="font-medium text-gray-500 pr-3">Ulica:</span> {{loggedMemberData?.address.streetName}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Ulica:</span> Lipowa
+                                <span class="font-medium text-gray-500 pr-3">Numer budynku:</span> {{loggedMemberData?.address.buildingNumber}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Numer budynku:</span> 11
+                                <span class="font-medium text-gray-500 pr-3">Numer mieszkania:</span> {{loggedMemberData?.address.apartmentNumber}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Numer mieszkania:</span> 123
+                                <span class="font-medium text-gray-500 pr-3"> Kod pocztowy:</span> {{loggedMemberData?.address.postalCode}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3"> Kod pocztowy:</span> 11-102
+                                <span class="font-medium text-gray-500 pr-3">Rok urodzenia:</span> {{ loggedMemberData?.birthdate }} 
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Rok urodzenia:</span> 11.09.2001
+                                <span class="font-medium text-gray-500 pr-3"> Pesel:</span> {{loggedMemberData?.pesel}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3"> Pesel:</span> 11002200334
+                                <span class="font-medium text-gray-500 pr-3">Typ konta:</span> {{ defaultLoginData?.userType==='Member' ? "Członek" : "Trener" }}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Status studenta:</span> TAK
-                            </li>
-                            <li>
-                                <span class="font-medium text-gray-500 pr-3">Typ konta:</span> klient
-                            </li>
-                            <li>
+                                <!-- TODO: add endpoint for getting active pass -->
                                 <span class="font-medium text-gray-500 pr-3">Aktywny karnet:</span> karnet OPEN 12 msc - STUDENT
                             </li>
                         </ul>
@@ -170,13 +164,13 @@ const test = () => {
 
             <div class="flex flex-col flex-nowrap place-items-start justify-start w-[47%] gap-8">
                 <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[100%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą wykresy</span>
+                    <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
                     <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
                     <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
                 </div>
 
                 <div class="settings flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[100%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">A tu ustawienia</span>
+                    <span class="font-semibold text-lg">A tu ustawienia ***TODO***</span>
                     <div class="flex flex-col">
                         <span class="font-semibold text-sm text-slate-600">Konto</span>
                         <div class="flex flex-row items-center gap-4 p-3">
@@ -197,7 +191,6 @@ const test = () => {
                     </div>
                 </div>
             </div>
-                
             
         </main>
     </div>
