@@ -1,4 +1,4 @@
-import type { MemberToRegister } from "~/types";
+import type { MemberToRegisterData } from "~/types";
 import { useLoginStore } from './loginStore';
 
 export const useRegisterStore = defineStore('register', () => {
@@ -6,7 +6,7 @@ export const useRegisterStore = defineStore('register', () => {
     // TODO: not sure if it stays here like that
     const loginStore = useLoginStore();
     
-    const memberToRegister = useState<MemberToRegister>('memberToRegister', () => ({
+    const memberToRegister = useState<MemberToRegisterData>('memberToRegister', () => ({
         email: "",
         password: "",
         name: "",
@@ -18,7 +18,7 @@ export const useRegisterStore = defineStore('register', () => {
             city: "",
             streetName: "",
             buildingNumber: "",
-            apartmentNumber: "",
+            apartmentNumber: 0,
             postalCode: ""
         }
     }));
@@ -26,7 +26,7 @@ export const useRegisterStore = defineStore('register', () => {
     const status = ref("idle");
 
     // TODO: zrobić to w try catch
-    const register = () => {
+    const register = async () => {
         async function registerMember() {
             const response = await fetch('https://pbgym.onrender.com/auth/registerMember', {
                 headers: {
@@ -38,9 +38,10 @@ export const useRegisterStore = defineStore('register', () => {
             const data = response;
             if(data.status === 201) {
                 status.value = "success";
+                console.log("Z register store register(): status", status.value)
             }
         }
-        registerMember();
+        await registerMember();
         loginStore.userToLoginCredentials = {
             email: memberToRegister.value.email,
             password: memberToRegister.value.password
@@ -62,7 +63,7 @@ export const useRegisterStore = defineStore('register', () => {
                 city: "",
                 streetName: "",
                 buildingNumber: "",
-                apartmentNumber: "",
+                apartmentNumber: 0,
                 postalCode: ""
             }
         };

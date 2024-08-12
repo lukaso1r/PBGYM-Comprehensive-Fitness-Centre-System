@@ -1,4 +1,4 @@
-export interface MemberToRegister {    
+export interface MemberToRegisterData {    
     email: string;
     password: string;
     name: string;
@@ -10,7 +10,7 @@ export interface MemberToRegister {
         city: string;
         streetName: string;
         buildingNumber: string;
-        apartmentNumber: string;
+        apartmentNumber: number;
         postalCode: string;
     };
 }
@@ -42,3 +42,4 @@ export interface DefaultLoginData {
     jwt: string,
     userType: string
 }
+
