@@ -27,7 +27,7 @@ export interface LoggedMemberData {
     surname: string,
     birthdate: string,
     pesel: string,
-    phoneNumber: number,
+    phoneNumber: string,
     address: {
         id: number,
         city: string,
@@ -46,5 +46,20 @@ export interface DefaultLoginData {
 export interface ChangePasswordData {
     oldPassword: string,
     newPassword: string
+}
+
+export interface ChangeEmailData {
+    newEmail: string
+}
+
+export interface ChangeMemberDetailsData {
+    phoneNumber: string,
+    address: {
+        city: string,
+        streetName: string,
+        buildingNumber: string,
+        apartmentNumber: number,
+        postalCode: string
+    }
 }
 

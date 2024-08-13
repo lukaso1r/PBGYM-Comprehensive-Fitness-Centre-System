@@ -4,7 +4,7 @@ export const useChangePasswordStore = defineStore('changePasswordStore', () => {
 
     const changePasswordData = useState<ChangePasswordData>(() => ({oldPassword: '', newPassword: ''}))
 
-    const changePassword = () => {
+    const changePassword = async () => {
         async function changePasswordApiCall() {
             try {
                 console.log("Z trycatcha", useCookie<DefaultLoginData>('defaultLoginData').value.jwt, useCookie<LoggedMemberData>('loggedMemberData').value.email, JSON.stringify(changePasswordData.value)  )
@@ -23,7 +23,7 @@ export const useChangePasswordStore = defineStore('changePasswordStore', () => {
                 alert('Błąd zmiany hasła');
             }
         };
-        changePasswordApiCall();
+        await changePasswordApiCall();
     }
 
     return {
