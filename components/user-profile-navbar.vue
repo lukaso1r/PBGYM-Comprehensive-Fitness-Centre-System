@@ -8,7 +8,7 @@ const items = [
         slot: 'checkoffer',
         color: 'orange',
         class: 'py-4 hover:bg-orange-100',
-        to: '/twoj-profil/oferta'
+        to: '/twoj-profil/oferty'
         
     },
     {

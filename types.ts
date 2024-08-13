@@ -63,3 +63,16 @@ export interface ChangeMemberDetailsData {
     }
 }
 
+export interface Offer {
+    id: 0,
+    title: "string",
+    subtitle: "string",
+    monthlyPrice: 0,
+    entryFee: 0,
+    durationInMonths: 0,
+    properties: [
+      "string"
+    ],
+    active: true,
+    type: "string"
+}
