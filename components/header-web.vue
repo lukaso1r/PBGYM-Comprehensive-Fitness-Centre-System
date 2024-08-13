@@ -1,8 +1,22 @@
 <script setup lang="ts">
+
+import type { DefaultLoginData } from "~/types";
+
+const jwt: string = useCookie<DefaultLoginData>('defaultLoginData').value.jwt
+
+const test = () => {
+  console.log('test')
+  console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
+  console.log("JWT", jwt)
+}
+
 </script>
 
 <template>
+
   <header class="flex items-center justify-between px-16 py-4 bg-transparent text-neutral-700 absolute top-0 w-full z-99">
+    
+    <UButton @click="test">test</UButton>
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <img src="/images/header/logo.svg" alt="Logo" class="w-40" />
@@ -19,11 +33,13 @@
 
     <!-- Button -->
     <div>
-      <NuxtLink to="/login" class="btn-gradient text-white font-bold py-2 px-4 rounded">
-        Zaloguj się lub załóż konto
+      <NuxtLink :to="jwt ? '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
+        {{jwt ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
       </NuxtLink>
     </div>
   </header>
+  
+  
 </template>
 
 <style scoped>

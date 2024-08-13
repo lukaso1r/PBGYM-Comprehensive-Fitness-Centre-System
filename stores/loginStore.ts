@@ -7,8 +7,15 @@ export const useLoginStore = defineStore('login', () => {
         password: ""
     }));
 
-    const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
-    const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
+    const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData', {
+        maxAge: weekInMilliseconds.value,
+        expires: nextWeekDate.value 
+    });
+      
+    const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData', {
+        maxAge: weekInMilliseconds.value,
+        expires: nextWeekDate.value 
+    });
     
     const login = () => {
         async function loginUser() {
@@ -89,10 +96,8 @@ export const useLoginStore = defineStore('login', () => {
     }
 
     const logOut = () => {
-        defaultLoginData.value = {
-            jwt: "",
-            userType: ""
-        };
+        defaultLoginData.value = {} as DefaultLoginData
+        loggedMemberData.value = {} as LoggedMemberData
         navigateTo('/');
     };
 

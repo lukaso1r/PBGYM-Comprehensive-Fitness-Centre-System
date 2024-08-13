@@ -49,7 +49,7 @@ const instructions = [
         content: 'Lorem ipsum dolor sit amet',
         class: 'py-4 hover:bg-purple-100 '
         
-    }
+    },
 ]
 
 </script>

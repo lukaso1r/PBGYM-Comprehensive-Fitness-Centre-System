@@ -13,12 +13,14 @@ const selected = ref(true)
 const test = () => {
     console.log('test')
     console.log("useCookie('loggedMemberData')", toRaw(useCookie('loggedMemberData').value))
+    console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
 }
 
 </script>
 
 <template>
     <UButton @click="test" label="test" />
+    <UButton @click="() => navigateTo('/twoj-profil/change-password')" label="Zmień hasło" />
 
     <header-user-profile></header-user-profile>
 
@@ -129,19 +131,19 @@ const test = () => {
                                 <span class="font-medium text-gray-500 pr-3">Adres Email:</span> {{loggedMemberData?.email}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Miasto:</span> {{loggedMemberData?.address.city}}
+                                <span class="font-medium text-gray-500 pr-3">Miasto:</span> {{loggedMemberData?.address?.city}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Ulica:</span> {{loggedMemberData?.address.streetName}}
+                                <span class="font-medium text-gray-500 pr-3">Ulica:</span> {{loggedMemberData?.address?.streetName}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Numer budynku:</span> {{loggedMemberData?.address.buildingNumber}}
+                                <span class="font-medium text-gray-500 pr-3">Numer budynku:</span> {{loggedMemberData?.address?.buildingNumber}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3">Numer mieszkania:</span> {{loggedMemberData?.address.apartmentNumber}}
+                                <span class="font-medium text-gray-500 pr-3">Numer mieszkania:</span> {{loggedMemberData?.address?.apartmentNumber}}
                             </li>
                             <li>
-                                <span class="font-medium text-gray-500 pr-3"> Kod pocztowy:</span> {{loggedMemberData?.address.postalCode}}
+                                <span class="font-medium text-gray-500 pr-3"> Kod pocztowy:</span> {{loggedMemberData?.address?.postalCode}}
                             </li>
                             <li>
                                 <span class="font-medium text-gray-500 pr-3">Rok urodzenia:</span> {{ loggedMemberData?.birthdate }} 

@@ -29,11 +29,20 @@
         <div class="col2">
             <UButton
                 class="bg-[#203983] hover:bg-[#617F9B]"
+                to="/twoj-profil/ustawienia-konta"
+                icon="i-ic-baseline-settings"
+            >
+                Ustawienia konta
+            </UButton>
+
+            <UButton
+                class="bg-[#203983] hover:bg-[#617F9B]"
                 @click="logoutt"
                 icon="i-ic-baseline-logout"
             >
                 Wyloguj
             </UButton>
+            
         </div>
     </header>
 
