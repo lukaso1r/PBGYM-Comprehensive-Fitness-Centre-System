@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@iconify-json/ic": "^1.1.17",
+    "@iconify-json/icon-park": "^1.1.14",
     "@iconify-json/material-symbols": "^1.1.80",
     "@iconify-json/ph": "^1.1.13",
     "@iconify-json/twemoji": "^1.1.15",
@@ -24,6 +25,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@iconify-json/icon-park-outline": "^1.1.16",
     "@vueuse/core": "^10.11.1",
     "@vueuse/nuxt": "^10.11.1"
   }

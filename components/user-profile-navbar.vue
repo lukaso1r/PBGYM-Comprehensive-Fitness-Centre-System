@@ -63,7 +63,7 @@ const instructions = [
                     Kokpit
                 </UButton>
                 <!-- TODO: change text color to black -->
-                <UAccordion :items="items" size="sm">
+                <UAccordion :items="items" size="sm" >
                     <template #checkoffer >
                         <NuxtLink to="/twoj-profil/oferty" >
                             <p class="hover:text-blue-500 hover:text-base transit pl-9">Sprawdź ofertę!</p>

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   },
   css: ['@/assets/css/main.css'],
   ui: {
-    icons: ['material-symbols', 'ic', 'ph', 'twemoji']
+    icons: ['material-symbols', 'ic', 'ph', 'twemoji', 'icon-park', 'icon-park-outline']
   },
   postcss: {
     plugins: {
