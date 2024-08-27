@@ -7,9 +7,7 @@ const items = [
         defaultOpen: false,
         slot: 'checkoffer',
         color: 'orange',
-        class: 'py-4 hover:bg-orange-100',
-        to: '/twoj-profil/oferty'
-        
+        class: 'py-4 hover:bg-orange-100'        
     },
     {
         label: 'Zajęcia',
@@ -65,11 +63,11 @@ const instructions = [
                     Kokpit
                 </UButton>
                 <!-- TODO: change text color to black -->
-                <UAccordion :items="items" size="sm" >
-                    <template #checkoffer>
-                        <div >
-                            <p>Sprawdź ofertę!</p>
-                        </div>
+                <UAccordion :items="items" size="sm">
+                    <template #checkoffer >
+                        <NuxtLink to="/twoj-profil/oferty" >
+                            <p class="hover:text-blue-500 hover:text-base transit pl-9">Sprawdź ofertę!</p>
+                        </NuxtLink>
                     </template>
                 </UAccordion>  
                 <hr/>

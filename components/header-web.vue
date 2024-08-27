@@ -16,7 +16,7 @@ const test = () => {
 
   <header class="flex items-center justify-between px-16 py-4 bg-transparent text-neutral-700 absolute top-0 w-full z-99">
     
-    <UButton @click="test">test</UButton>
+    <!-- <UButton @click="test">test</UButton> -->
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <img src="/images/header/logo.svg" alt="Logo" class="w-40" />

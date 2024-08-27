@@ -19,14 +19,14 @@ const test = () => {
 </script>
 
 <template>
-    <UButton @click="test" label="test" />
-    <UButton @click="() => navigateTo('/twoj-profil/change-password')" label="Zmień hasło" />
+    <!-- <UButton @click="test" label="test" />
+    <UButton @click="() => navigateTo('/twoj-profil/change-password')" label="Zmień hasło" /> -->
 
     <header-user-profile></header-user-profile>
 
     <div class="flex bg-[#F5F7F8]">
         <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
-        <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap content-start justify-start gap-8 pb-10">
+        <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap justify-start gap-8 pb-10">
             <!-- TODO: fix shadow and hand written css to tailwind -->
             <div class="credit-card bg-[url('/images/twoj-profil/trump.jpg')] w-[35%] p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>

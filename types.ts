@@ -64,15 +64,39 @@ export interface ChangeMemberDetailsData {
 }
 
 export interface Offer {
-    id: 0,
-    title: "string",
-    subtitle: "string",
-    monthlyPrice: 0,
-    entryFee: 0,
-    durationInMonths: 0,
+    id: number,
+    title: string,
+    subtitle: string,
+    monthlyPrice: number,
+    entryFee: number,
+    durationInMonths: number,
     properties: [
-      "string"
+      string
     ],
-    active: true,
-    type: "string"
+    active: boolean,
+    type: string
 }
+
+export interface LoggedWorkerData {
+    id: number,
+    email: string,
+    name: string,
+    surname: string,
+    birthdate: string,
+    pesel: string,
+    phoneNumber: string,
+    address: {
+        id: number,
+        city: string,
+        streetName: string,
+        buildingNumber: string,
+        apartmentNumber: string,
+        postalCode: string
+    },
+    idCardNumber: string,
+    position: string,
+    permissions: [
+       string
+    ]
+}
+

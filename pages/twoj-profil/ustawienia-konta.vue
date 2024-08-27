@@ -79,11 +79,11 @@ const test = () => {
 
 <template>
 
-<UButton @click="test">test</UButton>
+<!-- <UButton @click="test">test</UButton> -->
 <header-user-profile />
 <div class="flex bg-[#F5F7F8]">
     <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
-    <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap content-start justify-start gap-8 pb-10">
+    <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap items-start content-start justify-start gap-8 pb-10">
         <div class="changePasswordContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4">
             <span class="font-semibold text-lg">Zmiana hasła</span>
             <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić swoje hasło</h3>

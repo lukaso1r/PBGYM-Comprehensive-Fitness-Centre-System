@@ -1,4 +1,4 @@
-import type { UserToLoginCredentials, DefaultLoginData, LoggedMemberData  } from "~/types";
+import type { UserToLoginCredentials, DefaultLoginData, LoggedMemberData, LoggedWorkerData  } from "~/types";
 
 export const useLoginStore = defineStore('login', () => {
 
@@ -13,6 +13,11 @@ export const useLoginStore = defineStore('login', () => {
     });
       
     const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData', {
+        maxAge: weekInMilliseconds.value,
+        expires: nextWeekDate.value 
+    });
+
+    const loggedWorkerData = useCookie<LoggedWorkerData>('loggedWorkerData', {
         maxAge: weekInMilliseconds.value,
         expires: nextWeekDate.value 
     });
@@ -68,16 +73,34 @@ export const useLoginStore = defineStore('login', () => {
                         }
                         break;
                     }
-                    case 'Trainer':
+                    case 'Trainer': {
                         // TODO: fetch trainer data
                         console.log('/trener-panel');
                         navigateTo('/trener-panel');
                         break;
-                    case 'Admin':
-                        // TODO: fetch admin data
-                        console.log('/admin-panel');
-                        navigateTo('/admin-panel');
+                    }
+                    case 'Worker': {
+                        console.log('Worker or Admin');
+                        const { data, error } = await useFetch<LoggedWorkerData>(`https://pbgym.onrender.com/workers/${userToLoginCredentials.value.email}`, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${defaultLoginData.value.jwt}`
+                            },
+                            method: 'GET'
+                        });
+                        if (error.value) {
+                            console.error('Error:', error.value);
+                            alert('Błąd pobierania danych workera lub admina');
+                        } else if (data.value) {
+                            loggedWorkerData.value = data.value;
+                            console.log('Dane z serwera loggedWorkerData:', toRaw(loggedWorkerData.value));
+                            navigateTo('/admin-panel');
+                        } else {
+                            console.error('Brak danych w odpowiedzi');
+                            alert('Brak danych w odpowiedzi');
+                        }
                         break;
+                    }
                     default:
                         console.log('Błąd');
                         alert('Błąd logowania');
@@ -112,6 +135,7 @@ export const useLoginStore = defineStore('login', () => {
         userToLoginCredentials,
         defaultLoginData,
         loggedMemberData,
+        loggedWorkerData,
         login,
         logOut
     };

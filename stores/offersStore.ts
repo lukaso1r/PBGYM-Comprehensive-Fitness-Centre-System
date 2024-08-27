@@ -1,31 +1,36 @@
-import type {Offer} from "~/types";
+import type { Offer } from "~/types";
 
 export const useOffersStore = defineStore('offersStore', () => {
+    const offers = useState<Offer[]>(() => ([]));
 
-    const offers = useState<Offer[]>(() => ([]))
-    
     const getOffers = async () => {
-        // TODO: rozwalone jest idk czemu @komarewski haaloooooooooooooooooooooooooooooo
-        async function getOffersApiCall() {
-            try {
-                const data = await useFetch('https://pbgym.onrender.com/offers/public/active', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                console.log('Dane z serwera:', data);
+        try {
+            const { data, error } = await useFetch<Offer[]>('https://pbgym.onrender.com/offers/public/active', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (error.value) {
+                throw new Error('Błąd pobrania ofert');
             }
-            catch (error) {
-                console.error('Error:', error);
-                alert('Błąd pobrania ofert');
+
+            // Logowanie danych w konsoli
+            console.log('Dane z serwera:', data.value);
+
+            // Aktualizacja stanu `offers`
+            if (data.value) {
+                offers.value = data.value;
             }
-        };
-        await getOffersApiCall();
-    }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Błąd pobrania ofert');
+        }
+    };
 
     return {
         offers,
         getOffers
-    }
+    };
 });

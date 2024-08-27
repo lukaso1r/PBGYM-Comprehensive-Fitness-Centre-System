@@ -59,7 +59,7 @@ const validateEmail = () => {
             </UForm>
             
             <NuxtLink to="/register" class="text-slate-500"><h6>Nie posiadasz konta? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zarejestruj się</span></h6></NuxtLink>
-
+            <NuxtLink to="/admin-panel">Admin</NuxtLink>
         </div>
         <div class="col2 ">
             <img src="/public/images/big-logo-background.svg" alt="" srcset="" class="max-h-[100svh]">
