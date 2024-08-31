@@ -29,7 +29,7 @@ const items = [
         label: 'Sprzedaż',
         icon: 'i-ic-sharp-local-grocery-store',
         defaultOpen: false,
-        slot: 'kokpit',
+        slot: 'sprzedaz',
         color: 'emerald',
         class: 'py-4 hover:bg-sky-100'        
     },
@@ -100,6 +100,12 @@ const settings = [
                         </NuxtLink>
                         <NuxtLink to="/admin-panel" >
                             <p class="hover:text-blue-500 pl-9">Podgląd na żywo</p>
+                        </NuxtLink>
+                    </template>
+
+                    <template #sprzedaz >
+                        <NuxtLink to="/admin-panel/sprzedaz/oferty" >
+                            <p class="hover:text-blue-500 pl-9">Aktualne oferty</p>
                         </NuxtLink>
                     </template>
                 </UAccordion>  
