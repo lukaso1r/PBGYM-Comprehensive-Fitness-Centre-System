@@ -2,12 +2,12 @@
 
 import type { DefaultLoginData } from "~/types";
 
-const jwt: string = useCookie<DefaultLoginData>('defaultLoginData').value.jwt
+const userType: string = useCookie<DefaultLoginData>('defaultLoginData').value.userType
 
 const test = () => {
   console.log('test')
   console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
-  console.log("JWT", jwt)
+  console.log("userType", userType)
 }
 
 </script>
@@ -16,7 +16,7 @@ const test = () => {
 
   <header class="flex items-center justify-between px-16 py-4 bg-transparent text-neutral-700 absolute top-0 w-full z-99">
     
-    <!-- <UButton @click="test">test</UButton> -->
+    <UButton @click="test">test</UButton>
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <img src="/images/header/logo.svg" alt="Logo" class="w-40" />
@@ -33,9 +33,15 @@ const test = () => {
 
     <!-- Button -->
     <div>
-      <NuxtLink :to="jwt ? '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
-        {{jwt ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
+      <NuxtLink :to="userType ? userType==='Worker' ? '/admin-panel' : '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
+        {{userType ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
       </NuxtLink>
+<!-- 
+      <NuxtLink :to="userType ? '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
+        {{userType ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
+      </NuxtLink> -->
+
+
     </div>
   </header>
   

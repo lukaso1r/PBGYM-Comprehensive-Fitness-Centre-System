@@ -83,7 +83,7 @@ const settings = [
 
 <template>
 
-    <nav class="px-6 -mt-[5%]">
+    <nav class=" ">
         <div class="bg-white px-4 py-4 rounded-2xl flex flex-col gap-y-3 ">
             <NuxtLink to="/"><img class="max-w-[80%] my-0 mx-auto " src="/images/logo-blue.svg"/></NuxtLink>
             <hr/>
