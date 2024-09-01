@@ -24,12 +24,15 @@ const columns = [{
 
 ]
 
+const isOpen = ref(false)
+const rowW = ref('hhh')
 
 const items = (row) => [
     [
         {
             label: 'Szczegóły',
-            icon: 'i-heroicons-document-magnifying-glass-16-solid'
+            icon: 'i-heroicons-document-magnifying-glass-16-solid',
+            to: { name: 'admin-panel-sprzedaz-oferta-id', params: { id: row.id } }
         },
         {
             label: 'Edytuj',
@@ -51,8 +54,7 @@ const { data: offersData} = await useAsyncData('offers', async () => {
     return offersStore.offers;
 });
 
-const isOpen = ref(false)
-const rowW = ref()
+
 
 const select = (row) => {
     console.log('Selected', row)
