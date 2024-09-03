@@ -6,7 +6,11 @@ const route = useRoute()
 const router = useRouter()
 
 const store = useOffersStore()
-const offer = useState<Offer>(() => store.offers.find(offer => offer.id == route.params.id))
+const offer = ref<Offer | null>(null);
+
+watchEffect(() => {
+    offer.value = store.offers.find(offer => offer.id == route.params.id) || null;
+});
 
 </script>
 

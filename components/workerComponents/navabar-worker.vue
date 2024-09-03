@@ -21,7 +21,7 @@ const items = [
         label: 'Zarządzanie',
         icon: 'i-icon-park-outline-switch-button',
         defaultOpen: false,
-        slot: 'kokpit',
+        slot: 'zarzadzanie',
         color: 'sky',
         class: 'py-4 hover:bg-sky-100'        
     },
@@ -102,9 +102,15 @@ const settings = [
                             <p class="hover:text-blue-500 pl-9">Podgląd na żywo</p>
                         </NuxtLink>
                     </template>
+                    
+                    <template #zarzadzanie >
+                        <NuxtLink to="/admin-panel/zarzadzanie/pracownicy" >
+                            <p class="hover:text-blue-500 pl-9">Pracownicy</p>
+                        </NuxtLink>
+                    </template>
 
                     <template #sprzedaz >
-                        <NuxtLink to="/admin-panel/sprzedaz/oferty" >
+                        <NuxtLink to="/admin-panel/sprzedaz/oferta" >
                             <p class="hover:text-blue-500 pl-9">Aktualne oferty</p>
                         </NuxtLink>
                     </template>

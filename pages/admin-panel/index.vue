@@ -2,9 +2,12 @@
 
 const store = useLoginStore();
 
+
+
 const test = () => {
-    console.log('test', store.loggedWorkerData)
+  console.log('test', store.loggedWorkerData)
 }
+
 
 </script>
 
@@ -91,7 +94,7 @@ const test = () => {
       </ul>
     </div>
 
-    <div class="flex flex-row gap-8 basis-full">
+    <div class="flex flex-row gap-8 basis-full items-start">
 
       <div class="socialColumn flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-[40%] gap-4 flex-grow " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
         <div>
@@ -105,71 +108,9 @@ const test = () => {
         <hr />
         <div>Komentarze</div>
       </div>
-
-      <div class="IncomeColumn flex flex-col flex-nowrap place-items-start justify-start basis-[60%] gap-4 flex-grow">
-        
-        <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-full gap-4 flex-grow " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-          <span class="font-semibold text-lg">Dokumenty ***TODO***</span>
-          <ul class="flex flex-col gap-5 w-full justify-between ">
-              <li class="flex flex-row w-full place-items-center">
-                  <div class="document-name w-full pr-14 flex flex-col gap-1">
-                      <h3 class="[word-spacing:5px] font-medium">1 Marzec 2023 - umowa członkowska</h3>
-                      <h6 class="font-thin text-slate-500">#MS-415646</h6>
-                  </div>
-                  <UButton
-                      icon="i-ic-baseline-insert-drive-file"
-                      size="sm"
-                      color="blue"
-                      variant="ghost"
-                      label="PDF"
-                      :trailing="false"
-                  />
-              </li>
-          </ul>
-        </div>
-
-        <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-full gap-4 flex-grow " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-          <span class="font-semibold text-lg">Dokumenty ***TODO***</span>
-          <ul class="flex flex-col gap-5 w-full justify-between ">
-              <li class="flex flex-row w-full place-items-center">
-                  <div class="document-name w-full pr-14 flex flex-col gap-1">
-                      <h3 class="[word-spacing:5px] font-medium">1 Marzec 2023 - umowa członkowska</h3>
-                      <h6 class="font-thin text-slate-500">#MS-415646</h6>
-                  </div>
-                  <UButton
-                      icon="i-ic-baseline-insert-drive-file"
-                      size="sm"
-                      color="blue"
-                      variant="ghost"
-                      label="PDF"
-                      :trailing="false"
-                  />
-              </li>
-          </ul>
-        </div>
-
-        <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-full gap-4 flex-grow " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-          <span class="font-semibold text-lg">Dokumenty ***TODO***</span>
-          <ul class="flex flex-col gap-5 w-full justify-between ">
-              <li class="flex flex-row w-full place-items-center">
-                  <div class="document-name w-full pr-14 flex flex-col gap-1">
-                      <h3 class="[word-spacing:5px] font-medium">1 Marzec 2023 - umowa członkowska</h3>
-                      <h6 class="font-thin text-slate-500">#MS-415646</h6>
-                  </div>
-                  <UButton
-                      icon="i-ic-baseline-insert-drive-file"
-                      size="sm"
-                      color="blue"
-                      variant="ghost"
-                      label="PDF"
-                      :trailing="false"
-                  />
-              </li>
-          </ul>
-        </div>
-
-      </div>
-
+      
+    <WorkerComponentsWorkerList :showButton="true"/>
+      
     </div>
 
   </main>

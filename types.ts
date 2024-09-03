@@ -100,3 +100,26 @@ export interface LoggedWorkerData {
     ]
 }
 
+export interface Worker {
+    id: number,
+    email: string,
+    name: string,
+    surname: string,
+    birthdate: string,
+    pesel: string,
+    phoneNumber: string,
+    address: {
+      id: number,
+      city: string,
+      streetName: string,
+      buildingNumber: string,
+      apartmentNumber: number,
+      postalCode: string
+    },
+    idCardNumber: string,
+    position: string,
+    permissions: [
+      string
+    ]
+}
+
