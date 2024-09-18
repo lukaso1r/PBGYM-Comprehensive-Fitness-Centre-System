@@ -123,3 +123,10 @@ export interface Worker {
     ]
 }
 
+export interface ChangeWorkerPasswordData {
+    email: string,
+    oldPassword: string | '',
+    newPassword: string,
+    newPasswordRepeat: string
+}
+

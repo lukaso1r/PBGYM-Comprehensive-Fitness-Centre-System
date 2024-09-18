@@ -82,7 +82,7 @@ const test = () => {
 <!-- <UButton @click="test">test</UButton> -->
 <header-user-profile />
 <div class="flex bg-[#F5F7F8]">
-    <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
+    <navbar-worker class="basis-1/5 max-w-[350px]"></navbar-worker>
     <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap items-start content-start justify-start gap-8 pb-10">
         <div class="changePasswordContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4">
             <span class="font-semibold text-lg">Zmiana hasła</span>

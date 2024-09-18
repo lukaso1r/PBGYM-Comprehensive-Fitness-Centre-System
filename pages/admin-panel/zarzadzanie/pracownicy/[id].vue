@@ -6,19 +6,45 @@ const route = useRoute()
 const router = useRouter()
 
 const store = useWorkerStore()
-const worker = ref<Worker | null>(null);
+const worker = ref<Worker>()
+
+const showSettingsModal = ref(false)
+const option = ref('')
 
 watchEffect(() => {
-    worker.value = store.allWorkers.find(worker => worker.id == route.params.id) || null;
+    // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
+    worker.value = store.allWorkers.find(worker => worker.id == route.params.id);
+    // TODO: to potencjalnie może wywalać w przyszłości kiedy będzie to już public np i będzie jakieś opóźnienie w pobraniu danych 
+    if(!worker.value) {
+        router.push('/admin-panel/zarzadzanie/pracownicy')
+    }
 });
-// const worker = useState<Worker>(() => store.allWorkers.find(worker => worker.id == route.params.id))
 
+const closeModal = () => {
+    showSettingsModal.value = false;
+}
+
+const test = () => {
+    console.log('test', worker.value)
+    console.log('showSettingsModal', showSettingsModal.value)
+}
+
+
+
+const toggleModal = (choosenOption: string) => {
+    option.value = choosenOption;
+    showSettingsModal.value = !showSettingsModal.value;
+    console.log('option', option.value)
+};
 
 
 </script>
 
 <template>
+<UButton @click="test">test</UButton>
+
 <workerComponents-header-worker></workerComponents-header-worker>
+
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
@@ -29,6 +55,8 @@ watchEffect(() => {
             <div>
                 <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Pracownik: </span>{{worker?.name}} {{worker?.surname}}</h1>
                 <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Stanowisko: </span>{{worker?.position}}</p>
+                <p class="text-lg"><span class="text-slate-500 text-base pr-3">Id pracownika: </span>{{worker?.id}}</p>
+                
                 <hr class="mt-3 mb-3"/>
                 <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{worker?.email}}</p>
                 <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{worker?.phoneNumber}}</p>
@@ -37,22 +65,62 @@ watchEffect(() => {
             <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
         </div>
 
-        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="active-pass w-max flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <ul>
-                <li class="text-lg"><span class="text-slate-500 text-base pr-3">Id pracownika: </span>{{worker?.id}}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Data urodzenia: </span>{{worker?.birthdate}}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Pesel: </span>{{worker?.pesel}}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Adres: </span>{{worker?.address.city + ' ' + worker?.address.streetName + ' ' + worker?.address.buildingNumber + (worker?.address.apartmentNumber ? ('/' + worker?.address.apartmentNumber) : ' ') + worker?.address.postalCode }}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Uprawnienia: </span>{{ worker?.permissions.join(', ') }}</li>
             </ul>
+            <div class="flex flex-row gap-4">
+                
+            </div>
         </div>
 
-        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <UButton
+                    icon="i-material-symbols-account-box"
+                    size="sm"
+                    color="blue"
+                    variant="solid"
+                    label="Edytuj dane personalne pracownika"
+                    @click="toggleModal('personal')"
+                />
+                <UButton
+                    icon="i-material-symbols-key"
+                    size="sm"
+                    color="blue"
+                    variant="solid"
+                    label="Edytuj dane logowania pracownika"
+                    @click="toggleModal('login')"
+                />
+                <UButton
+                    icon="i-material-symbols-manage-accounts-rounded"
+                    size="sm"
+                    color="blue"
+                    variant="solid"
+                    label="Edytuj uprawnienia pracownika"
+                    @click="toggleModal('permissions')"
+                />
+
+                <WorkerComponentsWorkerModal 
+                    :workerId="workerId" 
+                    :worker="worker" 
+                    :showSettingsModal="showSettingsModal" 
+                    @update:showSettingsModal="value => showSettingsModal = value" 
+                    @close="closeModal" 
+                    :title="'Edytuj dane personalne pracownika'"
+                    :option="option"
+                />
+
+        </div>
+
+        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Statystyki</h1>
             <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące pracownika</p>
         </div>
 
-        <div class="flex flex-row flex-nowrap gap-8">
+        <div class="flex flex-row flex-nowrap gap-8 items-start">
             <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
               <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
               <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
@@ -68,8 +136,20 @@ watchEffect(() => {
     </main> 
 
 </div>
+
+
+
+
 </template>
 
 <style scoped>
+
+table{
+    border-spacing: 20px!important;
+}
+
+tr>td{
+    padding: 5px;
+}
 
 </style>

@@ -79,7 +79,7 @@ const validatePassword = () => {
 
     <header class="flex flex-row header-gradient w-1/2 h-14 justify-between items-center px-12 py-8 border border-white border-solid rounded-xl shadow-lg text-white absolute top-6 left-1/2 transform -translate-x-1/2">
         <img src="/public/images/logo-blue.svg" alt="logo" class="w-16 h-auto" />
-        <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
+        <NuxtLink to="/" class="btn-gradient text-white py-2 px-4 rounded-2xl text-sm">Wróć na stronę główną</NuxtLink>
     </header>
     
     <!-- <UButton @click="test">test</UButton> -->
