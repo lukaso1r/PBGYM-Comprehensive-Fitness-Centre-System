@@ -2,6 +2,8 @@ import type { Worker, DefaultLoginData, ChangeWorkerPasswordData } from "~/types
 
 export const useWorkerStore = defineStore('workerStore', () => {
     const allWorkers = useState<Worker[]>(() => ([]));
+    const permissionList = <string[]>['ADMIN', 'STATISTICS', 'USER_MANAGEMENT', 'NEWSLETTER', 'PASS_MANAGEMENT', 'GROUP_CLASSES_MANAGEMENT', 'BLOG', 'SHOP_MANAGEMENT']
+
 
     const getAllWorkers = async () => {
         try {
@@ -65,6 +67,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
 
     return {
         allWorkers,
+        permissionList,
         getAllWorkers,
         getWorkerByEmail,
         changeWorkerData,

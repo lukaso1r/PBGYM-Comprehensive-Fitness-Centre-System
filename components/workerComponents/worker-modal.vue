@@ -12,6 +12,8 @@ const prop = defineProps<{
 
 const store = useWorkerStore()
 const changePasswordState = useState<ChangeWorkerPasswordData>(() => ({email: '', oldPassword: '', newPassword: '', newPasswordRepeat: ''}))
+const workerPermissions = ref<string[]>(prop.worker?.permissions ? [...prop.worker.permissions] : []);
+
 
 const emit = defineEmits(['update:showSettingsModal', 'close']);
 const closeModal = () => {
@@ -63,8 +65,10 @@ const save = () => {
 };
 
 const test = () => {
-    console.log('test', prop.worker.position)
+    console.log('test', prop.worker.permissions)
+    prop.worker.permissions = ['Admin', 'Owner']
     // worker?.position==='Admin' || worker?.email === useCookie<LoggedWorkerData>('loggedWorkerData').value.email
+    console.log('test', prop.worker.permissions)
 }
 
 
@@ -77,7 +81,7 @@ const test = () => {
         :model-value="showSettingsModal"
         @update:model-value="value => emit('update:showSettingsModal', value)" 
         :ui="{
-            base: 'flex flex-row sm:max-w-[79vw] sm:max-h-[90vh] overflow-x-hidden sm:w-auto',
+            base: 'flex flex-row sm:max-w-[79vw] sm:max-h-[90vh] overflow-x-hidden sm:w-auto sm:h-auto',
             rounded: '',
             divide: 'divide-y divide-gray-100 dark:divide-gray-800',
             body: {
@@ -85,14 +89,13 @@ const test = () => {
             },
         }"    
     >
-        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }" class="">
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }" :class="{'min-h-[30rem]': option === 'permissions', 'h-auto': option !== 'permissions'}">
             <template #header>
                 <Placeholder class="h-8" />
                 <h3 class="font-bold text-lg">{{title}}</h3>
             </template>
-            <div class="flex flex-row flex-wrap gap-10 ">
-
-                <table v-show="option==='permissions'" class="table-auto flex flex-col">
+            <div class="flex flex-row flex-wrap gap-10 h-[20rem] min-w-[25rem]">
+                <table v-show="option==='permissions'" class="table-auto flex flex-col ">
                     <tbody class="border-spacing-y-3" style="border-spacing:20px!important">
                         <p class="font-medium pr-8 pb-2 pt-4">Ustawienia pracownicze:</p>
                         <tr>
@@ -101,7 +104,27 @@ const test = () => {
                         </tr>
                         <tr>
                             <td class="font-normal pr-8 pb-2 pt-2">Uprawnienia</td>
-                            <td><UInput v-model="worker.permissions" /></td>
+                            <td class="w-[40rem]">
+                                <USelectMenu 
+                                    v-model="workerPermissions" 
+                                    :options="store.permissionList" 
+                                    multiple 
+                                    placeholder="Wybierz uprawnienia"  
+                                    searchable
+                                    searchable-placeholder="Wyszukaj uprawnienie" 
+                                >
+                                    <template #label>
+                                        <span v-if="workerPermissions.length" >{{ workerPermissions.join(', ') }}</span>
+                                        <span v-else>Wybierz uprawnienia</span>
+                                    </template>
+
+                                    <template #option-empty="{ query }">
+                                        <q>{{ query }}</q> nie znaleziono takiego uprawnienia
+                                      </template>
+
+                                </USelectMenu>
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>

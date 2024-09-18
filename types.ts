@@ -95,9 +95,7 @@ export interface LoggedWorkerData {
     },
     idCardNumber: string,
     position: string,
-    permissions: [
-       string
-    ]
+    permissions: string[]
 }
 
 export interface Worker {
@@ -118,9 +116,7 @@ export interface Worker {
     },
     idCardNumber: string,
     position: string,
-    permissions: [
-      string
-    ]
+    permissions: string[]
 }
 
 export interface ChangeWorkerPasswordData {
@@ -129,4 +125,3 @@ export interface ChangeWorkerPasswordData {
     newPassword: string,
     newPasswordRepeat: string
 }
-
