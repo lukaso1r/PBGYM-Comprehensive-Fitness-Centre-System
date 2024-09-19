@@ -125,3 +125,4 @@ export interface ChangeWorkerPasswordData {
     newPassword: string,
     newPasswordRepeat: string
 }
+
