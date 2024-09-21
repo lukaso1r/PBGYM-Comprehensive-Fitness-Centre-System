@@ -1,4 +1,4 @@
-import type { Worker, DefaultLoginData, ChangeWorkerPasswordData } from "~/types"
+import type { Worker, DefaultLoginData, ChangeWorkerPasswordData, NewWorkerData } from "~/types"
 
 export const useWorkerStore = defineStore('workerStore', () => {
     const allWorkers = useState<Worker[]>(() => ([]));
@@ -144,6 +144,28 @@ export const useWorkerStore = defineStore('workerStore', () => {
         console.log('Zmieniono email pracownika', newEmail)
     }
 
+    const addNewWorker = async (worker: NewWorkerData) => {
+        async function addWorkerApiCall() {
+            try {
+                const response = await useFetch('https://pbgym.onrender.com/auth/registerWorker', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(worker)
+                });
+                console.log('response add worker:', response);
+            }
+            catch (error) {
+                console.error('Error:', error);
+                alert('Błąd dodania pracownika');
+            }
+        };
+        await addWorkerApiCall();
+        console.log('Dodano pracownika', worker)
+    }
+
 
     return {
         allWorkers,
@@ -154,6 +176,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
         changeWorkerPassowrd,
         changeWorkerPermissions,
         changeWorkerEmail,
+        addNewWorker
     }
         
 })

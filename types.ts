@@ -111,7 +111,7 @@ export interface Worker {
       city: string,
       streetName: string,
       buildingNumber: string,
-      apartmentNumber: number,
+      apartmentNumber: string | number | undefined,
       postalCode: string
     },
     idCardNumber: string,
@@ -124,5 +124,26 @@ export interface ChangeWorkerPasswordData {
     oldPassword: string | '',
     newPassword: string,
     newPasswordRepeat: string
+}
+
+export interface NewWorkerData {
+    email: string,
+    password: string,
+    name: string,
+    surname: string,
+    gender: string,
+    birthdate: string,
+    pesel: string,
+    phoneNumber: string,
+    address: {
+      city: string,
+      streetName: string,
+      buildingNumber: string,
+      apartmentNumber: string,
+      postalCode: string
+    },
+    idCardNumber: string,
+    position: string,
+    permissions: string[]
 }
 
