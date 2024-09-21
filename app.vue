@@ -2,6 +2,6 @@
     <div>
         <NuxtPage />
         <!-- TODO: przykrywa pozostałe elementy strony czyniąc je nieklikalnymi -->
-        <!-- <UNotifications /> -->
+        <UNotifications />
     </div>
   </template>

@@ -2,8 +2,9 @@
 
 import type { Worker, NewWorkerData, DefaultLoginData } from '~/types'
 import { format } from 'date-fns'
-import VueDatePicker from '@vuepic/vue-datepicker';
+import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { z } from 'zod'
 
 const showAddWorkerModal = ref(false)
 const option = ref('')
@@ -42,8 +43,19 @@ const birthdate = computed(() => {
 const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>(["year", "month", "calendar"])
 const maxDate = ref(currentDate.value)
 
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string().min(2),
+  surname: z.string().min(2),
+  pesel: z.number().min(11).max(11),
+})
+
+const toast = useToast()
+
 const test = () => {
   console.log('test')
+  toast.add({ title: 'Test', description: 'Test' })
 }
 
 const closeModal = () => {
@@ -91,7 +103,7 @@ const addNewWorker = () => {
           :closable="true"
           @close="closeModal"
           :ui="{ 
-            base: 'flex flex-row min-h-[50vh] sm:max-w-[91%] max-w-[90%] overflow-x-hidden sm:w-auto sm:h-auto',
+            base: 'min-h-[50vh] overflow-x-hidden',
           }"
     >
       <UCard 
@@ -102,7 +114,7 @@ const addNewWorker = () => {
           <h3 class="font-bold text-lg">Dodaj nowego pracownika</h3>
         </template>
 
-      <UForm :state="newWorker" class="space-y-4" @submit="addNewWorker">  
+      <UForm :state="newWorker" :schema="schema" class="space-y-4" @submit="addNewWorker">  
         <div class="flex flex-col gap-4 border-slate-200 border-2 py-4 px-4">
           <h4 class="font-semibold">Dane logowania</h4>
           <div class="flex flex-row gap-4">
@@ -140,8 +152,8 @@ const addNewWorker = () => {
             </UFormGroup>
           </div>
           <div class="flex flex-row gap-4">
-            <UFormGroup label="Pesel" name="pesel" required>
-              <UInput v-model="newWorker.pesel" type="number"/>
+            <UFormGroup label="Pesel" name="pesel" required :error="newWorker.pesel.length!=11 && 'You must enter an email'">
+              <UInput v-model="newWorker.pesel" type="number" inputmode="numeric"/>
             </UFormGroup>
             <UFormGroup label="Numer dowodu" name="idCardNumber" required>
               <UInput v-model="newWorker.idCardNumber" type="string"/>
@@ -249,9 +261,24 @@ const addNewWorker = () => {
   </main>
 </div>
 
+
+
 </template>
 
 <style scoped>
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
 
 
 
