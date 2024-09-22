@@ -89,11 +89,9 @@ const select = (row) => {
             <UModal v-model="isOpen">
                 <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                     <template #header>
-                        <Placeholder class="h-8" />
                         <h3 class="font-medium text-lg">{{rowW ? rowW.title : 'nic'}}</h3>
                     </template>
 
-                    <Placeholder class="h-32" />
                     <table class="table-auto">
                         <tbody>
                             <tr v-for="(value, key) in rowW" :key="key">
@@ -104,7 +102,6 @@ const select = (row) => {
                     </table>
 
                     <template #footer >
-                        <Placeholder class="h-8" />
                         <div class="flex flex-row justify-end">
                             <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
                         </div>

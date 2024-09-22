@@ -2,12 +2,18 @@
 
 import type { DefaultLoginData } from "~/types";
 
-const userType: string = useCookie<DefaultLoginData>('defaultLoginData').value.userType
+const userType = ref<string | undefined>(undefined);
+
+onMounted(() => {
+  const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData').value;
+  userType.value = defaultLoginData?.userType || ''; // Ustawienie wartości po zamontowaniu komponentu
+  console.log('useCookie(\'defaultLoginData\')', defaultLoginData);
+  console.log('userType', userType.value);
+});
 
 const test = () => {
-  console.log('test')
-  console.log("useCookie('defaultLoginData')", toRaw(useCookie('defaultLoginData').value))
-  console.log("userType", userType)
+  console.log('test');
+  console.log('userType in test:', userType.value);
 }
 
 </script>

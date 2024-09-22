@@ -98,7 +98,7 @@ const test = () => {
     
     <UModal 
         :model-value="showSettingsModal"
-        @update:model-value="value => emit('update:showSettingsModal', value)" 
+        @update:model-value="(value: any) => emit('update:showSettingsModal', value)" 
         :ui="{
             base: 'flex flex-row sm:max-w-[90%] max-w-[90%] sm:max-h-[94vh] overflow-x-hidden sm:w-auto sm:h-auto',
             rounded: '',
@@ -110,7 +110,6 @@ const test = () => {
     >
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }" :class="{'min-h-[30rem] min-w-[25rem]': option === 'permissions', 'h-full w-fit': option !== 'permissions'}">
             <template #header>
-                <Placeholder class="h-8" />
                 <h3 class="font-bold text-lg">{{title}}</h3>
             </template>
 
@@ -244,7 +243,6 @@ const test = () => {
 
             
             <template #footer >
-                <Placeholder class="h-8" />
                 <div class="flex flex-row justify-end gap-5">
                     <UButton label="Anuluj" @click="closeModal" color="gray" icon="i-material-symbols-cancel" />
                     <UButton label="Zapisz zmiany" @click="save" color="blue" icon="i-material-symbols-save" />

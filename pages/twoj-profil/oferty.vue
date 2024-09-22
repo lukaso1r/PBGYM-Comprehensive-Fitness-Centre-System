@@ -27,10 +27,8 @@ const { data: offersData, pending } = await useAsyncData('offers', async () => {
             <div class="offers-container flex flex-row items-baseline gap-8 w-full ">
                 <UCard v-for="offer in offersData" :key="offer.id" class="offer-card max-w-1/4 w-1/4 rounded-lg" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <template #header>
-                        <Placeholder class="h-8" />
                         <h4 class="text-xl font-bold">{{offer.title}}</h4>
                     </template>
-                    <Placeholder class="h-32" />
                     <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> /miesiąc</p>
                     <div class="list-pass mx-auto mt-7 pl-7" >
                         <ul class="list-disc" >

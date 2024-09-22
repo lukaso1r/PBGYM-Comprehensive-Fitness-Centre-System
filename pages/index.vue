@@ -104,10 +104,8 @@
         <div id="price-list" class="flex flex-row gap-12 my-7">
             <UCard >
                 <template #header>
-                  <Placeholder class="h-8" />
                   <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
                 </template>
-                <Placeholder class="h-32" />
                 <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
@@ -127,10 +125,8 @@
             </UCard>
             <UCard >
                 <template #header>
-                  <Placeholder class="h-8" />
                   <h4 class="text-xl font-bold">Karnet 1 Miesiąc - Normalny</h4>
                 </template>
-                <Placeholder class="h-32" />
                 <p> <span class="text-6xl font-bold">85</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
@@ -149,10 +145,8 @@
                 </template>
             </UCard><UCard >
                 <template #header>
-                  <Placeholder class="h-8" />
                   <h4 class="text-xl font-bold">Karnet 12 Miesięcy - STUDENT</h4>
                 </template>
-                <Placeholder class="h-32" />
                 <p> <span class="text-6xl font-bold">70</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
@@ -171,10 +165,8 @@
                 </template>
             </UCard><UCard >
                 <template #header>
-                  <Placeholder class="h-8" />
                   <h4 class="text-xl font-bold">Karnet 12 Miesięcy - Normalny</h4>
                 </template>
-                <Placeholder class="h-32" />
                 <p> <span class="text-6xl font-bold">75</span> /miesiąc</p>
                 <div class="list-pass mx-auto mt-7 pl-7" >
                     <ul class="list-disc" >
@@ -203,40 +195,31 @@
         <div id="opinion-box" class="flex flex-row gap-[7%] justify-between mt-10 w-[80%] mx-auto">
             <UCard class="w-[30%] mt-12">
                 <template #header>
-                <Placeholder class="h-8" />
                 <img src="/public/images/home-opinions/person1.png" alt="">
                 </template>
             
-                <Placeholder class="h-32" />
                 <p>To miejsce zmieniło moje podejście do treningu. Wcześniej bałem się siłowni, ale tutaj czuję się komfortowo i doceniany. Trenerzy są profesjonalni i zawsze chętni do udzielenia pomocy. </p>
                 <template #footer>
-                <Placeholder class="h-8" />
                 <p>--- Jan Kowalski</p>
                 </template>
             </UCard>
             <UCard class="w-[30%] mb-12">
                 <template #header>
-                <Placeholder class="h-8" />
                 <img src="/public/images/home-opinions/person2.png" alt="">
                 </template>
             
-                <Placeholder class="h-32" />
                 <p>Jestem zachwycony tą siłownią! Sprzęt jest nowoczesny, sale są czyste, a trenerzy naprawdę zaangażowani w pomoc swoim podopiecznym. </p>
                 <template #footer>
-                <Placeholder class="h-8" />
                 <p>--- Max Verstappen</p>
                 </template>
             </UCard>
             <UCard class="w-[30%] mt-12">
                 <template #header>
-                <Placeholder class="h-8" />
                 <img src="/public/images/home-opinions/person3.png" alt="">
                 </template>
             
-                <Placeholder class="h-32" />
                 <p>Siłownia, która przekracza moje oczekiwania! Bardzo miło zaskoczyła mnie atmosfera - panuje tutaj przyjazna rywalizacja i wzajemne wsparcie. </p>
                 <template #footer>
-                <Placeholder class="h-8" />
                 <p>--- Magdalena Maria Monika</p>
                 </template>
             </UCard>

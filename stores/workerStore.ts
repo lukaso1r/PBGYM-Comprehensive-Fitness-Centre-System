@@ -5,6 +5,8 @@ export const useWorkerStore = defineStore('workerStore', () => {
     const permissionList = <string[]>['ADMIN', 'STATISTICS', 'USER_MANAGEMENT', 'NEWSLETTER', 'PASS_MANAGEMENT', 'GROUP_CLASSES_MANAGEMENT', 'BLOG', 'SHOP_MANAGEMENT']
     const loginStore = useLoginStore();
 
+    const toast = useToast()
+
 
     const getAllWorkers = async () => {
         try {
@@ -145,27 +147,41 @@ export const useWorkerStore = defineStore('workerStore', () => {
     }
 
     const addNewWorker = async (worker: NewWorkerData) => {
-        async function addWorkerApiCall() {
-            try {
-                const response = await useFetch('https://pbgym.onrender.com/auth/registerWorker', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
-                    },
-                    method: 'POST',
-                    body: JSON.stringify(worker)
-                });
-                console.log('response add worker:', response);
+        let response: any;
+        try {
+            // Wysyłanie zapytania do serwera
+            response = await $fetch('https://pbgym.onrender.com/auth/registerWorker', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`,
+                },
+                method: 'POST',
+                body: worker
+            });
+    
+            // Jeśli serwer zwraca sukces
+            console.log('Full server response:', response);
+    
+            if (response === 'Worker registered successfully') {
+                toast.add({ title: 'Dodano pracownika', description: `${worker.email}` });
+            } else {
+                throw new Error(response || 'Nie udało się dodać pracownika.');
             }
-            catch (error) {
+        } catch (error: any) {
+            console.log('Full server response:', response);
+    
+            // Sprawdzenie, czy błąd ma pole statusCode (HTTP status)
+            if (error.response && error.response.status === 409) {
+                console.error('Conflict (409): Email already in use.');
+                toast.add({ title: 'Błąd dodania pracownika', description: 'Ten adres email jest już zarejestrowany.' });
+            } else {
+                // Obsługa innych błędów
+                const errorMessage = error?.response?.status || error.message || 'Nieznany błąd';
+                toast.add({ title: 'Błąd dodania pracownika', description: `${worker.email}: ${errorMessage}` });
                 console.error('Error:', error);
-                alert('Błąd dodania pracownika');
             }
-        };
-        await addWorkerApiCall();
-        console.log('Dodano pracownika', worker)
-    }
-
+        }
+    };
 
     return {
         allWorkers,

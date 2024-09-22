@@ -92,10 +92,8 @@ const items = (row) => [
     <UModal v-model="isOpen">
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
-                <Placeholder class="h-8" />
                 <h3 class="font-medium text-lg">{{selectedRow ? selectedRow.title : 'nic'}}</h3>
             </template>
-            <Placeholder class="h-32" />
             <table class="table-auto">
                 <tbody>
                     <tr v-for="(value, key) in selectedRow" :key="key">
@@ -105,7 +103,6 @@ const items = (row) => [
                 </tbody>
             </table>
             <template #footer >
-                <Placeholder class="h-8" />
                 <div class="flex flex-row justify-end">
                     <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
                 </div>
