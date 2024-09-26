@@ -45,14 +45,14 @@ const columns = [{
 const isOpen = ref(false)
 const selectedRow = ref()
 
-const select = (row) => {
+const select = (row: any) => {
     console.log('Selected', row)
     isOpen.value = true
     selectedRow.value = row
     console.log('roww', selectedRow.value)
 }
 
-const items = (row) => [
+const items = (row: any) => [
     [
         {
             label: 'Szczegóły',

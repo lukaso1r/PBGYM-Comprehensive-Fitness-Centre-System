@@ -102,6 +102,7 @@ const validate = (newWorker: NewWorkerData): FormError[] => {
   if (!newWorker.address.postalCode) errors.push({ path: 'postalCode', message: 'Wymagane' })
   if (!validatePostalCode(newWorker.address.postalCode) || !newWorker.address.postalCode) errors.push({ path: 'postalCode', message: 'Niepoprawny kod pocztowy' })
   if (!newWorker.position) errors.push({ path: 'position', message: 'Wymagane' })
+  if (!validatePosition(newWorker.position) || !newWorker.position) errors.push({ path: 'position', message: 'Niepoprawna pozycja' })
 
   return errors
 }

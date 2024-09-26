@@ -42,3 +42,10 @@ export const validatePostalCode = (postalCode: string) => {
     return true
 }
 
+export const validatePosition = (position: string) => {
+    if (!(/^[A-Z][a-zA-Z]*$/.test(position)) && position !== '') {
+        return false
+    }
+    return true
+}
+

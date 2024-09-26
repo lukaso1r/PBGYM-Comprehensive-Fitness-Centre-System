@@ -27,7 +27,7 @@ const columns = [{
 const isOpen = ref(false)
 const rowW = ref()
 
-const items = (row) => [
+const items = (row: any) => [
     [
         {
             label: 'Szczegóły',
@@ -54,7 +54,7 @@ const { data: offersData} = await useAsyncData('offers', async () => {
     return offersStore.offers;
 });
 
-const select = (row) => {
+const select = (row: any) => {
     console.log('Selected', row)
     isOpen.value = true
     rowW.value = row
