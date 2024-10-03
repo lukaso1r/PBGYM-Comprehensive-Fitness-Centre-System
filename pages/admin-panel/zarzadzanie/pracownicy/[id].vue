@@ -41,7 +41,7 @@ const toggleModal = (choosenOption: string) => {
 </script>
 
 <template>
-<UButton @click="test">test</UButton>
+<!-- <UButton @click="test">test</UButton> -->
 
 <workerComponents-header-worker></workerComponents-header-worker>
 
@@ -85,6 +85,7 @@ const toggleModal = (choosenOption: string) => {
                     variant="solid"
                     label="Edytuj dane personalne pracownika"
                     @click="toggleModal('personal')"
+                    v-show="worker?.permissions.includes('ADMIN')"
                 />
                 <UButton
                     icon="i-material-symbols-key"
@@ -103,6 +104,7 @@ const toggleModal = (choosenOption: string) => {
                     @click="toggleModal('permissions')"
                 />
 
+                <!-- Sprawdzić co ja tu miałem na myśli z tym niezadeklaorwanym worker id XDD -->
                 <WorkerComponentsWorkerModal 
                     :workerId="workerId" 
                     :worker="worker" 

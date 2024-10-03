@@ -88,7 +88,6 @@ const settings = [
             <NuxtLink to="/"><img class="max-w-[80%] my-0 mx-auto " src="/images/logo-blue.svg"/></NuxtLink>
             <hr/>
             <div class="navigationContainer flex flex-col gap-y-0">
-
                 <!-- TODO: change text color to black -->
                 <UAccordion :items="items" size="sm" variant="ghost">
                     <template #kokpit >
@@ -127,24 +126,15 @@ const settings = [
                     <template #Konto>
                         <div>
                             <p>Tu instrukcje</p>
-
                         </div>
                     </template>
                 </UAccordion>  
-                
             </div>
-            
-            
-            
-
         </div>
     </nav>
 
 </template>
 
-
 <style scoped>
     /*TODO: Due to delays, some of the code was written in plain CSS rather than using correct Tailwind practices.  It gonna be changed later*/
-    
-  
 </style>

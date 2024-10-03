@@ -83,6 +83,7 @@ export interface LoggedWorkerData {
     name: string,
     surname: string,
     birthdate: string,
+    gender: string,
     pesel: string,
     phoneNumber: string,
     address: {
@@ -90,7 +91,7 @@ export interface LoggedWorkerData {
         city: string,
         streetName: string,
         buildingNumber: string,
-        apartmentNumber: string,
+        apartmentNumber: number | undefined,
         postalCode: string
     },
     idCardNumber: string,
@@ -106,6 +107,7 @@ export interface Worker {
     birthdate: string,
     pesel: string,
     phoneNumber: string,
+    gender: string
     address: {
       id: number,
       city: string,

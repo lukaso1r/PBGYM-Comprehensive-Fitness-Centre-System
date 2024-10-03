@@ -50,7 +50,7 @@ const validateEmail = () => {
                 </UFormGroup>
 
                 <UFormGroup label="Hasło" required>
-                    <UInput v-model="loginState.password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
+                    <UInput v-model="loginState.password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" type="password"/>
                 </UFormGroup>
 
                 <UButton type="submit" :disabled="!(loginState.password!='' && validateEmail())" class="bg-[#203983] hover:bg-[#617F9B]">

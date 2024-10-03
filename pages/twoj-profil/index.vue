@@ -28,9 +28,9 @@ const test = () => {
         <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
         <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap justify-start gap-8 pb-10">
             <!-- TODO: fix shadow and hand written css to tailwind -->
-            <div class="credit-card bg-[url('/images/twoj-profil/trump.jpg')] w-[35%] p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="credit-card bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover w-[35%] p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>
-                <p class="tracking-wide text-slate-50 font-semibold text-xl" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">4562 1256 8752 9856</p>
+                <p class="tracking-wide text-slate-50 font-semibold text-xl" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">45** **** **** **56</p>
                 <div class="row flex place-content-between">
                     <div class="owner flex flex-col gap-2">
                         <span class="text-slate-200 font-medium" style="text-shadow: 1px 1px 1px black;">Właściciel karty</span>
@@ -112,7 +112,7 @@ const test = () => {
             </div>
 
             <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Informacje ***TODO***</span>
+                <span class="font-semibold text-lg">Informacje</span>
                 <div class="information-container w-full bg-slate-50 py-3 px-5 flex flex-col rounded-xl">
                     <div class="inf-row-title flex flex-row justify-between items-center">
                         <span class="font-medium ">{{ loggedMemberData?.name + " " + loggedMemberData?.surname}}</span>
@@ -123,6 +123,7 @@ const test = () => {
                             variant="ghost"
                             label=""
                             :trailing="false"
+                            :to="'/twoj-profil/ustawienia-konta'"
                         />
                     </div>
                     <div class="inf-row-info">

@@ -43,7 +43,7 @@ export const validatePostalCode = (postalCode: string) => {
 }
 
 export const validatePosition = (position: string) => {
-    if (!(/^[A-Z][a-zA-Z]*$/.test(position)) && position !== '') {
+    if (!(/^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*(\s[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*)*$/.test(position)) && position !== '') {
         return false
     }
     return true

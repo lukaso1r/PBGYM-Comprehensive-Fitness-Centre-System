@@ -144,25 +144,25 @@ const test = () => {
                     </tbody>
                 </table>
 
-                <div v-show="option=='personal'" class="changePersonalData flex flex-row gap-16">
+                <div v-show="option=='personal' " class="changePersonalData flex flex-row gap-16">
                     <table class="table-auto flex flex-col">
                         <tbody class="border-spacing-y-3" style="border-spacing:20px!important">
                             <p class="font-medium pr-8 pb-4 pt-2">Ustawienia personalne:</p>
                             <tr>
                                 <td class="font-normal pr-8 pb-2">Imię</td>
-                                <td><UInput v-model="worker.name" disabled/></td>
+                                <td><UInput v-model="worker.name"/></td>
                             </tr>
                             <tr>
                                 <td class="font-normal pr-8 pb-2">Nazwisko</td>
-                                <td><UInput v-model="worker.surname" disabled/></td>
+                                <td><UInput v-model="worker.surname" /></td>
                             </tr>
                             <tr>
                                 <td class="font-normal pr-8 pb-2">Pesel</td>
-                                <td><UInput v-model="worker.pesel" disabled/></td>
+                                <td><UInput v-model="worker.pesel" /></td>
                             </tr>
                             <tr>
                                 <td class="font-normal pr-8 pb-2">Numer Dowodu</td>
-                                <td><UInput v-model="worker.idCardNumber" disabled/></td>
+                                <td><UInput v-model="worker.idCardNumber" /></td>
                             </tr>
                             <tr>
                                 <td class="font-normal pr-8 pb-2">Telefon</td>

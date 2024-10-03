@@ -1,4 +1,4 @@
-import type { Worker, DefaultLoginData, ChangeWorkerPasswordData, NewWorkerData } from "~/types"
+import type { Worker, DefaultLoginData, ChangeWorkerPasswordData, NewWorkerData, LoggedWorkerData } from "~/types"
 
 export const useWorkerStore = defineStore('workerStore', () => {
     const allWorkers = useState<Worker[]>(() => ([]));
@@ -39,6 +39,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
 
     const changeWorkerData = async (worker: Worker) => {
         async function changeWorkerDataApiCall() {
+            console.log(' changeWorkerDataApiCall Worker:', worker);
             try {
                 const response = await useFetch(`https://pbgym.onrender.com/workers/${worker.email}`, {
                     headers: {
@@ -48,7 +49,13 @@ export const useWorkerStore = defineStore('workerStore', () => {
                     method: 'PUT',
                     body: JSON.stringify(
                         {
+                            "name": worker.name,
+                            "surname": worker.surname,
+                            "birthdate": worker.birthdate,
+                            "gender": worker.gender,
+                            "pesel": worker.pesel,
                             "phoneNumber": worker.phoneNumber,
+                            "idCardNumber": worker.idCardNumber,
                             "address": {
                                 "city": worker.address.city,
                                 "streetName": worker.address.streetName,
@@ -147,6 +154,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
     }
 
     const addNewWorker = async (worker: NewWorkerData) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
             // Wysyłanie zapytania do serwera
@@ -167,6 +175,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
             } else {
                 throw new Error(response || 'Nie udało się dodać pracownika.');
             }
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } catch (error: any) {
             console.log('Full server response:', response);
     
