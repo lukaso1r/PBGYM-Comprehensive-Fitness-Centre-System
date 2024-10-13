@@ -112,6 +112,9 @@ const settings = [
                         <NuxtLink to="/admin-panel/sprzedaz/oferta" >
                             <p class="hover:text-blue-500 pl-9">Aktualne oferty</p>
                         </NuxtLink>
+                        <NuxtLink to="/admin-panel/sprzedaz/oferta/addNewPass" >
+                            <p class="hover:text-blue-500 pl-9">Dodaj nową ofertę</p>
+                        </NuxtLink>
                     </template>
                 </UAccordion>  
                 

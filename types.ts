@@ -77,6 +77,16 @@ export interface Offer {
     type: string
 }
 
+export interface EditableStandardOfferData {
+    title: string,
+    subtitle: string,
+    monthlyPrice: number,
+    entryFee: number,
+    durationInMonths: number,
+    properties: string[],
+    active: boolean,
+}
+
 export interface LoggedWorkerData {
     id: number,
     email: string,
