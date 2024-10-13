@@ -14,7 +14,7 @@ const showEditOfferModal = ref(false)
 
 //TODO: naprawić odświeżanie danych
 watchEffect(() => {
-    offer.value = store.offers.find(offer => offer.id == route.params.id) || null;
+    offer.value = store.offersPublicActive.find(offer => offer.id == route.params.id) || null;
 });
 
 const propertiesInput = ref('')

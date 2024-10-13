@@ -5,8 +5,8 @@ import type { Offer } from '~/types';
 const offersStore = useOffersStore();
 
 const { data: offersData, pending } = await useAsyncData('offers', async () => {
-    await offersStore.getOffers();
-    return offersStore.offers;
+    await offersStore.getOffersPublicActive();
+    return offersStore.offersPublicActive;
 });
 
 </script>

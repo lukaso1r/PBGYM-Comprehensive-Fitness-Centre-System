@@ -159,3 +159,30 @@ export interface NewWorkerData {
     permissions: string[]
 }
 
+export interface SpecialOffer {
+    id: number,
+    title: string,
+    subtitle: string,
+    monthlyPrice: number,
+    entryFee: number,
+    durationInMonths: number,
+    properties: string[],
+    active: boolean,
+    type: string,
+    specialOfferText: string,
+    borderText: string,
+    previousPriceInfo: string
+}
+
+export interface EditableSpecialOfferData{
+    title: string,
+    subtitle: string,
+    monthlyPrice: number,
+    entryFee: number,
+    durationInMonths: number,
+    properties: string[],
+    active: boolean,
+    specialOfferText: string,
+    borderText: string,
+    previousPriceInfo: string
+}

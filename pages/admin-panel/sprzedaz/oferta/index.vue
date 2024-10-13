@@ -27,6 +27,7 @@ const columns = [{
 const isOpen = ref(false)
 const rowW = ref()
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const items = (row: any) => [
     [
         {
@@ -50,19 +51,28 @@ const items = (row: any) => [
 
 const offersStore = useOffersStore();
 const { data: offersData} = await useAsyncData('offers', async () => {
-    await offersStore.getOffers();
-    return offersStore.offers;
+    await offersStore.getOffersPublicActive();
+    return offersStore.offersPublicActive;
 });
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const select = (row: any) => {
     console.log('Selected', row)
     isOpen.value = true
     rowW.value = row
     console.log('roww', rowW.value)
 }
+
+const test = () => {
+    console.log('test getofferSpecialAll')
+    offersStore.deleteOffer('Standardowa Oferta 6msc');
+}
 </script>
 
 <template>
+
+<UButton @click="test">test</UButton>
+
 <workerComponents-header-worker></workerComponents-header-worker>
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
