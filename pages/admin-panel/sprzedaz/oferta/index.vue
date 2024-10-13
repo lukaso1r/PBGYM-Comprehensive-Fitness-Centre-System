@@ -82,11 +82,11 @@ const test = () => {
               
         <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Aktualna oferta karnetów</h1>
-            <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać aktualnie dostępnymi karnetami</p>
+            <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać aktualnie dostępnymi karnetami, które widzą klienci.</p>
         </div>
 
         <div class="active-pass w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <p class="text-slate-500">Karnety dostępne w systemie</p>
+            <p class="text-slate-500">Karnety dostępne w systemie dla klientów.</p>
 
             <UTable :rows="offersData" :columns="columns" @select="select">
                 <template #actions-data="{ row }" @click.stop>
