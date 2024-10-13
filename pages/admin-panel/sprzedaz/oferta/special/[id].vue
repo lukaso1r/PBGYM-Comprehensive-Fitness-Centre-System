@@ -1,0 +1,292 @@
+<script setup lang="ts">
+
+import type { SpecialOffer, LoggedWorkerData, EditableSpecialOfferData } from '~/types'
+import type { FormError, FormSubmitEvent } from '#ui/types'
+
+const route = useRoute()
+const router = useRouter()
+
+const store = useOffersStore()
+const offer = ref<SpecialOffer | null>(null)
+const showEditOfferModal = ref(false)
+const showDeleteOfferModal = ref(false)
+const toast = useToast()
+
+
+
+//TODO: naprawić odświeżanie danych
+watchEffect(() => {
+    // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
+    offer.value = store.offerSpecialAll.find(offer => offer.id == route.params.id as unknown as number) || null;
+});
+
+const propertiesInput = ref('')
+const previousTitle = ref('')
+
+const newOfferData = useState<EditableSpecialOfferData>(() => ({
+    title: offer.value?.title || '',
+    subtitle: offer.value?.subtitle || '',
+    monthlyPrice: offer.value?.monthlyPrice || 0,
+    entryFee: offer.value?.entryFee || 0,
+    durationInMonths: offer.value?.durationInMonths || 0,
+    properties: offer.value?.properties || [],
+    active: offer.value?.active || false,
+    specialOfferText: offer.value?.specialOfferText || '',
+    borderText: offer.value?.borderText || '',
+    previousPriceInfo: offer.value?.previousPriceInfo || '',
+}));
+
+watchEffect(() => {
+  if (offer.value) {
+    newOfferData.value = {
+        title: offer.value.title || '',
+        subtitle: offer.value.subtitle || '',
+        monthlyPrice: offer.value.monthlyPrice || 0,
+        entryFee: offer.value.entryFee || 0,
+        durationInMonths: offer.value.durationInMonths || 0,
+        properties: offer.value.properties || [],
+        active: offer.value.active || false,
+        specialOfferText: offer.value.specialOfferText || '',
+        borderText: offer.value.borderText || '',
+        previousPriceInfo: offer.value.previousPriceInfo || '',
+    };
+    propertiesInput.value = offer.value.properties.join('; ');
+    previousTitle.value = offer.value.title
+  }
+});
+
+const validate = (data: EditableSpecialOfferData) => {
+    const errors: FormError<string>[] = []
+
+    if (!data.title) errors.push({ path: 'title', message: 'Tytuł jest wymagany' })
+    if (!data.subtitle) errors.push({ path: 'subtitle', message: 'Podtytuł jest wymagany' })
+    if (!data.monthlyPrice) errors.push({ path: 'monthlyPrice', message: 'Cena miesięczna jest wymagana' })
+    if (!data.entryFee) errors.push({ path: 'entryFee', message: 'Opłata aktywacyjna jest wymagana' })
+    if (!data.durationInMonths) errors.push({ path: 'durationInMonths', message: 'Okres trwania jest wymagany' })
+    if (!propertiesInput.value || propertiesInput.value.length === 0 || newOfferData.value.properties.length > 6) errors.push({ path: 'properties', message: 'Cechy oferty są wymagane i może być ich maksymalnie 6' })
+    if (!data.specialOfferText) errors.push({ path: 'specialOfferText', message: 'Tekst specjalnej oferty jest wymagany' })
+    if(!data.borderText) errors.push({ path: 'borderText', message: 'Tekst na obramowaniu jest wymagany' }) 
+    if(!data.previousPriceInfo) errors.push({ path: 'previousPriceInfo', message: 'Poprzednia cena jest wymagana' })
+
+    return errors
+}
+
+const handlePropertiesInput = () => {
+    newOfferData.value.properties = propertiesInput.value
+        .split(/;|\n/)
+        .map(item => item.trim())
+        .filter(item => item.length > 0); 
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const updateSpecialOffer = async (event: FormSubmitEvent<any>) => {
+    console.log('Aktualizowanie karnetu', toRaw(event.data))
+    await store.updateSpecialOffer(toRaw(event.data), previousTitle.value)
+}
+
+const deleteOffer = async () => {
+    console.log('Usuwanie karnetu', offer.value?.title)
+    if(offer.value){
+        await store.deleteOffer(offer.value.title)
+        showDeleteOfferModal.value = false;
+        router.push('/admin-panel/sprzedaz/oferta')
+
+    }else{
+        toast.add({title: 'Błąd usunięcia oferty, nie znaleziono tytułu'})
+    } 
+}
+
+const closeModal = () => {
+    showEditOfferModal.value = false;
+    showDeleteOfferModal.value = false;
+}
+
+</script>
+
+<template>
+<workerComponents-header-worker></workerComponents-header-worker>
+<div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
+    <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
+  
+    <!-- TODO: poprawić margines -->
+    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+        
+        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal">Tytuł: </span>{{offer?.title}}</h1>
+            <p class="font-semibold"><span class="text-slate-500 text-base font-normal">Podtytuł: </span>{{offer?.subtitle}}</p>
+            <p>{{ offer }}</p>
+        </div>
+
+        <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <UButton
+                icon="i-material-symbols-id-card-outline"
+                size="sm"
+                color="blue"
+                variant="solid"
+                label="Edytuj dane karnetu"
+                @click="showEditOfferModal = true"
+                v-show="useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('PASS_MANAGEMENT') || useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('ADMIN')"
+            />
+            <UButton
+                icon="i-material-symbols-id-card-outline"
+                size="sm"
+                color="red"
+                variant="solid"
+                label="Usuń karnet"
+                @click="showDeleteOfferModal = true"
+                v-show="useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('PASS_MANAGEMENT') || useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('ADMIN')"
+            />
+            <UModal 
+                v-model="showEditOfferModal"
+                :closable="true"
+                @close="closeModal"
+                :ui="{ 
+                base: 'min-h-[50vh] overflow-x-hidden min-w-[40vw]',
+                }"
+            >
+                <UCard 
+                    :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+                >
+                    <template #header>
+                        <h3 class="font-bold text-lg">Edytuj dane oferty</h3>
+                    </template>
+
+                    <UForm :state="newOfferData" :validate="validate" class="space-y-4" @submit="updateSpecialOffer">  
+                        <UFormGroup label="Tytuł" name="title" required>
+                            <UInput v-model="newOfferData.title" label="Tytuł" placeholder="Wpisz tytuł oferty" />
+                        </UFormGroup>
+                        <UFormGroup label="Podtytuł" name="subtitle" required>
+                            <UInput v-model="newOfferData.subtitle" label="Podtytuł" placeholder="Wpisz podtytuł oferty" />
+                        </UFormGroup>
+                        <UFormGroup label="Cena miesięczna" name="monthlyPrice" required>
+                            <UInput v-model="newOfferData.monthlyPrice" label="Cena miesięczna" placeholder="Wpisz cenę miesięczną" >
+                                <template #trailing>
+                                    <span class="text-gray-500 dark:text-gray-400 text-xs">PLN</span>
+                                </template>
+                            </UInput>
+                        </UFormGroup>
+                        <UFormGroup label="Opłata aktywacyjna" name="entryFee" required>
+                            <UInput v-model="newOfferData.entryFee" label="Opłata aktywacyjna" placeholder="Wpisz opłatę aktywacyjną" >
+                                <template #trailing>
+                                    <span class="text-gray-500 dark:text-gray-400 text-xs">PLN</span>
+                                </template>
+                            </UInput>
+                        </UFormGroup>
+                        <UFormGroup label="Okres trwania w miesiącach" name="durationInMonths" required>
+                            <UInput v-model="newOfferData.durationInMonths" label="Okres trwania" placeholder="Wpisz okres trwania" >
+                            <template #trailing>
+                                <span class="text-gray-500 dark:text-gray-400 text-xs">Miesięcy</span>
+                            </template>
+                            </UInput>
+                        </UFormGroup>
+                        <UFormGroup label="Cechy oferty, maks 6 cech" name="properties" required>
+                            <UTextarea 
+                                v-model="propertiesInput" 
+                                placeholder="Cechy oferty oddzielone enterem lub średnikiem ';' np. siłownia; basen; sauna" 
+                                @update:model-value="handlePropertiesInput"
+                                resize 
+                            >
+                            </UTextarea>
+                            {{propertiesInput}}
+                        </UFormGroup>
+                        <UFormGroup label="Tekst specjalnej oferty" name="specialOfferText" required>
+                            <UInput v-model="newOfferData.specialOfferText" label="Podtytuł" placeholder="Wpisz podtytuł oferty" />
+                        </UFormGroup>
+                        <UFormGroup label="Aktywność" name="active">
+                            <UCheckbox v-model="newOfferData.active" :label="newOfferData.active ? 'Aktywny' : 'Nieaktywny'" />
+                        </UFormGroup>
+                        <UFormGroup label="Tekst na obramowaniu" name="borderText">
+                            <UInput v-model="newOfferData.borderText" label="Tekst na obramowaniu" placeholder="Wpisz tekst na obramowaniu" />
+                        </UFormGroup>
+                        <UFormGroup label="Poprzednia cena" name="previousPriceInfo">
+                            <UInput v-model="newOfferData.previousPriceInfo" label="Poprzednia cena" placeholder="Wpisz poprzednią cenę" />
+                        </UFormGroup>
+                        <UButton type="submit" color="blue">Zapisz zmiany oferty</UButton>
+                    </UForm>
+
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Anuluj" @click="closeModal" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
+
+            <UModal 
+            v-model="showDeleteOfferModal"
+            :closable="true"
+            @close="closeModal"
+            :ui="{ 
+            base: 'overflow-x-hidden min-w-[40vw]',
+            }"
+        >
+            <UCard 
+                :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+            >
+                <template #header>
+                    <h3 class="font-bold text-lg">Potwierdzenie usunięcia karnetu</h3>
+                </template>
+                
+                <div class="flex flex-col gap-5 align-middle justify-start items-start h-full">
+                    <p class="text-xl font-medium text-red-700">Czy na pewno chcesz usunąć karnet:</p>  
+                    <p>{{offer?.title}}</p>
+                    <UButton @click="deleteOffer" color="red">Usuń karnet</UButton>
+                </div>
+                
+
+                <template #footer>
+                    <div class="flex flex-row justify-end gap-5">
+                        <UButton label="Anuluj" @click="closeModal" color="gray" icon="i-material-symbols-cancel" />
+                    </div>
+                </template>
+            </UCard>
+        </UModal>
+        
+
+        </div>
+
+        <div class="active-pass w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <ul class="w-max">
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Id oferty: </span>{{offer?.id}}</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Miesięczna cena oferty: </span>{{offer?.monthlyPrice}} zł</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Opłata aktywacyjna: </span>{{offer?.entryFee}} zł</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Okres trwania: </span>{{offer?.durationInMonths}} msc</li>
+                <li class="text-lg flex flex-row flex-nowrap gap-2 items-center"><span class="text-slate-500 text-base">Cechy oferty: </span>
+                    <div class="flex flex-row gap-2">
+                        <li v-for="property in offer?.properties" :key="property" >{{property}}, </li>
+                    </div>
+                </li>
+                <li :class="['text-lg', {'text-green-600': offer?.active, 'text-red-600': !offer?.active}]"><span class="text-slate-500 text-base pr-2">Aktywność: </span>{{offer?.active === true ? 'Aktywna' : 'Nieaktywna'}}</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Typ oferty: </span>{{offer?.type}}</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Tekst specjalnej oferty: </span>{{offer?.specialOfferText}}</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Tekst na obramowaniu: </span>{{offer?.borderText}}</li>
+                <li class="text-lg"><span class="text-slate-500 text-base pr-2">Poprzednia cena: </span>{{offer?.previousPriceInfo}}</li>
+            </ul>
+        </div>
+
+        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <h1 class="text-xl font-semibold">Statystyki</h1>
+            <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące oferty, ilość wykupionych dostępów, wpływ i inne.</p>
+        </div>
+
+        <div class="flex flex-row flex-nowrap gap-8">
+            <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+              <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
+              <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
+              <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
+            </div>
+      
+            <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
+                <img src="/images/worker/diagram.jpg" alt="" srcset="">
+            </div>  
+        </div>
+
+    </main> 
+
+</div>
+</template>
+
+<style scoped>
+
+</style>

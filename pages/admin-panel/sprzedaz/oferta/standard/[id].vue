@@ -9,12 +9,16 @@ const router = useRouter()
 const store = useOffersStore()
 const offer = ref<Offer | null>(null)
 const showEditOfferModal = ref(false)
+const showDeleteOfferModal = ref(false)
+
+const toast = useToast()
 
 
 
 //TODO: naprawić odświeżanie danych
 watchEffect(() => {
-    offer.value = store.offersPublicActive.find(offer => offer.id == route.params.id) || null;
+    // biome-ignore lint/suspicious/noDoubleEquals: <explanation>
+    offer.value = store.offerStandardAll.find(offer => offer.id == route.params.id as unknown as number) || null;
 });
 
 const propertiesInput = ref('')
@@ -72,8 +76,20 @@ const updateStandardOffer = async (event: FormSubmitEvent<any>) => {
     await store.updateStandardOffer(toRaw(event.data), previousTitle.value)
 }
 
+const deleteOffer = async () => {
+    console.log('Usuwanie karnetu', offer.value?.title)
+    if(offer.value){
+        await store.deleteOffer(offer.value.title)
+        router.push('/admin-panel/sprzedaz/oferta')
+        showDeleteOfferModal.value = false;
+    }else{
+        toast.add({title: 'Błąd usunięcia oferty, nie znaleziono tytułu'})
+    } 
+}
+
 const closeModal = () => {
     showEditOfferModal.value = false;
+    showDeleteOfferModal.value = false;
 }
 
 </script>
@@ -99,6 +115,15 @@ const closeModal = () => {
                 variant="solid"
                 label="Edytuj dane karnetu"
                 @click="showEditOfferModal = true"
+                v-show="useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('PASS_MANAGEMENT') || useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('ADMIN')"
+            />
+            <UButton
+                icon="i-material-symbols-id-card-outline"
+                size="sm"
+                color="red"
+                variant="solid"
+                label="Usuń karnet"
+                @click="showDeleteOfferModal = true"
                 v-show="useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('PASS_MANAGEMENT') || useCookie<LoggedWorkerData>('loggedWorkerData').value.permissions.includes('ADMIN')"
             />
             <UModal 
@@ -158,6 +183,29 @@ const closeModal = () => {
                         <UButton type="submit" color="blue">Zapisz zmiany oferty</UButton>
                     </UForm>
 
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Anuluj" @click="closeModal" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
+
+            <UModal 
+                v-model="showDeleteOfferModal"
+                :closable="true"
+                @close="closeModal"
+                :ui="{base: 'overflow-x-hidden min-w-[40vw]'}"
+            >
+                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <h3 class="font-bold text-lg">Potwierdzenie usunięcia karnetu</h3>
+                    </template>
+                    <div class="flex flex-col gap-5 align-middle justify-start items-start h-full">
+                        <p class="text-xl font-medium text-red-700">Czy na pewno chcesz usunąć karnet:</p>  
+                        <p>{{offer?.title}}</p>
+                        <UButton @click="deleteOffer" color="red">Usuń karnet</UButton>
+                    </div>
                     <template #footer>
                         <div class="flex flex-row justify-end gap-5">
                             <UButton label="Anuluj" @click="closeModal" color="gray" icon="i-material-symbols-cancel" />

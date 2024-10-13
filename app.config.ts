@@ -8,7 +8,7 @@ export default defineAppConfig({
       },
       modal: {
         wrapper: 'relative z-50 bg-black p-30',
-        width: 'sm:max-w-[91%] sm:w-auto sm:h-auto'
+        width: 'sm:max-w-[91%] sm:w-auto sm:h-auto '
       }
 
     }

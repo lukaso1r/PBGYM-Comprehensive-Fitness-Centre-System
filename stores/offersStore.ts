@@ -9,7 +9,7 @@ export const useOffersStore = defineStore('offersStore', () => {
     const offerStandardByTitle = useState<Offer | null>(() => null);
     const offerSpecialByTitle = useState<Offer | null>(() => null);
     const offerStandardAll = useState<Offer[]>(() => []);
-    const offerSpecialAll = useState<Offer[]>(() => []);
+    const offerSpecialAll = useState<SpecialOffer[]>(() => []);
     const offerAll = useState<Offer[]>(() => []);
 
     // GET /offers  
@@ -105,7 +105,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<Offer[]>('https://pbgym.onrender.com/offers/special', {
+            response = await $fetch<SpecialOffer[]>('https://pbgym.onrender.com/offers/special', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -151,6 +151,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
+
             response = await $fetch<EditableStandardOfferData>('https://pbgym.onrender.com/offers/standard', {
                 method: 'POST',
                 headers: {
@@ -159,7 +160,7 @@ export const useOffersStore = defineStore('offersStore', () => {
                 },
                 body: JSON.stringify(offer)
             });
-            if (response.status === 'Standard Offer successfully added.') {
+            if (response === 'Standard Offer successfully added.') {
                 toast.add({ title: 'Dodano standardową ofertę', description: `${offer.title}` });
             } else {
                 throw new Error(response || 'Nie udało się dodać oferty standardowej.');
@@ -188,7 +189,7 @@ export const useOffersStore = defineStore('offersStore', () => {
                 },
                 body: JSON.stringify(offer)
             });
-            if (response.status === 'Special Offer successfully added.') {
+            if (response === 'Special Offer successfully added.') {
                 toast.add({ title: 'Dodano specjalną ofertę', description: `${offer.title}` });
             } else {
                 throw new Error(response || 'Nie udało się dodać oferty specjalnej.');
@@ -303,16 +304,20 @@ export const useOffersStore = defineStore('offersStore', () => {
         offerStandardAll,
         offerSpecialAll,
         offerAll,
+        
         addStandardOffer,
         addSpecialOffer,
+        
         updateStandardOffer,
         updateSpecialOffer,
+        
         getOffersPublicActive,
         getOfferStandardByTitle,
         getOfferSpecialByTitle,
         getOfferStandardAll,
         getOfferSpecialAll,
         getOfferAll,
+
         deleteOffer
     };
     
