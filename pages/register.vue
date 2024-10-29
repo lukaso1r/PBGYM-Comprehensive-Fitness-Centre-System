@@ -169,7 +169,7 @@ const validatePassword = () => {
                     Zakończ rejestrację i przejdź do swojego profilu
                 </UButton>
 
-                <UButton @click="registerStep=1" class="" variant="ghost" color="sky" icon="i-ic-sharp-keyboard-backspace">
+                <UButton @click="registerStep=1" class="text-[#203983]" variant="ghost" color="sky" icon="i-ic-sharp-keyboard-backspace">
                     Wróć do poprzedniego kroku
                 </UButton>
             </UForm>

@@ -49,3 +49,31 @@ export const validatePosition = (position: string) => {
     return true
 }
 
+export const validateCardNumber = (cardNumber: string) => {
+    if (!(/^\d{16}$/.test(cardNumber)) && cardNumber !== '') {
+        return false
+    }
+    return true
+}
+
+export const validateCardMonth = (month: string) => {
+    if (!(/^(0?[1-9]|1[0-2])$/.test(month)) && month !== '') {
+        return false
+    }
+    return true
+}
+
+export const validateCardYear = (year: string) => {
+    if (!(/^(0[0-9]|[1-9][0-9])$/.test(year)) && year !== '') {
+        return false
+    }
+    return true
+}
+
+export const validateCardCVC = (cvc: string) => {
+    if (!(/^\d{3}$/.test(cvc)) && cvc !== '') {
+        return false
+    }
+    return true
+}
+

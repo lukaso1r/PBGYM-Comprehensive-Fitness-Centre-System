@@ -186,3 +186,12 @@ export interface EditableSpecialOfferData{
     borderText: string,
     previousPriceInfo: string
 }
+
+export interface CreditCardData {
+    cardNumber: string,
+    expirationMonth: string,
+    expirationYear: string,
+    cvc: string
+}
+
+

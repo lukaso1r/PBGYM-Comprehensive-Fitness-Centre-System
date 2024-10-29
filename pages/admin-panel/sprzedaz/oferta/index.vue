@@ -49,6 +49,7 @@ const itemsStandard = (row: any) => [
     ]
 ]
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const itemsSpecial = (row: any) => [
     [
         {
