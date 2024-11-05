@@ -194,4 +194,50 @@ export interface CreditCardData {
     cvc: string
 }
 
+export interface PaymentData {
+    id: number,
+    amount: number,
+    dateTime: string,
+    cardNumber: string,
+    expirationMonth: string,
+    expirationYear: string,
+    name: string,
+    surname: string,
+    email: string,
+    pesel: string
+  }
 
+export interface StatsPaymentsByUserEmail {
+    userEmail: PaymentData[]
+}
+
+export interface GymEntryData {
+    id: number,
+    dateTimeOfEntry: string,
+    dateTimeOfExit: string,
+    email: string
+}
+
+export interface StatsGymEntriesByUserEmail {
+    userEmail: GymEntryData[]
+}
+
+export interface MemberPaymentHistory {
+    id: number,
+    amount: number,
+    dateTime: string,
+    cardNumber: string,
+    expirationMonth: string,
+    expirationYear: string,
+    name: string,
+    surname: string,
+    email: string,
+    pesel: string
+}
+
+export interface MemberGymEntriesHistory {
+    id: number,
+    dateTimeOfEntry: string,
+    dateTimeOfExit: string,
+    email: string
+}
