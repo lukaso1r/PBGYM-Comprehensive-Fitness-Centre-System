@@ -60,7 +60,7 @@ const validate = (data: CreditCardData) => {
 
 <template>
 
-    <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/>
+    <!-- <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/> -->
 
     <header-user-profile></header-user-profile>
 
@@ -216,9 +216,6 @@ const validate = (data: CreditCardData) => {
                 </div>
             </div>
             
-
-            
-
             <div class="entriesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
@@ -236,7 +233,7 @@ const validate = (data: CreditCardData) => {
             </div>
 
             <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Dokumenty</span>
+                <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">

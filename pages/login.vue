@@ -28,6 +28,13 @@ const validateEmail = () => {
     return true
 }
 
+const fakeLogin = (email: string, password: string) => {
+    loginState.value.email = email;
+    loginState.value.password = password;
+
+    onSubmitLogin()
+}
+
 </script>
 
 <template>
@@ -57,6 +64,20 @@ const validateEmail = () => {
                     Zaloguj
                 </UButton>
             </UForm>
+
+            <div class="bg-slate-100 p-4 shadow-md">
+                <h3 class="text-xl font-medium">W celu ułatwienia logowania</h3>
+                <ul class="flex flex-col gap-4 pt-3">
+                    <li class="flex flex-row gap-3 justify-between items-center border-2 p-2 border-gray-800 bg-white">
+                        <p><span class="font-medium text-lg">Klient</span> <br /> Login: test1@member.com <br /> Hasło: 12345678</p>
+                        <UButton @click="fakeLogin('test1@member.com', '12345678')" class="p-2" color="sky">Zaloguj</UButton>
+                    </li>
+                    <li class="flex flex-row gap-3 justify-between items-center border-2 p-2 border-gray-800 bg-white">
+                        <p><span class="font-medium text-lg">Administrator</span> <br /> Login: admin@worker.com <br /> Hasło: 12345678</p>
+                        <UButton @click="fakeLogin('admin@worker.com', '12345678')" class="p-2" color="sky">Zaloguj</UButton>
+                    </li>
+                </ul>
+            </div>
             
             <NuxtLink to="/register" class="text-slate-500"><h6>Nie posiadasz konta? <span class="text-[#203983] font-bold"> &nbsp;&nbsp; Zarejestruj się</span></h6></NuxtLink>
         </div>
