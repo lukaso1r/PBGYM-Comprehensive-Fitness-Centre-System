@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core';
-import type { DefaultLoginData, LoggedMemberData, CreditCardData, MemberGymEntriesHistory, MemberPaymentHistory  } from "~/types";
+import type { DefaultLoginData, LoggedMemberData, CreditCardData, MemberGymEntriesHistory, MemberPaymentHistory, ActiveMemberPass  } from "~/types";
 import type { FormError, FormSubmitEvent } from '#ui/types'
 
 const store = useLoginStore();
@@ -16,6 +16,8 @@ const showEditPaymentModal = ref(false)
 
 const entriesHistory = ref(<MemberGymEntriesHistory[]>[] as MemberGymEntriesHistory[])
 const paymentHistory = ref(<MemberPaymentHistory[]>[] as MemberPaymentHistory[])
+const activeMemberPass = ref(<ActiveMemberPass>{} as ActiveMemberPass)
+
 
 const test = () => {
     console.log('test', entriesHistory.value )
@@ -28,8 +30,10 @@ onMounted(async () => {
     await paymentStore.getHiddenCreditCardInfo()
     await loggedMemberStore.getMemberGymEntriesHistory()
     await loggedMemberStore.getMemberPaymentsHistory()
+    await loggedMemberStore.getActiveMemberPass()
     paymentHistory.value = loggedMemberStore.memberPaymentHistory
     entriesHistory.value = loggedMemberStore.memberGymEntriesHistory
+    activeMemberPass.value = loggedMemberStore.activeMemberPass
 });
 
 const deletePaymentMethod = async () => {
@@ -101,10 +105,10 @@ const validate = (data: CreditCardData) => {
                 <div class="active-pass flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px] flex-nowrap items-center place-content-evenly " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
                     <h3 class="text-center font-medium">
-                        Karnet OPEN 12 msc STUDENT
+                        {{activeMemberPass.title}}
                     </h3>
                     <UDivider />
-                    <p class="text-center font-bold">do 20.12.2024</p>
+                    <p class="text-center font-bold">do {{dateToString(new Date (activeMemberPass.dateEnd))}}</p>
                 </div>
                 <!-- <div class="active-subscription flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px] flex-nowrap items-center  place-content-evenly " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <img src="/images/twoj-profil/gatorade.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">

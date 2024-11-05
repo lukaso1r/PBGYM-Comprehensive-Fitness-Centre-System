@@ -3,11 +3,20 @@
 import type { Offer } from '~/types';
 
 const offersStore = useOffersStore();
+const toast = useToast();
 
 const { data: offersData, pending } = await useAsyncData('offers', async () => {
     await offersStore.getOffersPublicActive();
     return offersStore.offersPublicActive;
 });
+
+const specialOffers = computed(() => offersData.value ? offersData.value.filter((offer: Offer) => offer.type === 'SPECIAL') : []);
+const standardOffers = computed(() => offersData.value ? offersData.value.filter((offer: Offer) => offer.type === 'STANDARD') : []);
+
+const buyPass = () => {
+    toast.add({ title: 'Zakup karnetu', description: 'Kupno karnetu dostępne wkrótce' });
+
+}
 
 </script>
 
@@ -24,49 +33,66 @@ const { data: offersData, pending } = await useAsyncData('offers', async () => {
                 <p class="text-slate-500">Wybierz karnet, który najlepiej odpowiada Twoim potrzebom</p>
             </div>
 
-            <div class="offers-container flex flex-row items-baseline gap-8 w-full ">
-                <UCard v-for="offer in offersData" :key="offer.id" class="offer-card max-w-1/4 w-1/4 rounded-lg" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <template #header>
-                        <h4 class="text-xl font-bold">{{offer.title}}</h4>
-                    </template>
-                    <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> /miesiąc</p>
-                    <div class="list-pass mx-auto mt-7 pl-7" >
-                        <ul class="list-disc" >
-                            <li v-for="(property, index) in offer.properties" :key="index">
-                                {{property}}
-                            </li>
-                        </ul>
+            <div class="offers-container flex flex-row items-center gap-8 w-full ">
+                <template v-for="offer in specialOffers" :key="offer.id">
+                    <div v-if="offer.type==='SPECIAL'" class="specialPass flex flex-row items-center">
+                        <p class="verticalSpecialText text-blue-600 font-medium shadow-2xl" style="z-50">{{offer.borderText}}</p>
+                        <UCard 
+                            class="w-max z-0"
+                            :ui="{shadow: 'shadow-2xl', ring: 'ring-[12px] ring-white dark:ring-gray-800', divide: 'divide-y divide-gray-200 dark:divide-gray-800', background: 'bg-blue-600 dark:bg-slate-200' }"
+                        >
+                            <template #header>
+                                <h4 class="text-2xl font-bold text-white">{{offer.title}}</h4>
+                                <h6 class=" pt-2 text-white text-lg">{{offer.subtitle}}</h6>
+                            </template>
+                            <p class="text-white"><span class="text-6xl font-bold text-white">{{offer.monthlyPrice}}</span> zł / miesiąc</p>
+                            <p class="w-4/6 text-zinc-300 text-sm pt-2">{{ offer.previousPriceInfo }} </p>
+                            <p class="pt-3 text-white">Opłata aktywacyjna: {{offer.entryFee}} zł</p>
+                            <div class="list-pass mx-auto mt-7 pl-7 text-white" >
+                                <ul class="list-disc text-white font-medium text-lg" >
+                                    <li>Ważność karnetu: {{offer.durationInMonths}} miesięcy</li>
+                                    <li v-for="(property, key) in offer.properties" :key="key">{{property}}</li>
+                                </ul>
+                            </div>
+                            <p class="text-white text-lg font-medium mt-5">{{offer.specialOfferText}}</p>
+                            <template #footer>
+                                <div class="flex flex-column justify-center">
+                                    <UButton 
+                                        label="Wybierz ten plan" 
+                                        class="bg-white text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" 
+                                        @click="buyPass"
+                                    />
+                                </div>
+                            </template>
+                        </UCard>
                     </div>
-                    <template #footer>
-                    <div class="flex flex-column justify-center">
-                        <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                    </div>
+                    
+                    <template v-for="offer in standardOffers" :key="offer.id">
+                        <UCard v-if="offer.type==='STANDARD'" class="offer-card max-w-1/4 w-1/4 rounded-lg" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                            <template #header>
+                                <h4 class="text-xl font-bold">{{offer.title}}</h4>
+                            </template>
+                            <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> /miesiąc</p>
+                            <div class="list-pass mx-auto mt-7 pl-7" >
+                                <ul class="list-disc" >
+                                    <li v-for="(property, index) in offer.properties" :key="index">
+                                        {{property}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <template #footer>
+                            <div class="flex flex-column justify-center">
+                                <UButton 
+                                    label="Wybierz ten plan" 
+                                    class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]"
+                                    @click="buyPass" 
+                                />
+                            </div>
+                            </template>
+                        </UCard>
                     </template>
-                </UCard>
+                </template>
             </div>
-
-            <div class="special-offers-container flex flex-row items-baseline gap-8 w-full ">
-                <UCard v-for="offer in offersData" :key="offer.id" class="offer-card max-w-1/4 w-1/4 rounded-lg" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <template #header>
-                        <h4 class="text-xl font-bold">{{offer.title}}</h4>
-                    </template>
-                    <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> /miesiąc</p>
-                    <div class="list-pass mx-auto mt-7 pl-7" >
-                        <ul class="list-disc" >
-                            <li v-for="(property, index) in offer.properties" :key="index">
-                                {{property}}
-                            </li>
-                        </ul>
-                    </div>
-                    <template #footer>
-                    <div class="flex flex-column justify-center">
-                        <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                    </div>
-                    </template>
-                </UCard>
-            </div>
-
-
         </main>
     </div>
    
@@ -74,5 +100,13 @@ const { data: offersData, pending } = await useAsyncData('offers', async () => {
 
 <style scoped>
 
+.verticalSpecialText{
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    z-index: 50;
+    background-color: white;
+    border-radius: 15px 0 0 15px;
+    padding: 10px 7px 10px 7px;
+}
 
 </style>

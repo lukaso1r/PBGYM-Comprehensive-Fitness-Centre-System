@@ -74,7 +74,10 @@ export interface Offer {
       string
     ],
     active: boolean,
-    type: string
+    type: string,
+    specialOfferText: string | undefined,
+    borderText: string | undefined,
+    previousPriceInfo: string | undefined
 }
 
 export interface EditableStandardOfferData {
@@ -240,4 +243,13 @@ export interface MemberGymEntriesHistory {
     dateTimeOfEntry: string,
     dateTimeOfExit: string,
     email: string
+}
+
+export interface ActiveMemberPass {
+    id: number,
+    title: string,
+    dateStart: string,
+    dateEnd: string
+    dateOfNextPayment: string,
+    monthlyPrice: number
 }
