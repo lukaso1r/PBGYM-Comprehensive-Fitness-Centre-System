@@ -37,7 +37,10 @@ export interface LoggedMemberData {
         buildingNumber: string,
         apartmentNumber: number,
         postalCode: string
-    }
+    },
+    passActive?: boolean,
+    passDateEnd?: string,
+
 }
 
 export interface DefaultLoginData {

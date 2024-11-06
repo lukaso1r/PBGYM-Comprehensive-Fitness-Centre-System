@@ -51,10 +51,10 @@ export const usePassStore = defineStore('passStore', () => {
     }
   }
 
-  const postNewPass = async (email: string, passId: number) => {
+  const postNewPass = async (email: string, offerId: number) => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     let response: any;
-    console.log('email:', email, 'passId:', passId, 'jwt:', useCookie<DefaultLoginData>('defaultLoginData').value.jwt);
+    console.log('email:', email, 'offerId:', offerId, 'jwt:', useCookie<DefaultLoginData>('defaultLoginData').value.jwt);
     try {
       response = await $fetch<ActiveMemberPass>(`https://pbgym.onrender.com/passes/${email}`, {
         method: 'POST',
@@ -62,7 +62,7 @@ export const usePassStore = defineStore('passStore', () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
         },
-        body: JSON.stringify({ passId })
+        body: JSON.stringify({ offerId })
       });
       if (response) {
         activeMemberPass.value = response;
@@ -75,7 +75,7 @@ export const usePassStore = defineStore('passStore', () => {
         throw new Error('Nie udało się zakupić karnetu.');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error, response);
       toast.add({
         title: 'Błąd zakupu karnetu!',
         description: 'Nie udało się zakupić karnetu.'
