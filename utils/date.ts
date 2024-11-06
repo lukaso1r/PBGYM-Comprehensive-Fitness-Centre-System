@@ -24,3 +24,11 @@ export const entryDuration = (dateStart: string, dateExit: string) => {
     const duration = exit.getTime() - start.getTime();
     return Math.ceil(duration/1000/60);
 };
+
+// data zakończenia karnetu
+export const passEndDate = (durationInMonths: number) => {
+    const start = currentDate.value;
+    const end = new Date(start);
+    end.setMonth(start.getMonth() + durationInMonths);
+    return end;
+};

@@ -2,11 +2,11 @@ import type { CreditCardData, LoggedMemberData, DefaultLoginData } from "~/types
 
 export const usePaymentStore = defineStore('paymentStore', () => {
 
-    const cardData = useState<CreditCardData>(() => ({cardNumber: '', expirationMonth: '', expirationYear: '', cvc: ''}))
-    const newCardData = useState<CreditCardData>(() => ({cardNumber: '', expirationMonth: '', expirationYear: '', cvc: ''}))
+    const cardData = useState<CreditCardData>(() => ({} as CreditCardData))
+    const newCardData = useState<CreditCardData>(() => ({} as CreditCardData))
     const toast = useToast();
 
-    const getHiddenCreditCardInfo = async () => {
+    const getHiddenCreditCardInfo = async (memberEmail: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
@@ -19,7 +19,7 @@ export const usePaymentStore = defineStore('paymentStore', () => {
             });
             if (response) {
                 cardData.value = response;
-                console.log('Oferta po tytyle z ofert standardowych:', response);
+                console.log('Dane karty kredytowej:', response);
             } else {
                 throw new Error('Nie udało się pobrać oferty standardowej.');
             }
@@ -28,9 +28,9 @@ export const usePaymentStore = defineStore('paymentStore', () => {
         }
     }
 
-    const deletePaymentMethod = async () => {
+    const deletePaymentMethod = async (memberEmail: string) => {
         try {
-            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
+            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,16 +38,17 @@ export const usePaymentStore = defineStore('paymentStore', () => {
                 }
             });
             console.log('Usunięto metodę płatności.');
+            cardData.value = {} as CreditCardData;
             toast.add({ title: 'Usunięto metodę płatności' });
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    const postPaymentMethod = async () => {
+    const postPaymentMethod = async (memberEmail: string) => {
         console.log('newCardData.value:', newCardData.value);
         try {
-            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
+            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -6,6 +6,7 @@ import type { FormError, FormSubmitEvent } from '#ui/types'
 const store = useLoginStore();
 const paymentStore = usePaymentStore();
 const loggedMemberStore = useLoggedMemberStore();
+const passStore = usePassStore();
 
 const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
 const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
@@ -14,36 +15,45 @@ const selectedTrue = ref(false)
 const selected = ref(true)
 const showEditPaymentModal = ref(false)
 
+const cardData = ref(<CreditCardData> {} as CreditCardData)
 const entriesHistory = ref(<MemberGymEntriesHistory[]>[] as MemberGymEntriesHistory[])
 const paymentHistory = ref(<MemberPaymentHistory[]>[] as MemberPaymentHistory[])
 const activeMemberPass = ref(<ActiveMemberPass>{} as ActiveMemberPass)
 
-
 const test = () => {
     console.log('test', entriesHistory.value )
     console.log('test2', paymentHistory.value )
-    
-
+    console.log('test3', activeMemberPass )
+    if (!isObjectEmpty(activeMemberPass)) {
+        console.log('activeMemberPass is an empty object');
+    } else {
+        console.log('activeMemberPass is not an empty object');
+    }
+    console.log('test4Karta', cardData.value )
 }
 
 onMounted(async () => {
-    await paymentStore.getHiddenCreditCardInfo()
+    await paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
     await loggedMemberStore.getMemberGymEntriesHistory()
     await loggedMemberStore.getMemberPaymentsHistory()
-    await loggedMemberStore.getActiveMemberPass()
+    await passStore.getActiveMemberPass(loggedMemberData.value.email)
+    await passStore.getMemberPassHistory(loggedMemberData.value.email)
     paymentHistory.value = loggedMemberStore.memberPaymentHistory
     entriesHistory.value = loggedMemberStore.memberGymEntriesHistory
-    activeMemberPass.value = loggedMemberStore.activeMemberPass
+    activeMemberPass.value = passStore.activeMemberPass
+    cardData.value = paymentStore.cardData
+
 });
 
 const deletePaymentMethod = async () => {
-    await paymentStore.deletePaymentMethod()
-    paymentStore.getHiddenCreditCardInfo()
+    await paymentStore.deletePaymentMethod(loggedMemberData.value.email)
+    paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
+    cardData.value = paymentStore.cardData
 }
 
 const addNewPaymentMethod = async () => {
-    await paymentStore.postPaymentMethod()
-    paymentStore.getHiddenCreditCardInfo()
+    await paymentStore.postPaymentMethod(loggedMemberData.value.email)
+    paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
 }
 
 const validate = (data: CreditCardData) => {
@@ -60,11 +70,14 @@ const validate = (data: CreditCardData) => {
     return errors
 }
 
+
+
 </script>
 
 <template>
 
-    <!-- <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/> -->
+    <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/>
+    <pre>test {{passStore.memberPassHistory}}</pre>
 
     <header-user-profile></header-user-profile>
 
@@ -73,9 +86,9 @@ const validate = (data: CreditCardData) => {
         <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap justify-start gap-8 pb-10 items-start">
             <div class="flex flex-row gap-8">
                 <!-- TODO: fix shadow and hand written css to tailwind -->
-                <div v-if="paymentStore.cardData.cardNumber!==''" class="credit-card aspect-[5/3] bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover w-fit p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
+                <div v-if="!isObjectEmpty(paymentStore.cardData) && cardData.cardNumber!==''" class="credit-card aspect-[5/3] bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover w-fit p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
                     <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>
-                    <p class="tracking-wide text-slate-50 font-semibold text-xl pr-20" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">**** **** **** {{paymentStore.cardData.cardNumber.slice(-4)}}</p>
+                    <p class="tracking-wide text-slate-50 font-semibold text-xl pr-20" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">**** **** **** {{paymentStore.cardData.cardNumber?.slice(-4)}}</p>
                     <div class="row flex place-content-between">
                         <div class="owner flex flex-col gap-2">
                             <span class="text-slate-200 font-medium" style="text-shadow: 1px 1px 1px black;">Właściciel karty</span>
@@ -102,13 +115,24 @@ const validate = (data: CreditCardData) => {
                     </div>
                 </div>
 
-                <div class="active-pass flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px] flex-nowrap items-center place-content-evenly " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
-                    <h3 class="text-center font-medium">
-                        {{activeMemberPass.title}}
-                    </h3>
-                    <UDivider />
-                    <p class="text-center font-bold">do {{dateToString(new Date (activeMemberPass.dateEnd))}}</p>
+                <div class="active-pass flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px]" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                    <div v-if="!isObjectEmpty(activeMemberPass)" class="flex flex-col flex-nowrap items-center place-content-evenly h-full">
+                        <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
+                        <h3 class="text-center font-medium">
+                            {{activeMemberPass.title}}
+                        </h3>
+                        <UDivider />
+                        <p class="text-center font-bold">do {{dateToString(new Date (activeMemberPass.dateEnd))}}</p>
+                    </div>
+                    <div v-else class="flex flex-col place-content-evenly items-center h-full">
+                        <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
+                        <h3 class="text-center font-medium">
+                            Brak aktywnego karnetu
+                        </h3>
+                        <UDivider />
+                        <NuxtLink to="/twoj-profil/oferty" class="text-sky-600 hover:bg-gray-50 hover:text-blue-500 p-1 px-2 rounded" >Kup karnet</NuxtLink>  
+                    </div>
+                    
                 </div>
                 <!-- <div class="active-subscription flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px] flex-nowrap items-center  place-content-evenly " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <img src="/images/twoj-profil/gatorade.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
@@ -124,9 +148,9 @@ const validate = (data: CreditCardData) => {
                     <span class="font-semibold text-lg">Metody płatności</span>
                     <div class="methods-container flex flex-row flex-wrap w-full">
                         <ul class="flex flex-row flex-nowrap place-items-center gap-2 justify-between w-full">
-                            <li v-if="paymentStore.cardData.cardNumber!==''" class="flex flex-row flex-nowrap place-items-center gap-5 border-solid border-2 border-gray-400 py-1 px-3 rounded-xl" >
+                            <li v-if="!isObjectEmpty(cardData)" class="flex flex-row flex-nowrap place-items-center gap-5 border-solid border-2 border-gray-400 py-1 px-3 rounded-xl" >
                                 <img src="/images/twoj-profil/mastercard.svg" alt="mastercard" class="w-[50px] h-[50px]">
-                                <p class="font-medium text-base" style="word-spacing: 0.6rem;">**** **** **** {{paymentStore.cardData.cardNumber.slice(-4)}}</p>
+                                <p class="font-medium text-base" style="word-spacing: 0.6rem;">**** **** **** {{paymentStore.cardData.cardNumber?.slice(-4)}}</p>
                                 <UButton
                                     icon="i-ic-baseline-create"
                                     size="sm"
@@ -162,7 +186,7 @@ const validate = (data: CreditCardData) => {
                                     <div class="flex flex-row flex-wrap gap-12 px-9 justify-center">
                                         <div class="flex flex-col gap-8 justify-center w-96">
                                             <h4 class="text-lg font-medium leading-7 [word-spacing:5px] w-max max-w-96">
-                                                <template v-if="paymentStore.cardData.cardNumber!==''">W celu zmiany danych karty, najpierw usuń obecną kartę, a następnie dodaj nową.</template>
+                                                <template v-if="!isObjectEmpty(cardData)">W celu zmiany danych karty, najpierw usuń obecną kartę, a następnie dodaj nową.</template>
                                                 <template v-else>Dodaj nową kartę płatniczą</template>
                                             </h4>
                                             <p class="font-light text-sm pt-3 flex flex-row justify-start items-center gap-4 w-max max-w-96">
@@ -171,10 +195,10 @@ const validate = (data: CreditCardData) => {
                                             </p>
                                         </div>
 
-                                        <div v-if="paymentStore.cardData.cardNumber!==''" class="flex flex-col w-96 items-center p-4">
+                                        <div v-if="!isObjectEmpty(cardData)" class="flex flex-col w-96 items-center p-4">
                                             <div  class="credit-card w-max aspect-[5/3] bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                                                 <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>
-                                                <p class="tracking-wide text-slate-50 font-semibold text-xl pr-10" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">**** **** **** {{paymentStore.cardData.cardNumber.slice(-4)}}</p>
+                                                <p class="tracking-wide text-slate-50 font-semibold text-xl pr-10" style="word-spacing: 1.5rem; text-shadow: 1px 1px 4px black;">**** **** **** {{paymentStore.cardData.cardNumber?.slice(-4)}}</p>
                                                 <div class="row flex place-content-between">
                                                     <div class="owner flex flex-col gap-2">
                                                         <span class="text-slate-200 font-medium" style="text-shadow: 1px 1px 1px black;">Właściciel karty</span>

@@ -4,6 +4,7 @@ export interface MemberToRegisterData {
     name: string;
     surname: string;
     birthdate: string;
+    gender: string;
     pesel: string;
     phoneNumber: string;
     address: {
@@ -251,5 +252,13 @@ export interface ActiveMemberPass {
     dateStart: string,
     dateEnd: string
     dateOfNextPayment: string,
+    monthlyPrice: number
+}
+
+export interface PassHistory {
+    id: number,
+    title: string,
+    dateStart: string,
+    dateEnd: string,
     monthlyPrice: number
 }

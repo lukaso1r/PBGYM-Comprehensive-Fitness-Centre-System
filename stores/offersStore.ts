@@ -5,12 +5,13 @@ export const useOffersStore = defineStore('offersStore', () => {
     const toast = useToast()
 
     // GETY
-    const offersPublicActive = useState<Offer[]>(() => ([]));
-    const offerStandardByTitle = useState<Offer | null>(() => null);
-    const offerSpecialByTitle = useState<Offer | null>(() => null);
+    const offersPublicActive = useState<Offer[]>(() => ([] as Offer[]));
+    const offerStandardByTitle = useState<Offer>(() => ({} as Offer));
+    const offerSpecialByTitle = useState<Offer>(() => ({} as Offer));
     const offerStandardAll = useState<Offer[]>(() => []);
     const offerSpecialAll = useState<SpecialOffer[]>(() => []);
     const offerAll = useState<Offer[]>(() => []);
+
 
     // GET /offers  
 
@@ -304,7 +305,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         offerStandardAll,
         offerSpecialAll,
         offerAll,
-        
+
         addStandardOffer,
         addSpecialOffer,
         

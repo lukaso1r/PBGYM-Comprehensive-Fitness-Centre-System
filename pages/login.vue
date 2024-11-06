@@ -2,7 +2,7 @@
 import type {UserToLoginCredentials} from '~/types'
 
 const store = useLoginStore();
-const loginState = useState<UserToLoginCredentials>(() => ({email: "test1@member.com", password: "12345678"}))
+const loginState = useState<UserToLoginCredentials>(() => ({email: "jan@member.com", password: "Haslo@123"}))
 const toast = useToast()
 
 const test = () => {

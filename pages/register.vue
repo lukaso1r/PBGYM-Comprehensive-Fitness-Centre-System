@@ -14,6 +14,7 @@ const memberToRegisterData = useState<MemberToRegisterData>(() => ({
     name: 'Lukasz',
     surname: 'Szukasz',
     birthdate: '2001-09-11',
+    gender: '',
     pesel: '54016842342',
     phoneNumber: '741852963',
     address: {
@@ -32,12 +33,14 @@ const birthdate = computed(() => {
 const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>(["year", "month", "calendar"]);
 const maxDate = ref(currentDate.value)
 
+const validGender = ref('valid')
+
 const registerStep = ref(1)
 // const registerStatus = computed(() => store.status)
 const toast = useToast()
 
 const onSubmitFirstForm = () => {
-    if(validateEmail() || validatePassword() || memberToRegisterData.value.password === repeatPassword.value){
+    if(validateEmail() || validatePassword() || validateGender() || memberToRegisterData.value.password === repeatPassword.value){
         console.log('Hasła są takie same')
         registerStep.value = 2
         console.log("defaultRegisterState.value.email",memberToRegisterData.value.email)
@@ -71,6 +74,16 @@ const validatePassword = () => {
         return false
     }
     return true
+}
+
+const validateGender = () => {
+    if (memberToRegisterData.value.gender==='') {
+        validGender.value = 'invalid'
+        return true
+    }else{
+        validGender.value = 'valid'
+        return false
+    }
 }
 
 </script>
@@ -123,6 +136,25 @@ const validatePassword = () => {
                     <UFormGroup label="Nazwisko"  required>
                         <UInput v-model="memberToRegisterData.surname" type="text" placeholder="Twoje Nazwisko" />
                     </UFormGroup>
+
+                    <UFormGroup label="Płeć" name="gender" required>
+                        <USelect v-model="memberToRegisterData.gender" 
+                          :options="[
+                            { label: 'Kobieta', value: 'FEMALE' },
+                            { label: 'Mężczyzna', value: 'MALE' },
+                            { label: 'Inne', value: 'OTHER' }
+                          ]" 
+                          :required="true"
+                          :style="{
+                            borderColor: validGender === 'invalid' ? 'red' : 'transparent',
+                            borderWidth: validGender === 'invalid' ? '1px' : '0px',
+                            borderStyle: 'solid',
+                            borderRadius: '5px',
+                          }"
+                        >
+                        </USelect>
+                        <p v-show="validGender==='invalid'" class="mt-2 text-red-500 dark:text-red-400 text-sm">Wymagane</p>
+                      </UFormGroup>
                 </div>
                 
                 <UFormGroup label="Data urodzenia"  required>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { Offer, LoggedMemberData } from '~/types';
 
-import type { Offer } from '~/types';
-
+const { buyNewPass } = usePassUtils();
 const offersStore = useOffersStore();
+const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
 const toast = useToast();
 
 const { data: offersData, pending } = await useAsyncData('offers', async () => {
@@ -13,8 +14,17 @@ const { data: offersData, pending } = await useAsyncData('offers', async () => {
 const specialOffers = computed(() => offersData.value ? offersData.value.filter((offer: Offer) => offer.type === 'SPECIAL') : []);
 const standardOffers = computed(() => offersData.value ? offersData.value.filter((offer: Offer) => offer.type === 'STANDARD') : []);
 
-const buyPass = () => {
+const showNewPassModal = ref(false);
+const choosenPassId = ref(0);
+const choosenPassType = ref('');
+const choosenPassTitle = ref('');
+
+const buyPass = (passId: number, passType: string, passTitle: string) => {
     toast.add({ title: 'Zakup karnetu', description: 'Kupno karnetu dostępne wkrótce' });
+    choosenPassId.value = passId
+    showNewPassModal.value = true
+    choosenPassType.value = passType
+    choosenPassTitle.value = passTitle
 
 }
 
@@ -60,7 +70,7 @@ const buyPass = () => {
                                     <UButton 
                                         label="Wybierz ten plan" 
                                         class="bg-white text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" 
-                                        @click="buyPass"
+                                        @click="buyPass(offer.id, offer.type, offer.title)"
                                     />
                                 </div>
                             </template>
@@ -85,7 +95,7 @@ const buyPass = () => {
                                 <UButton 
                                     label="Wybierz ten plan" 
                                     class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]"
-                                    @click="buyPass" 
+                                    @click="buyPass(offer.id, offer.type, offer.title)" 
                                 />
                             </div>
                             </template>
@@ -93,6 +103,8 @@ const buyPass = () => {
                     </template>
                 </template>
             </div>
+
+            <BuyNewPassModal v-model:showNewPassModal="showNewPassModal" :memberEmail="loggedMemberData.email" :choosenPassId="choosenPassId"  :choosenPassTitle="choosenPassTitle"/>
         </main>
     </div>
    

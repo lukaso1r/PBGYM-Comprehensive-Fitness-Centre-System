@@ -1,3 +1,6 @@
+import type { FormError, FormSubmitEvent } from '#ui/types'
+import type { CreditCardData } from '~/types'
+
 export const validatePassword = (password: string) => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password)) && password !== '') {
         return false
@@ -77,3 +80,21 @@ export const validateCardCVC = (cvc: string) => {
     return true
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const isObjectEmpty = (obj: any) => {
+    return Object.keys(obj).length === 0
+}
+
+export const validate = (data: CreditCardData) => {
+    const errors: FormError<string>[] = []
+
+    if (!data.cardNumber) errors.push({ path: 'cardNumber', message: 'Numer karty jest wymagany' })
+    if (!data.expirationMonth) errors.push({ path: 'expirationMonth', message: 'Miesiąc ważności karty jest wymagany' })
+    if (!data.expirationYear) errors.push({ path: 'expirationYear', message: 'Rok ważności karty jest wymagany' })
+    if (!data.cvc) errors.push({ path: 'cvc', message: 'Kod CVC / CVV jest wymagany' })
+    if (validateCardNumber(data.cardNumber) === false) errors.push({ path: 'cardNumber', message: 'Numer karty jest nieprawidłowy' })
+    if (validateCardMonth(data.expirationMonth) === false) errors.push({ path: 'expirationMonth', message: 'Miesiąc ważności karty jest nieprawidłowy' })
+    if (validateCardYear(data.expirationYear) === false) errors.push({ path: 'expirationYear', message: 'Rok ważności karty jest nieprawidłowy' })
+    if (validateCardCVC(data.cvc) === false) errors.push({ path: 'cvc', message: 'Kod CVC / CVV jest nieprawidłowy' })
+    return errors
+}

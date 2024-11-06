@@ -4,7 +4,6 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
     
     const memberPaymentHistory = useState<MemberPaymentHistory[]>(() => []);
     const memberGymEntriesHistory = useState<MemberGymEntriesHistory[]>(() => []);
-    const activeMemberPass = useState<ActiveMemberPass>(() => ({} as ActiveMemberPass));
 
     const getMemberPaymentsHistory = async () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -50,27 +49,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         }
     }
 
-    const getActiveMemberPass = async () => {
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        let response: any;
-        try {
-            response = await $fetch<ActiveMemberPass>(`https://pbgym.onrender.com/passes/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
-                }
-            });
-            if (response) {
-                activeMemberPass.value = response;
-                console.log('Aktywny karnet:', response);
-            } else {
-                throw new Error('Nie udało się pobrać aktywnego karnetu.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    
 
     
 
@@ -79,12 +58,9 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
     return {
         memberPaymentHistory,
         memberGymEntriesHistory,
-        activeMemberPass,
 
-        
         getMemberPaymentsHistory,
         getMemberGymEntriesHistory,
-        getActiveMemberPass
     }
 
 });
