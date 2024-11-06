@@ -1,11 +1,26 @@
 <script setup lang="ts">
 import type { ChangeEmailData, ChangeMemberDetailsData, LoggedMemberData } from '~/types'
+import { format } from 'date-fns'
 
 const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData')
+const date = ref<Date>();
+const birthdate = computed(() => {
+    return date.value ? format(date.value, 'yyyy-MM-dd') : ""
+})
+const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>(["year", "month", "calendar"]);
+const maxDate = ref(currentDate.value)
+
+const validGender = ref('valid')
+
 
 const changePasswordState = useState(() => ({oldPassword: '', newPassword: '', newPasswordRepeat: ''}))
 const changeEmailState = useState<ChangeEmailData>(() => ({newEmail: ''}))
 const changeMemberDetailsState = useState<ChangeMemberDetailsData>(() => ({
+    name: '',
+    surname: '',
+    birthdate: '',
+    gender: '',
+    pesel: '',
     phoneNumber: '',
     address: {
         city: '',
@@ -19,6 +34,11 @@ const changeMemberDetailsState = useState<ChangeMemberDetailsData>(() => ({
 watchEffect(() => {
     if (loggedMemberData) {
         changeMemberDetailsState.value = {
+            name: loggedMemberData.value.name,
+            surname: loggedMemberData.value.surname,
+            birthdate: loggedMemberData.value.birthdate,
+            gender: loggedMemberData.value.gender,
+            pesel: loggedMemberData.value.pesel,
             phoneNumber: loggedMemberData.value.phoneNumber,
             address: {
                 city: loggedMemberData.value.address?.city || "",
@@ -34,6 +54,7 @@ watchEffect(() => {
 const passwordStore = useChangePasswordStore()
 const emailStore = useChangeEmailStore()
 const memberDetailsStore = useChangeMemberDetailsStore()
+
 
 const onSubmitChangePassword = () => {
     console.log('submit change passsword')
@@ -125,32 +146,63 @@ const test = () => {
         </div>
 
         <div class="changeMemberDetailsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4">
-            <span class="font-semibold text-lg">Zmiana danych adresowych</span>
-            <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić swoje dane adresowe.</h3>
+            <span class="font-semibold text-lg">Zmiana danych personalnych</span>
+            <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić swoje dane personalne.</h3>
             
             <UForm class="space-y-4" :state="changeMemberDetailsState" @submit="onSubmitChangeMemberDetails">
+                <UFormGroup label="Nowe imię" required>
+                    <UInput v-model="changeMemberDetailsState.name" type="string" placeholder="Twóoje nowe imię" :value="changeMemberDetailsState.name"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowe nazwisko" required>
+                    <UInput v-model="changeMemberDetailsState.surname" type="string" placeholder="Twój nowy numer telefonu" :value="changeMemberDetailsState.surname"  />
+                </UFormGroup>
+
+                <UFormGroup label="Data urodzenia"  required>
+                    <VueDatePicker v-model="date" :max-date="maxDate" :min-date="'1900'" :year-range="[1900, maxDate.getFullYear()]" prevent-min-max-navigation :enable-time-picker="false" :flow="flow" locale="pl" cancelText="anuluj" selectText="potwierdź" />
+                </UFormGroup>
+
+                <UFormGroup label="Płeć" name="gender" required>
+                    <USelect v-model="changeMemberDetailsState.gender" 
+                      :options="[
+                        { label: 'Kobieta', value: 'FEMALE' },
+                        { label: 'Mężczyzna', value: 'MALE' },
+                        { label: 'Inne', value: 'OTHER' }
+                      ]" 
+                      :required="true"
+                      :style="{
+                        borderColor: validGender === 'invalid' ? 'red' : 'transparent',
+                        borderWidth: validGender === 'invalid' ? '1px' : '0px',
+                        borderStyle: 'solid',
+                        borderRadius: '5px',
+                      }"
+                    >
+                    </USelect>
+                    <p v-show="validGender==='invalid'" class="mt-2 text-red-500 dark:text-red-400 text-sm">Wymagane</p>
+                </UFormGroup>
+
                 <UFormGroup label="Nowy numer telefonu" required>
-                    <UInput v-model="changeMemberDetailsState.phoneNumber" type="number" placeholder="Twój nowy numer telefonu" :value="changeMemberDetailsState.phoneNumber" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.phoneNumber" type="number" placeholder="Twój nowy numer telefonu" :value="changeMemberDetailsState.phoneNumber"  />
                 </UFormGroup>
 
                 <UFormGroup label="Nowe miasto" required>
-                    <UInput v-model="changeMemberDetailsState.address.city" type="text" placeholder="Twoje nowe miasto" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.address.city" type="text" placeholder="Twoje nowe miasto"  />
                 </UFormGroup>
 
                 <UFormGroup label="Nowa ulica" required>
-                    <UInput v-model="changeMemberDetailsState.address.streetName" type="text" placeholder="Twoja nowa ulica" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.address.streetName" type="text" placeholder="Twoja nowa ulica"  />
                 </UFormGroup>
 
                 <UFormGroup label="Nowy numer budynku" required>
-                    <UInput v-model="changeMemberDetailsState.address.buildingNumber" type="text" placeholder="Twój nowy numer budynku" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.address.buildingNumber" type="text" placeholder="Twój nowy numer budynku"  />
                 </UFormGroup>
 
                 <UFormGroup label="Nowy numer mieszkania" required>
-                    <UInput v-model="changeMemberDetailsState.address.apartmentNumber" type="text" placeholder="Twój nowy numer mieszkania" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.address.apartmentNumber" type="text" placeholder="Twój nowy numer mieszkania"  />
                 </UFormGroup>
 
                 <UFormGroup label="Nowy kod pocztowy" required>
-                    <UInput v-model="changeMemberDetailsState.address.postalCode" type="text" placeholder="Twój nowy kod pocztowy" icon="i-ic-baseline-mail-outline" />
+                    <UInput v-model="changeMemberDetailsState.address.postalCode" type="text" placeholder="Twój nowy kod pocztowy"  />
                 </UFormGroup>
 
 

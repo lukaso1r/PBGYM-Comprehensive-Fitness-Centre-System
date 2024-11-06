@@ -20,7 +20,6 @@ const choosenPassType = ref('');
 const choosenPassTitle = ref('');
 
 const buyPass = (passId: number, passType: string, passTitle: string) => {
-    toast.add({ title: 'Zakup karnetu', description: 'Kupno karnetu dostępne wkrótce' });
     choosenPassId.value = passId
     showNewPassModal.value = true
     choosenPassType.value = passType

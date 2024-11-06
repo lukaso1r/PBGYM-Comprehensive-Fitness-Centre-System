@@ -80,6 +80,7 @@ const validateGender = () => {
     if (memberToRegisterData.value.gender==='') {
         validGender.value = 'invalid'
         return true
+    // biome-ignore lint/style/noUselessElse: <explanation>
     }else{
         validGender.value = 'valid'
         return false

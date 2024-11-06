@@ -27,6 +27,7 @@ export interface LoggedMemberData {
     name: string,
     surname: string,
     birthdate: string,
+    gender: string,
     pesel: string,
     phoneNumber: string,
     address: {
@@ -54,6 +55,11 @@ export interface ChangeEmailData {
 }
 
 export interface ChangeMemberDetailsData {
+    name: string,
+    surname: string,
+    birthdate: string,
+    gender: string,
+    pesel: string,
     phoneNumber: string,
     address: {
         city: string,

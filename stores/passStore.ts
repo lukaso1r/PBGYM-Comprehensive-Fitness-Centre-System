@@ -78,7 +78,7 @@ export const usePassStore = defineStore('passStore', () => {
       console.error('Error:', error);
       toast.add({
         title: 'Błąd zakupu karnetu!',
-        description: `Nie udało się zakupić karnetu.${email + ' ' + passId + 'jwt ' + useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+        description: 'Nie udało się zakupić karnetu.'
       });
     }
   }

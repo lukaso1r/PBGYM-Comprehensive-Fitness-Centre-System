@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import type { Offer } from '~/types';
 
 const { buyNewPass } = usePassUtils();
@@ -40,7 +39,6 @@ onBeforeMount( async () => {
     await paymentStore.getHiddenCreditCardInfo(props.memberEmail)    
     
 })
-
 
 </script>
 
@@ -89,7 +87,10 @@ onBeforeMount( async () => {
                 <li><span class="font-medium">Ważność:</span> {{choosenPassObj?.durationInMonths}} miesięcy</li>
             </ul>
 
-            <p v-if="choosenPassObj" class="text-gray-500">Aktywacja karnetu następuje od momentu zakupu, <br />karnet będzie ważny do: {{dateToString(passEndDate(choosenPassObj.durationInMonths))}}</p>
+            <p v-if="choosenPassObj" class="text-gray-500">
+                Aktywacja karnetu następuje od momentu zakupu, 
+                <br />karnet będzie ważny do: {{dateToString(passEndDate(choosenPassObj.durationInMonths))}}
+            </p>
 
             <UButton 
                 class="flex flex-row justify-center text-xl px-7 py-2" 
@@ -100,10 +101,9 @@ onBeforeMount( async () => {
 
         </div>
 
-
         <template #footer>
             <div class="flex flex-row justify-end gap-5">
-            <UButton label="Anuluj" @click="closeShowNewPassModal" color="gray" icon="i-material-symbols-cancel" />
+                <UButton label="Anuluj" @click="closeShowNewPassModal" color="gray" icon="i-material-symbols-cancel" />
             </div>
         </template>
     </UCard>
