@@ -6,9 +6,12 @@ const email = ref<string>(route.params.id as string);
 
 const membersManagmentStore = useMembersManagmentStore();
 const loginStore = useLoginStore();
+const passStore = usePassStore();
+
 const loggedWorker = computed(() => loginStore.loggedWorkerData);
 
 const showMemberDataEditModal = ref(false);
+const showPassDetailsModal = ref(false);
 const typeDataToEdit = ref('');
 
 const editMemberData = (type: string) => {
@@ -18,6 +21,8 @@ const editMemberData = (type: string) => {
 
 onMounted( async () => {
     await membersManagmentStore.getMemberByEmail(email.value);
+    await passStore.getMemberPassHistory(email.value);
+    await passStore.getActiveMemberPass(email.value);
 });
 
 
@@ -68,6 +73,46 @@ onMounted( async () => {
                                 + ' ' 
                                 +  membersManagmentStore.memberByEmail?.address?.postalCode }}
                         </li>
+                        <li class="text-lg flex flex-col min-w-max ">
+                            <span class="text-slate-500 text-base pr-3">Aktywny karnet:</span>
+                            {{ passStore.activeMemberPass ? passStore.activeMemberPass.title : 'Brak' }} 
+                            <br />
+                            <UButton 
+                                class="mt-2"
+                                icon="i-material-symbols-key"
+                                size="sm"
+                                color="blue"
+                                variant="solid"
+                                label="Wyświetl szczegóły karnetu"
+                                @click="showPassDetailsModal = true"
+                            />
+                            <UModal 
+                                :model-value="showPassDetailsModal"
+                                :closable="true"
+                                @close="showPassDetailsModal = false"
+                                :ui="{}"
+                            >
+                                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                                    <template #header>
+                                        <h3 class="font-bold text-lg">Szczegóły aktywnego karnetu</h3>
+                                    </template>
+                                        <div class="flex flex-col gap-4">
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Id karnetu: </span>{{ passStore.activeMemberPass?.id }}</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Nazwa karnetu: </span>{{ passStore.activeMemberPass?.title }}</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Cena miesięczna: </span>{{ passStore.activeMemberPass?.monthlyPrice }} zł</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Data rozpoczęcia: </span>{{ dateToString(passStore.activeMemberPass?.dateStart) }}</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Data zakończenia: </span>{{ dateToString(passStore.activeMemberPass?.dateEnd) }}</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Pozostało dni: </span>{{ daysLeft(new Date(passStore.activeMemberPass?.dateEnd)) }}</p>
+                                            <p class="text-lg"><span class="text-slate-500 text-base pr-3">Data następnej płatności: </span>{{ passStore.activeMemberPass?.dateOfNextPayment }}</p>
+                                        </div>
+                                    <template #footer>
+                                        <div class="flex flex-row justify-end gap-5">
+                                            <UButton label="Anuluj" @click="showPassDetailsModal = false" color="gray" icon="i-material-symbols-cancel" />
+                                        </div>
+                                    </template>
+                                </UCard>
+                            </UModal>
+                        </li>
                     </ul>
                 </div>
         
@@ -100,6 +145,46 @@ onMounted( async () => {
             <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Statystyki</h1>
                 <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące pracownika</p>
+            </div>
+
+            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
+                <ul class="flex flex-col gap-5 w-full justify-between ">
+                    <h2 class="font-medium text-xl">Historia płatności</h2>
+                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnPayments - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
+                    <!-- <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
+                        <div class="document-name w-full pr-14 flex flex-col gap-1">
+                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
+                            <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
+                        </div>
+                        <UButton
+                            icon="i-ic-baseline-insert-drive-file"
+                            size="sm"
+                            color="blue"
+                            variant="ghost"
+                            label="PDF"
+                            :trailing="false"
+                        />
+                    </li> -->
+                    <hr class="w-full"/>
+                    <h2 class="font-medium text-xl">Historia karnetów</h2>
+                    <p v-if="passStore.memberPassHistory.length === 0" >Brak historii kanrnetów</p>
+                    <li v-for="pass in passStore.memberPassHistory" :key="pass.id" class="flex flex-row w-full place-items-center">
+                        <div class="document-name w-full pr-14 flex flex-col gap-1">
+                            <h3 class="[word-spacing:5px] font-medium">{{pass.title}} - {{pass.monthlyPrice}} zł</h3>
+                            <h6 class="font-thin text-slate-500">#ID-{{pass.id}}</h6>
+                        </div>
+                        <UButton
+                            icon="i-ic-baseline-insert-drive-file"
+                            size="sm"
+                            color="blue"
+                            variant="ghost"
+                            label="PDF"
+                            :trailing="false"
+                        />
+                    </li>
+
+                </ul>
             </div>
     
             <div class="flex flex-row flex-nowrap gap-8 items-start">

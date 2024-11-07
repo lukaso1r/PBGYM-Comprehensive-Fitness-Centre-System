@@ -8,9 +8,9 @@ export const weekInMilliseconds = computed(() => {
     return 7 * 24 * 60 * 60 * 1000;
 });
 
-export const dateToString = (date: Date) => {
+export const dateToString = (date: Date | string) => {
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-    return date.toLocaleDateString('pl-PL', options);
+    return new Date(date).toLocaleDateString('pl-PL', options);
 };
 
 export const dateToTimeString = (date: Date) => {
@@ -31,4 +31,11 @@ export const passEndDate = (durationInMonths: number) => {
     const end = new Date(start);
     end.setMonth(start.getMonth() + durationInMonths);
     return end;
+};
+
+// ile dni zostało
+export const daysLeft = (end: Date) => {
+    const start = currentDate.value;
+    const difference = end.getTime() - start.getTime();
+    return Math.ceil(difference/1000/60/60/24);
 };
