@@ -73,13 +73,13 @@ onMounted( async () => {
                                 + ' ' 
                                 +  membersManagmentStore.memberByEmail?.address?.postalCode }}
                         </li>
-                        <li class="text-lg flex flex-col min-w-max ">
+                        <li class="text-lg flex flex-col min-w-max mt-3">
                             <span class="text-slate-500 text-base pr-3">Aktywny karnet:</span>
                             {{ passStore.activeMemberPass ? passStore.activeMemberPass.title : 'Brak' }} 
                             <br />
                             <UButton 
                                 class="mt-2"
-                                icon="i-material-symbols-key"
+                                icon="i-material-symbols-id-card"
                                 size="sm"
                                 color="blue"
                                 variant="solid"
