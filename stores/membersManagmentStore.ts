@@ -1,10 +1,13 @@
-import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData } from "~/types";
+import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData} from "~/types";
 
 export const useMembersManagmentStore = defineStore('membersManagment', () => {
+
+    const { createMemberToRegisterObject } = useObjectFactory();
 
     const memberByEmail = useState<LoggedMemberData>('memberByEmail', () => ({} as LoggedMemberData));
     const allMembers = useState<LoggedMemberData[]>('allMembers', () => ([] as LoggedMemberData[]));
     const memberDataToChange = useState<ChangeMemberDetailsData>('memberDataToChange', () => ({} as ChangeMemberDetailsData));
+    const memberToRegister = useState<MemberToRegisterData>('memberToRegister', createMemberToRegisterObject);
 
     const router = useRouter();
     const toast = useToast();
@@ -56,6 +59,27 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     }
 
     // POST _______________________________________________________________
+
+    const postRegisterNewMember = async () => {
+        console.log('memberToRegister.value:', memberToRegister.value);
+        try {
+            await $fetch('https://pbgym.onrender.com/auth/registerMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                },
+                body: JSON.stringify(memberToRegister.value)
+            });
+            console.log('Dodano nowego członka.');
+            toast.add({ title: 'Dodano nowego członka' });
+            getAllMembers();
+            memberToRegister.value = createMemberToRegisterObject();
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Nie udało się dodać nowego członka' });
+        }
+    }
 
     // PUT _______________________________________________________________
 
@@ -131,6 +155,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         memberByEmail,
         allMembers,
         memberDataToChange,
+        memberToRegister,
 
         getMemberByEmail,
         getAllMembers,
@@ -138,6 +163,9 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         putMemberDetails,
         putMemberPassword,
         putMemberEmail,
+
+        postRegisterNewMember,
+
         clearData
         
 

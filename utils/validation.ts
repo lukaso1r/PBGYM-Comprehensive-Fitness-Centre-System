@@ -1,5 +1,5 @@
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import type { CreditCardData, LoggedMemberData } from '~/types'
+import type { CreditCardData, LoggedMemberData, MemberToRegisterData } from '~/types'
 
 export const validatePassword = (password: string) => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password)) && password !== '') {
@@ -111,6 +111,27 @@ export const validateMemberData = (data: LoggedMemberData) => {
     if (validatePesel(data.pesel) === false) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
     if (validatePhoneNumber(data.phoneNumber) === false) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest nieprawidłowy' })
     // if (!checkPESELChecksum(data.pesel)) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (data.address.streetName === '') errors.push({ path: 'streetName', message: 'Ulica jest wymagana' })
+    if (data.address.city === '') errors.push({ path: 'city', message: 'Miasto jest wymagane' })
+    if (!data.address.postalCode) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest wymagany' })
+    if (validatePostalCode(data.address.postalCode) === false) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest nieprawidłowy' })
+    if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
+    return errors
+}
+
+export const validateMemberToRegister = (data: MemberToRegisterData) => {
+    const errors: FormError<string>[] = []
+    if (!data.email) errors.push({ path: 'email', message: 'Email jest wymagany' })
+    if (!validateEmail(data.email)) errors.push({ path: 'email', message: 'Email jest nieprawidłowy' })
+    if (!data.password) errors.push({ path: 'password', message: 'Hasło jest wymagane' })
+    if (!validatePassword(data.password)) errors.push({ path: 'password', message: 'Hasło musi zawierać co najmniej 8 znaków, jedną cyfrę i jeden znak specjalny' })
+    if (!data.name) errors.push({ path: 'name', message: 'Imię jest wymagane' })
+    if (!data.surname) errors.push({ path: 'surname', message: 'Nazwisko jest wymagane' })
+    if (!data.email) errors.push({ path: 'email', message: 'Email jest wymagany' })
+    if (!data.pesel) errors.push({ path: 'pesel', message: 'PESEL jest wymagany' })
+    if (!data.phoneNumber) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest wymagany' })
+    if (validatePesel(data.pesel) === false) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (validatePhoneNumber(data.phoneNumber) === false) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest nieprawidłowy' })
     if (data.address.streetName === '') errors.push({ path: 'streetName', message: 'Ulica jest wymagana' })
     if (data.address.city === '') errors.push({ path: 'city', message: 'Miasto jest wymagane' })
     if (!data.address.postalCode) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest wymagany' })

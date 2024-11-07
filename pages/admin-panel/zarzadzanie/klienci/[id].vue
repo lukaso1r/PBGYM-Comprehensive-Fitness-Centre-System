@@ -39,7 +39,7 @@ const test = () => {
 
 <template>
 
-    <UButton @click="test" label="test" />
+    <!-- <UButton @click="test" label="test" /> -->
     <workerComponents-header-worker></workerComponents-header-worker>
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
@@ -145,7 +145,6 @@ const test = () => {
                         label="Edytuj dane logowania klienta"
                         @click="editMemberData('login')"
                     />
-
                     <WorkerComponentsMemberDataEditModal 
                         v-model:showMemberDataEditModal="showMemberDataEditModal"
                         :typeDataToEdit="typeDataToEdit"   
@@ -163,6 +162,9 @@ const test = () => {
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
                     <h1 class="text-red-600 font-bold text-xl">/members/getOwnPayments - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
+                    <hr class="w-full"/>
+                    <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
+                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
                     <!-- <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>

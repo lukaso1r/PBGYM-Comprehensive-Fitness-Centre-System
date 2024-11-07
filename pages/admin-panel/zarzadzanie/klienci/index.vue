@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 
+const showAddNewMemberByWorkerModal = ref(false)
+
 </script>
 
 <template>
@@ -16,7 +18,14 @@
 
             <WorkerComponentsMemberList />
             
-
+            <UButton 
+                color="blue"
+                class=" hover:bg-[#617F9B] text-center"
+                @click="showAddNewMemberByWorkerModal = true"
+            >   
+                Dodaj klienta
+            </UButton>
+            <WorkerComponentsAddNewMemberByWorkerModal v-model:showAddNewMemberByWorkerModal="showAddNewMemberByWorkerModal"/>
             
         </main>
 

@@ -57,12 +57,13 @@ const items = (row: any) => [
         {
             label: 'Szczegóły',
             icon: 'i-heroicons-document-magnifying-glass-16-solid',
-            to: { name: 'admin-panel-zarzadzanie-pracownicy-id', params: { id: row.id } }
+            click: () => select(row)
+            
         },
         {
             label: 'Edytuj',
             icon: 'i-heroicons-pencil-square-20-solid',
-            click: () => console.log('Edit', row.id)
+            to: { name: 'admin-panel-zarzadzanie-pracownicy-id', params: { id: row.id } }
         }
     ], 
     [
@@ -92,7 +93,7 @@ const items = (row: any) => [
     <UModal v-model="isOpen">
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
-                <h3 class="font-medium text-lg">{{selectedRow ? selectedRow.title : 'nic'}}</h3>
+                <h3 class="font-medium text-lg">{{selectedRow ? `${selectedRow.name}  ${selectedRow.surname} - ${selectedRow.position}` : 'nic'}}</h3>
             </template>
             <table class="table-auto">
                 <tbody>
