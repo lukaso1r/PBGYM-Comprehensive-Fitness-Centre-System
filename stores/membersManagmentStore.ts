@@ -71,6 +71,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             console.log('Zmieniono dane członka.');
             toast.add({ title: 'Zmieniono dane członka' });
+            getMemberByEmail(memberEmail);
         } catch (error) {
             console.error('Error:', error);
             toast.add({ title: 'Nie udało się zmienić danych członka' });

@@ -59,7 +59,7 @@ onBeforeMount( async () => {
             <h2 class="font-medium">W celu zakupu karnetu, najpierw należy przypisać kartę płatniczą do konta.</h2>
             <p>Wykonaj to za pomocą poniższego formularza</p>
             <div class="flex flex-col items-center p-4">
-                <UForm :state="paymentStore.newCardData" :validate="validate" class="space-y-4" @submit="addNewPaymentMethod">  
+                <UForm :state="paymentStore.newCardData" :validate="validateCreditCard" class="space-y-4" @submit="addNewPaymentMethod">  
                     <UFormGroup label="Numer karty" name="cardNumber" required>
                         <UInput v-model="paymentStore.newCardData.cardNumber" label="cardNumber" placeholder="Numer Karty" />
                     </UFormGroup>

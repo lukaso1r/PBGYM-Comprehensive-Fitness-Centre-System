@@ -1,5 +1,5 @@
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import type { CreditCardData } from '~/types'
+import type { CreditCardData, LoggedMemberData } from '~/types'
 
 export const validatePassword = (password: string) => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password)) && password !== '') {
@@ -85,7 +85,7 @@ export const isObjectEmpty = (obj: any) => {
     return Object.keys(obj).length === 0
 }
 
-export const validate = (data: CreditCardData) => {
+export const validateCreditCard = (data: CreditCardData) => {
     const errors: FormError<string>[] = []
 
     if (!data.cardNumber) errors.push({ path: 'cardNumber', message: 'Numer karty jest wymagany' })
@@ -96,5 +96,25 @@ export const validate = (data: CreditCardData) => {
     if (validateCardMonth(data.expirationMonth) === false) errors.push({ path: 'expirationMonth', message: 'Miesiąc ważności karty jest nieprawidłowy' })
     if (validateCardYear(data.expirationYear) === false) errors.push({ path: 'expirationYear', message: 'Rok ważności karty jest nieprawidłowy' })
     if (validateCardCVC(data.cvc) === false) errors.push({ path: 'cvc', message: 'Kod CVC / CVV jest nieprawidłowy' })
+    return errors
+}
+
+export const validateMemberData = (data: LoggedMemberData) => {
+    console.log('validacja membera', data)
+    const errors: FormError<string>[] = []
+
+    if (!data.name) errors.push({ path: 'name', message: 'Imię jest wymagane' })
+    if (!data.surname) errors.push({ path: 'surname', message: 'Nazwisko jest wymagane' })
+    if (!data.email) errors.push({ path: 'email', message: 'Email jest wymagany' })
+    if (!data.pesel) errors.push({ path: 'pesel', message: 'PESEL jest wymagany' })
+    if (!data.phoneNumber) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest wymagany' })
+    if (validatePesel(data.pesel) === false) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (validatePhoneNumber(data.phoneNumber) === false) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest nieprawidłowy' })
+    // if (!checkPESELChecksum(data.pesel)) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (data.address.streetName === '') errors.push({ path: 'streetName', message: 'Ulica jest wymagana' })
+    if (data.address.city === '') errors.push({ path: 'city', message: 'Miasto jest wymagane' })
+    if (!data.address.postalCode) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest wymagany' })
+    if (validatePostalCode(data.address.postalCode) === false) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest nieprawidłowy' })
+    if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
     return errors
 }
