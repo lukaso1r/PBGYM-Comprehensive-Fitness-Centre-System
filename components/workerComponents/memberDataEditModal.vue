@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import type { LoggedMemberData } from '~/types';
+import type { LoggedMemberData, ChangePasswordData, ChangeEmailData } from '~/types';
 import { format } from 'date-fns'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -14,8 +14,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:showMemberDataEditModal']);
 
+
 const membersManagmentStore = useMembersManagmentStore();
 const changedPersonalMemberData = ref<LoggedMemberData>({} as LoggedMemberData);
+const memberPasswordToChange = ref<ChangePasswordData>({} as ChangePasswordData);
+const memberEmailToChange = ref<ChangeEmailData>({'newEmail': ''} as ChangeEmailData);
 
 const date = ref<Date>(new Date (props.memberByEmail.birthdate));
 const birthdate = computed(() => {
@@ -43,7 +46,21 @@ const closeshowMemberDataEditModal = () => {
 const onSubmitChangeMemberDetails = async () => {
     console.log('changedPersonalMemberData', changedPersonalMemberData.value);
     membersManagmentStore.memberDataToChange = changedPersonalMemberData.value;
+    membersManagmentStore.memberDataToChange.birthdate = birthdate.value;
     await membersManagmentStore.putMemberDetails(changedPersonalMemberData.value.email);
+    membersManagmentStore.getMemberByEmail(changedPersonalMemberData.value.email);
+    closeshowMemberDataEditModal();
+}
+
+const onSubmitChangeMemberPassword = async () => {
+    console.log('memberPasswordToChange', memberPasswordToChange.value, props.memberByEmail.email);
+    await membersManagmentStore.putMemberPassword(props.memberByEmail.email, memberPasswordToChange.value.newPassword);
+    closeshowMemberDataEditModal();
+}
+
+const onSubmitChangeMemberEmail = async () => {
+    console.log('memberEmailToChange', memberEmailToChange.value, props.memberByEmail.email);
+    await membersManagmentStore.putMemberEmail(props.memberByEmail.email, memberEmailToChange.value.newEmail);
     closeshowMemberDataEditModal();
 }
 
@@ -80,7 +97,17 @@ const onSubmitChangeMemberDetails = async () => {
                     </UFormGroup>
     
                     <UFormGroup label="Data urodzenia" name="birthdate"  required>
-                        <VueDatePicker v-model="date" :max-date="maxDate" :min-date="'1900'" :year-range="[1900, maxDate.getFullYear()]" prevent-min-max-navigation :enable-time-picker="false" :flow="flow" locale="pl" cancelText="anuluj" selectText="potwierdź" />
+                        <VueDatePicker v-model="date" 
+                            :max-date="maxDate" 
+                            :min-date="'1900'" 
+                            :year-range="[1900, maxDate.getFullYear()]" 
+                            prevent-min-max-navigation 
+                            :enable-time-picker="false" 
+                            :flow="flow" 
+                            locale="pl" 
+                            cancelText="anuluj" 
+                            selectText="potwierdź" 
+                        />
                     </UFormGroup>
     
                     <UFormGroup label="Płeć" name="gender" required>
@@ -146,8 +173,34 @@ const onSubmitChangeMemberDetails = async () => {
             <h3 class="font-bold text-lg">Formularz zmiany danych logowania</h3>
         </template>
 
-        <h1>test</h1>
-        <pre>{{memberByEmail}}</pre>
+        <span class="font-semibold text-lg">Zmiana danych logowania</span>
+        <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić dane logowania klienta.</h3>
+        
+        <UForm class="grid grid-cols-3 gap-5 pt-8 items-end" :state="memberPasswordToChange" @submit="onSubmitChangeMemberPassword">
+            <UFormGroup label="Nowe hasło" name="password" required>
+                <UInput v-model="memberPasswordToChange.newPassword" type="string" placeholder="Nowe hasło klienta" :value="memberPasswordToChange.newPassword"  />
+            </UFormGroup>
+        
+            <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid" :disabled="!validatePassword(memberPasswordToChange.newPassword)">
+                Zapisz nowe hasło
+            </UButton>
+        </UForm>
+
+        <UForm class="grid grid-cols-3 gap-5 pt-8 items-end" :state="memberEmailToChange" @submit="onSubmitChangeMemberEmail">
+            <UFormGroup label="Nowy email" name="email" required>
+                <UInput v-model="memberEmailToChange.newEmail" type="string" placeholder="Nowy email klienta" :value="memberEmailToChange.newEmail"  />
+            </UFormGroup>
+        
+            <UButton 
+                type="submit" 
+                color="blue" 
+                class="bg-[#203983] hover:bg-[#617F9B] text-center grid" 
+                :disabled="!validateEmail(memberEmailToChange.newEmail) || memberEmailToChange.newEmail===''">
+                Zapisz nowy email
+            </UButton>
+        </UForm>
+
+        
 
         <template #footer>
             <div class="flex flex-row justify-end gap-5">

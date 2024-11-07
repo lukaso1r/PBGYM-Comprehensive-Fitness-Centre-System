@@ -1,4 +1,4 @@
-import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData } from "~/types";
+import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData } from "~/types";
 
 export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
@@ -6,6 +6,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const allMembers = useState<LoggedMemberData[]>('allMembers', () => ([] as LoggedMemberData[]));
     const memberDataToChange = useState<ChangeMemberDetailsData>('memberDataToChange', () => ({} as ChangeMemberDetailsData));
 
+    const router = useRouter();
     const toast = useToast();
 
     // GET _______________________________________________________________
@@ -108,6 +109,9 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             console.log('Zmieniono email członka.');
             toast.add({ title: 'Zmieniono email członka' });
+            router.push(`/admin-panel/zarzadzanie/klienci/${newEmail}`);
+            
+            await getMemberByEmail(newEmail);
         } catch (error) {
             console.error('Error:', error);
             toast.add({ title: 'Nie udało się zmienić emaila członka' });

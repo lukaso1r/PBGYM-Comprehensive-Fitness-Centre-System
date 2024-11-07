@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@iconify-json/icon-park-outline": "^1.1.16",
+    "@types/lodash": "^4.17.13",
     "@vueuse/core": "^10.11.1",
     "@vueuse/nuxt": "^10.11.1"
   }
