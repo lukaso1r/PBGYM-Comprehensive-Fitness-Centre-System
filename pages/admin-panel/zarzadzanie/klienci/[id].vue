@@ -25,11 +25,21 @@ onMounted( async () => {
     await passStore.getActiveMemberPass(email.value);
 });
 
+onBeforeRouteLeave(() => {
+    membersManagmentStore.clearData();
+    passStore.clearData();
+});
+
+const test = () => {
+    console.log('test', passStore.activeMemberPass);
+}
 
 
 </script>
 
 <template>
+
+    <UButton @click="test" label="test" />
     <workerComponents-header-worker></workerComponents-header-worker>
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
@@ -73,11 +83,12 @@ onMounted( async () => {
                                 + ' ' 
                                 +  membersManagmentStore.memberByEmail?.address?.postalCode }}
                         </li>
-                        <li class="text-lg flex flex-col min-w-max mt-3">
+                        <li class="text-lg min-w-max mt-3">
                             <span class="text-slate-500 text-base pr-3">Aktywny karnet:</span>
-                            {{ passStore.activeMemberPass ? passStore.activeMemberPass.title : 'Brak' }} 
+                            {{ !isObjectEmpty(passStore.activeMemberPass) ? passStore.activeMemberPass.title : 'Brak' }} 
                             <br />
                             <UButton 
+                                v-show="!isObjectEmpty(passStore.activeMemberPass)"
                                 class="mt-2"
                                 icon="i-material-symbols-id-card"
                                 size="sm"

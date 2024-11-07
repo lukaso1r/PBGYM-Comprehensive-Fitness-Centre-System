@@ -120,6 +120,13 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
     // DELETE _______________________________________________________________
 
+
+    const clearData = () => {
+        memberByEmail.value = {} as LoggedMemberData;
+        allMembers.value = [] as LoggedMemberData[];
+        memberDataToChange.value = {} as ChangeMemberDetailsData;
+    }
+
     return {
         memberByEmail,
         allMembers,
@@ -130,7 +137,9 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
         putMemberDetails,
         putMemberPassword,
-        putMemberEmail
+        putMemberEmail,
+        clearData
+        
 
     }
 

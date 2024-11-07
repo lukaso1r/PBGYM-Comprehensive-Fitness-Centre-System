@@ -83,13 +83,19 @@ export const usePassStore = defineStore('passStore', () => {
     }
   }
 
+  const clearData = () => {
+    activeMemberPass.value = {} as ActiveMemberPass;
+    memberPassHistory.value = [];
+  }
+
   return{
     activeMemberPass,
     memberPassHistory,
 
     getActiveMemberPass,
     getMemberPassHistory,
-    postNewPass
+    postNewPass,
+    clearData
 
   }
 
