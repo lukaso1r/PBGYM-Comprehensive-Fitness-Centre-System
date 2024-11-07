@@ -33,12 +33,12 @@ const itemsStandard = (row: any) => [
         {
             label: 'Szczegóły',
             icon: 'i-heroicons-document-magnifying-glass-16-solid',
-            to: { name: 'admin-panel-sprzedaz-oferta-standard-id', params: { id: row.id } }
+            click: () => select(row)
         },
         {
             label: 'Edytuj',
             icon: 'i-heroicons-pencil-square-20-solid',
-            click: () => console.log('Edit', row.id)
+            to: { name: 'admin-panel-sprzedaz-oferta-standard-id', params: { id: row.id } }
         }
     ], 
     [
@@ -55,12 +55,12 @@ const itemsSpecial = (row: any) => [
         {
             label: 'Szczegóły',
             icon: 'i-heroicons-document-magnifying-glass-16-solid',
-            to: { name: 'admin-panel-sprzedaz-oferta-special-id', params: { id: row.id } }
+            click: () => select(row)
         },
         {
             label: 'Edytuj',
             icon: 'i-heroicons-pencil-square-20-solid',
-            click: () => console.log('Edit', row.id)
+            to: { name: 'admin-panel-sprzedaz-oferta-special-id', params: { id: row.id } }
         }
     ], 
     [
@@ -98,7 +98,7 @@ const test = () => {
 
 <template>
 
-<UButton @click="test">test</UButton>
+<!-- <UButton @click="test">test</UButton> -->
 
 <workerComponents-header-worker></workerComponents-header-worker>
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">

@@ -114,7 +114,6 @@ const closeModal = () => {
         <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal">Tytuł: </span>{{offer?.title}}</h1>
             <p class="font-semibold"><span class="text-slate-500 text-base font-normal">Podtytuł: </span>{{offer?.subtitle}}</p>
-            <p>{{ offer }}</p>
         </div>
 
         <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">

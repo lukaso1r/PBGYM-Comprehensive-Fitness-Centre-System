@@ -10,7 +10,7 @@ const items = [
         class: 'py-4 hover:bg-sky-100'        
     },
     {
-        label: 'Strony',
+        label: 'Strony *WIP*',
         icon: 'i-ic-round-layers',
         defaultOpen: false,
         slot: 'kokpit',
@@ -34,7 +34,7 @@ const items = [
         class: 'py-4 hover:bg-sky-100'        
     },
     {
-        label: 'Dokumenty',
+        label: 'Dokumenty *WIP*',
         icon: 'i-ic-round-collections-bookmark',
         defaultOpen: false,
         slot: 'kokpit',
@@ -45,18 +45,7 @@ const items = [
 
 const settings = [
     {
-        label: 'Konto',
-        icon: 'i-ic-twotone-handyman',
-        defaultOpen: false,
-        slot: 'insctruction',
-        color:'gray',
-        variant: 'ghost',
-        content: 'Lorem ipsum dolor sit amet',
-        class: 'py-4 hover:bg-purple-100 '
-        
-    },
-    {
-        label: 'Instrukcje',
+        label: 'Instrukcje  *WIP*',
         icon: 'i-ic-baseline-integration-instructions',
         defaultOpen: false,
         slot: 'insctruction',
@@ -67,7 +56,7 @@ const settings = [
         
     },
     {
-        label: 'Dziennik zdarzeń',
+        label: 'Dziennik zdarzeń  *WIP*',
         icon: 'i-ic-baseline-format-align-left',
         defaultOpen: false,
         slot: 'insctruction',
@@ -95,10 +84,10 @@ const settings = [
                             <p class="hover:text-blue-500 pl-9">Start</p>
                         </NuxtLink>
                         <NuxtLink to="/admin-panel" >
-                            <p class="hover:text-blue-500 pl-9">Główne statystyki</p>
+                            <p class="hover:text-blue-500 pl-9">Główne statystyki  *WIP*</p>
                         </NuxtLink>
                         <NuxtLink to="/admin-panel" >
-                            <p class="hover:text-blue-500 pl-9">Podgląd na żywo</p>
+                            <p class="hover:text-blue-500 pl-9">Podgląd na żywo  *WIP*</p>
                         </NuxtLink>
                     </template>
                     

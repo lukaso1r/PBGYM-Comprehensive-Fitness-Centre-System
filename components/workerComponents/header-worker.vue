@@ -30,7 +30,7 @@ import { UIcon } from '../../.nuxt/components';
                 <!-- TODO: Display Breadcrumbs dynamicly  -->
                 <UBreadcrumb
                     divider="/"
-                    :links="[{ label: 'PBGYM', to: '/' }, { label: 'Panel pracownika', to: '/admin-panel'}]"
+                    :links="[{ label: 'PBGYM  *WIP*', to: '/' }, { label: 'Panel pracownika', to: '/admin-panel'}]"
                 />
             </div>
             <div class="col2">
@@ -39,7 +39,7 @@ import { UIcon } from '../../.nuxt/components';
                     @click="powiadomienie"
                     icon="i-ic-baseline-notifications"
                 >
-                    Powiadomienia
+                    Powiadomienia  *WIP*
                 </UButton>
 
                 <UButton
@@ -65,7 +65,7 @@ import { UIcon } from '../../.nuxt/components';
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
                     <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejszy przychód</h3>
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejszy przychód  *WIP*</h3>
                         <span class="font-bold text-lg">2500 zł</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-blue-800 w-8 h-8 rounded-full py-4">
@@ -80,7 +80,7 @@ import { UIcon } from '../../.nuxt/components';
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
                     <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejsza sprzedaż karnetów</h3>
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejsza sprzedaż karnetów  *WIP*</h3>
                         <span class="font-bold text-lg">12</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-orange-700 w-8 h-8 rounded-full py-4">
@@ -95,7 +95,7 @@ import { UIcon } from '../../.nuxt/components';
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
                     <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Ogólny przyrost klientów</h3>
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Ogólny przyrost klientów  *WIP*</h3>
                         <span class="font-bold text-lg">+8</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-green-500 w-8 h-8 rounded-full py-4">
@@ -110,7 +110,7 @@ import { UIcon } from '../../.nuxt/components';
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
                     <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód</h3>
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód  *WIP*</h3>
                         <span class="font-bold text-lg">40 456 zł</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-amber-500 w-8 h-8 rounded-full py-4">

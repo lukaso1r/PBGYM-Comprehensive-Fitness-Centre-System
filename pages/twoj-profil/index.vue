@@ -75,9 +75,9 @@ const validate = (data: CreditCardData) => {
 </script>
 
 <template>
-
+<!-- 
     <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/>
-    <pre>test {{passStore.memberPassHistory}}</pre>
+    <pre>test {{passStore.memberPassHistory}}</pre> -->
 
     <header-user-profile></header-user-profile>
 
