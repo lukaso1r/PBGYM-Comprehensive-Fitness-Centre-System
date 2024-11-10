@@ -18,14 +18,6 @@ const items = [
         class: 'py-4 hover:bg-cyan-100'
     },
     {
-        label: 'Trenerzy *WIP*',
-        icon: 'i-ic-baseline-emoji-people',
-        defaultOpen: false,
-        slot: 'checkoffer',
-        color: 'green',
-        class: 'py-4 hover:bg-green-100'
-    },
-    {
         label: 'Dokumenty *WIP*',
         icon: 'i-ic-round-collections-bookmark',
         defaultOpen: false,

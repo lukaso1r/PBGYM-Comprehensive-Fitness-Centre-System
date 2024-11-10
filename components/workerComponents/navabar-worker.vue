@@ -98,6 +98,9 @@ const settings = [
                         <NuxtLink to="/admin-panel/zarzadzanie/klienci" >
                             <p class="hover:text-blue-500 pl-9">Klienci</p>
                         </NuxtLink>
+                        <NuxtLink to="/admin-panel/zarzadzanie/trenerzy" >
+                            <p class="hover:text-blue-500 pl-9">Trenerzy</p>
+                        </NuxtLink>
                     </template>
 
                     <template #sprzedaz >

@@ -30,6 +30,11 @@ onBeforeRouteLeave(() => {
     passStore.clearData();
 });
 
+const buyPassForMember = () =>{
+    console.log('buyPassForMember');
+    // passStore.buyPassForMember(email.value);
+}
+
 const test = () => {
     console.log('test', passStore.activeMemberPass);
 }
@@ -40,7 +45,7 @@ const test = () => {
 <template>
 
     <!-- <UButton @click="test" label="test" /> -->
-    <workerComponents-header-worker></workerComponents-header-worker>
+    <HeaderTrainerProfile />
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
       <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
@@ -135,7 +140,6 @@ const test = () => {
                         variant="solid"
                         label="Edytuj dane personalne klienta"
                         @click="editMemberData('data')"
-                        v-show="loggedWorker.permissions.includes('ADMIN')"
                     />
                     <UButton
                         icon="i-material-symbols-key"
@@ -145,11 +149,24 @@ const test = () => {
                         label="Edytuj dane logowania klienta"
                         @click="editMemberData('login')"
                     />
+                    <UButton 
+                        v-show="isObjectEmpty(passStore.activeMemberPass)"
+                        icon="i-material-symbols-id-card"
+                        size="sm"
+                        color="blue"
+                        variant="solid"
+                        label="Kup karnet klientowi"
+                        @click="buyPassForMember"
+                    />
                     <WorkerComponentsMemberDataEditModal 
                         v-model:showMemberDataEditModal="showMemberDataEditModal"
                         :typeDataToEdit="typeDataToEdit"   
                         :memberByEmail="membersManagmentStore.memberByEmail" 
                     />
+                    <!-- <BuyNewPassModal 
+                        v-model:showPassDetailsModal="showPassDetailsModal"
+                        :memberByEmail="membersManagmentStore.memberByEmail"
+                    /> -->
                 </div>
             </div>
             <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">

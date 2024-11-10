@@ -1,5 +1,5 @@
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import type { CreditCardData, LoggedMemberData, MemberToRegisterData } from '~/types'
+import type { CreditCardData, LoggedMemberData, MemberToRegisterData, TrainerDataToEdit } from '~/types'
 
 export const validatePassword = (password: string) => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password)) && password !== '') {
@@ -85,6 +85,11 @@ export const isObjectEmpty = (obj: any) => {
     return Object.keys(obj).length === 0
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export const isListEmpty = (list: any) => {
+    return list.length === 0 ? 'Brak' : list
+}
+
 export const validateCreditCard = (data: CreditCardData) => {
     const errors: FormError<string>[] = []
 
@@ -139,3 +144,24 @@ export const validateMemberToRegister = (data: MemberToRegisterData) => {
     if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
     return errors
 }
+
+export const validateTrainerPersonalData = (data: TrainerDataToEdit) => {
+    const errors: FormError<string>[] = []
+    if (!data.name) errors.push({ path: 'name', message: 'Imię jest wymagane' })
+    if (!data.surname) errors.push({ path: 'surname', message: 'Nazwisko jest wymagane' })
+    if (!data.pesel) errors.push({ path: 'pesel', message: 'PESEL jest wymagany' })
+    if (!data.gender) errors.push({path: 'gender', message: 'Płeć jest wymagana'})
+    if (!data.birthdate) errors.push({ path: 'birthdate', message: 'Data urodzenia jest wymagana' })
+    if (!data.phoneNumber) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest wymagany' })
+    if (validatePesel(data.pesel) === false) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (validatePhoneNumber(data.phoneNumber) === false) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest nieprawidłowy' })
+    if (data.address.streetName === '') errors.push({ path: 'streetName', message: 'Ulica jest wymagana' })
+    if (data.address.city === '') errors.push({ path: 'city', message: 'Miasto jest wymagane' })
+    if (!data.address.postalCode) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest wymagany' })
+    if (validatePostalCode(data.address.postalCode) === false) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest nieprawidłowy' })
+    if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
+    if (data.description === '') errors.push({ path: 'description', message: 'Opis jest wymagany' })
+    if (data.trainerTags.length === 0) errors.push({ path: 'trainerTags', message: 'Tagi trenera są wymagane' })
+    if (data.visible === undefined) errors.push({ path: 'visible', message: 'Widoczność trenera jest wymagana' })
+    return errors
+} 

@@ -1,28 +1,18 @@
-import type { MemberToRegisterData } from "~/types";
+import type { MemberToRegisterData, TrainerDataToRegister, DefaultLoginData } from "~/types";
 import { useLoginStore } from './loginStore';
 
 export const useRegisterStore = defineStore('register', () => {
 
+
+    const { createTrainerToRegisterObject, createMemberToRegisterObject } = useObjectFactory();
+
     // TODO: not sure if it stays here like that
     const loginStore = useLoginStore();
     
-    const memberToRegister = useState<MemberToRegisterData>('memberToRegister', () => ({
-        email: "",
-        password: "",
-        name: "",
-        surname: "",
-        birthdate: "",
-        pesel: "",
-        phoneNumber: "",
-        address: {
-            city: "",
-            streetName: "",
-            buildingNumber: "",
-            apartmentNumber: 0,
-            postalCode: ""
-        }
-    }));
+    const memberToRegister = useState<MemberToRegisterData>('memberToRegister', () => createMemberToRegisterObject());
+    const trainerToRegister = ref<TrainerDataToRegister>(createTrainerToRegisterObject());
 
+    const toast = useToast();
     const status = ref("idle");
 
     // TODO: zrobić to w try catch
@@ -50,6 +40,26 @@ export const useRegisterStore = defineStore('register', () => {
         clearData();
     };
 
+    const registerTrainer = async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch('https://pbgym.onrender.com/auth/registerTrainer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                },
+                body: JSON.stringify(trainerToRegister.value)
+            });
+            console.log('response:', response);
+            toast.add({title: 'Trener zarejestrowany', description: 'Trener został zarejestrowany pomyślnie.'});
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({title: 'Błąd', description: 'Nie udało się zarejestrować trenera.'});
+        }
+    }
+
     const clearData = () => {
         memberToRegister.value = {
             email: "",
@@ -57,6 +67,7 @@ export const useRegisterStore = defineStore('register', () => {
             name: "",
             surname: "",
             birthdate: "",
+            gender: "",
             pesel: "",
             phoneNumber: "",
             address: {
@@ -72,6 +83,9 @@ export const useRegisterStore = defineStore('register', () => {
     return {
         memberToRegister,
         status,
+        trainerToRegister,
+
+        registerTrainer,
         register,
         clearData
     };

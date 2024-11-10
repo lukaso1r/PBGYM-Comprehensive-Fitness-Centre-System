@@ -271,3 +271,71 @@ export interface PassHistory {
     dateEnd: string,
     monthlyPrice: number
 }
+
+export interface TrainerDataToRegister {
+    email: string,
+    password: string,
+    name: string,
+    surname: string,
+    birthdate: string,
+    gender: string,
+    pesel: string,
+    phoneNumber: string,
+    address: {
+        city: string,
+        streetName: string,
+        buildingNumber: string,
+        apartmentNumber?: number,
+        postalCode: string
+    }
+}
+
+export interface TrainerData {
+    id: number,
+    email: string,
+    name: string,
+    surname: string,
+    birthdate: string,
+    pesel: string,
+    phoneNumber: string,
+    address: {
+        id: number,
+        city: string,
+        streetName: string,
+        buildingNumber: string,
+        apartmentNumber: number,
+        postalCode: string
+    },
+    description: string,
+    photo: string[],
+    gender: string,
+    visible: boolean,
+    trainerTags: string[]
+}
+
+export interface TrainerEntries {
+    id: number,
+    dateTimeOfEntry: string,
+    dateTimeOfExit: string,
+    email: string
+}
+
+export interface TrainerDataToEdit {
+    name: string;
+    surname: string;
+    birthdate: string;
+    gender: string;
+    pesel: string;
+    phoneNumber: string;
+    address: {
+        city: string;
+        streetName: string;
+        buildingNumber: string;
+        apartmentNumber: number;
+        postalCode: string;
+    };
+    description: string;
+    photo: string[];
+    visible: boolean;
+    trainerTags: string[];
+}
