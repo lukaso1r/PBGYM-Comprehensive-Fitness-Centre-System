@@ -34,6 +34,8 @@ const maxDate = ref(currentDate.value)
 const validGender = ref('valid')
 const isTrainerVisible = ref('false')
 const trainerTags = ref<string[]>(props.trainerByEmail?.trainerTags ? [...props.trainerByEmail.trainerTags] : []);
+const changePasswordState = ref<ChangePasswordData>({oldPassword: '', newPassword: ''});
+const changeEmailState = ref<ChangeEmailData>({newEmail: ''});
 
 watch(
     () => props.trainerByEmail,
@@ -67,6 +69,19 @@ const onSubmitChangeTrainerData = async () => {
     closeshowTrainerDataEditModal();
 }
 
+const onSubmitUpdateTrainerPassword = async () => {
+    console.log('changePasswordState', changePasswordState.value, props.trainerByEmail.email);
+    await trainerStore.putUpdateTrainerPassword(props.trainerByEmail.email, changePasswordState.value.newPassword, changePasswordState.value.oldPassword);
+    changePasswordState.value = {oldPassword: '', newPassword: ''};
+    closeshowTrainerDataEditModal();
+}
+
+const onSubmitUpdateTrainerEmail = async () => {
+    console.log('changeEmailState', changeEmailState.value, props.trainerByEmail.email);
+    await trainerStore.putUpdateTrainerEmail(props.trainerByEmail.email, changeEmailState.value.newEmail);
+    changeEmailState.value = {newEmail: ''};
+    closeshowTrainerDataEditModal();
+}
 
 </script>
 
@@ -219,9 +234,26 @@ const onSubmitChangeTrainerData = async () => {
             </template>
             <div class="w-full">
                 <!-- <pre>{{memberByEmail}}</pre> -->
-                <div class="changeMemberDetailsContainer grid rounded-lg p-4 bg-white w-full">
-                    <span class="font-semibold text-lg">Zmiana danych logowania</span>
-                    <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić dane logowania trenera.</h3>
+                <div class="changeMemberDetailsContainer flex flex-row gap-8 rounded-lg p-4 bg-white w-full">
+                    <div class="flex flex-col gap-2 p-4 border-2">
+                        <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić hasło.</h3>
+                        <UForm class="space-y-4" :state="changePasswordState" @submit="onSubmitUpdateTrainerPassword">
+                            <UFormGroup label="Nowe hasło" required>
+                                <UInput v-model="changePasswordState.newPassword" type="password" placeholder="Nowe hasło" icon="i-heroicons-lock-closed" />
+                            </UFormGroup>
+                            <UButton label="Zapisz hasło" type="submit" color="blue" icon="i-material-symbols-save" />
+                        </UForm>
+                    </div>
+                    <div class="flex flex-col gap-2 p-4 border-2">
+                        <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić email.</h3>
+                        <UForm class="space-y-4" :state="changeEmailState" @submit="onSubmitUpdateTrainerEmail">
+                            <UFormGroup label="Nowy adres email" required>
+                                <UInput v-model="changeEmailState.newEmail" type="email" placeholder="Nowy email" icon="i-heroicons-envelope" />
+                            </UFormGroup>
+                            <UButton label="Zapisz email" type="submit" color="blue" icon="i-material-symbols-save" />
+                        </UForm>
+                    </div>
+                    
                 </div>
             </div>
             <template #footer>

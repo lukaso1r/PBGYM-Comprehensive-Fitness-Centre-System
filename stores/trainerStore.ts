@@ -118,6 +118,8 @@ export const useTrainerStore = defineStore('trainerStore', () => {
     const putUpdateTrainerPassword = async (email: string, newPassword: string, oldPassword?: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
+        // biome-ignore lint/style/useConst: <explanation>
+        let oldPasswordString = oldPassword ? oldPassword : '';
         try {
             response = await $fetch<TrainerData>(`https://pbgym.onrender.com/trainers/changePassword/${email}`, {
                 method: 'PUT',
@@ -125,7 +127,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 },
-                body: JSON.stringify({ newPassword, oldPassword })
+                body: JSON.stringify({ newPassword, oldPasswordString })
             });
             if (response) {
                 console.log('Zaktualizowane hasło trenera:', response);
