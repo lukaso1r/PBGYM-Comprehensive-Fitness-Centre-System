@@ -1,6 +1,9 @@
 <script setup lang="ts">
 
+
+
 const trainerStore = useTrainerStore();
+const registerStore = useRegisterStore();
 const { data: allTrainers} = await useAsyncData('trainers', async () => {
     await trainerStore.getAllTrainers();
     return trainerStore.allTrainers;
@@ -74,6 +77,11 @@ const items = (row: any) => [
     ]
 ]
 
+
+///
+
+
+
 </script>
 
 <template>
@@ -117,5 +125,6 @@ const items = (row: any) => [
         </UCard>
     </UModal>
 </div>
+
 
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import type { TrainerData, TrainerDataToEdit} from '~/types';
+import { trainerTagTranslations } from '~/utils/trainerTagTranslations';
 
 const route = useRoute();
 const email = ref<string>(route.params.id as string);
@@ -50,9 +51,6 @@ const test = () => {
   
     <!-- TODO: poprawić margines -->
     <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-stretch justify-start gap-8">
-        
-        {{trainerStore.trainerData}}
-
         <div class="active-pass w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <div>
                 <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Trener: </span>{{trainerStore.trainerData?.name}} {{trainerStore.trainerData?.surname}}</h1>
@@ -81,7 +79,14 @@ const test = () => {
                     }}
                 </li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Opis: </span>{{trainerStore.trainerData?.description ?? 'Brak'}}</li>
-                <li class="text-lg"><span class="text-slate-500 text-base pr-3">Tagi: </span>{{trainerStore.trainerData?.trainerTags ?? 'Brak'}}</li>
+                <li class="text-lg">
+                    <span class="text-slate-500 text-base pr-3">Tagi: </span>
+                    {{
+                        trainerStore.trainerData?.trainerTags
+                            .map(tag => trainerTagTranslations[tag] || tag)
+                            .join(', ') ?? 'Brak'
+                    }}
+                </li>
             </ul>
             <div class="flex flex-row gap-4">
                 
@@ -115,8 +120,16 @@ const test = () => {
         <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Statystyki</h1>
             <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
-        </div>
+        </div>  
 
+        <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
+            <ul class="flex flex-col gap-5 w-full justify-between ">
+                <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
+                <h1 class="text-red-600 font-bold text-xl">/trainers/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
+            </ul>
+        </div>
+        
         <div class="flex flex-row flex-nowrap gap-8 items-start">
             <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
               <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
@@ -129,6 +142,8 @@ const test = () => {
                 <img src="/images/worker/diagram.jpg" alt="" srcset="">
             </div>  
         </div>
+
+        
 
     </main> 
 

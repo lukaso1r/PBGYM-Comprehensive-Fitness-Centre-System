@@ -29,10 +29,10 @@
     </div>
 
 
-    <div id="promo-section" class="my-28 mx-[10%] ">
-        <div class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 w-fit mx-auto tracking-widest rounded-lg ">Wszystko czego szukasz</div>
-        <h2 class="font-bold text-4xl text-center py-5">Centrum fitness, Twój profil, sklep internetowy</h2>
-        <p class="text-xl text-center py-1 pb-10">Nie musisz już się zastanawiać nad tym, jak kupisz karnet, gdzie zarejestrujesz się na zajęcia sportowe, czy gdzie kupisz produkty ułatwiające sportową przygodę. Wszystko znajdziesz w naszym systemie</p>
+    <div id=" promo-section" class="my-28 mx-[10%] ">
+        <div id="onas" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 w-fit mx-auto tracking-widest rounded-lg ">Wszystko czego szukasz</div>
+        <h2 class="font-bold text-4xl text-center py-5">Centrum fitness, Twój profil</h2>
+        <p class="text-xl text-center py-1 pb-10">Nie musisz już się zastanawiać nad tym, jak kupisz karnet, gdzie zarejestrujesz się na zajęcia sportowe. Wszystko znajdziesz w naszym systemie</p>
         <div id="list-benefits" class="flex flex-row gap-[20%] justify-center align-middle">
             <div class="benefit flex flex-row  justify-center items-center gap-3 ">
                 <div class="benefit-card">
@@ -98,8 +98,8 @@
     </div>
     
 
-    <div id="pricing-section" class="flex flex-col align-middle justify-center py-32 mx-[10%]  ">
-        <h3 class="mb-7 text-4xl font-bold text-center">Cennik Karnetów</h3>
+    <div id="pricing-section " class="flex flex-col align-middle justify-center py-32 mx-[10%]  ">
+        <h3 id="cennik" class="mb-7 text-4xl font-bold text-center">Cennik Karnetów</h3>
         <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
         <div id="price-list" class="flex flex-row gap-12 my-7">
             <UCard >

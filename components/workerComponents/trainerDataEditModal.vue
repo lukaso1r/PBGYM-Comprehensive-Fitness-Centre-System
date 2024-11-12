@@ -4,7 +4,8 @@ import type { LoggedMemberData, ChangePasswordData, ChangeEmailData, TrainerData
 import { format } from 'date-fns'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import { cloneDeep } from 'lodash';
+import { cloneDeep, takeRight } from 'lodash';
+import { trainerTagTranslations } from '~/utils/trainerTagTranslations';
 
 const props = defineProps<{
     showTrainerDataEditModal: boolean,
@@ -37,6 +38,8 @@ const trainerTags = ref<string[]>(props.trainerByEmail?.trainerTags ? [...props.
 const changePasswordState = ref<ChangePasswordData>({oldPassword: '', newPassword: ''});
 const changeEmailState = ref<ChangeEmailData>({newEmail: ''});
 
+
+
 watch(
     () => props.trainerByEmail,
     (newVal) => {
@@ -57,12 +60,13 @@ watch (
     () => trainerTags.value,
     (newVal) => {
         trainerDataToEdit.value.trainerTags = newVal;
+        console.log('trainerTags' , trainerTags.value.map(tag => tag.value));
     }
 )
 
 const onSubmitChangeTrainerData = async () => {
     trainerDataToEdit.value.birthdate = birthdate.value;
-    trainerDataToEdit.value.trainerTags = trainerTags.value;
+    trainerDataToEdit.value.trainerTags = trainerTags.value.map(tag => tag.value)
     console.log('trainerDataToEdit', trainerDataToEdit.value, props.trainerByEmail.email);
     await trainerStore.putUpdateTrainer(trainerDataToEdit.value, props.trainerByEmail.email);
     await trainerStore.getTrainerByEmail(props.trainerByEmail.email);
@@ -82,6 +86,17 @@ const onSubmitUpdateTrainerEmail = async () => {
     changeEmailState.value = {newEmail: ''};
     closeshowTrainerDataEditModal();
 }
+
+const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
+        label,
+        value,
+    }));
+
+const selectedPolishTags = computed(() =>
+    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
+);
+
+
 
 </script>
 
@@ -192,17 +207,18 @@ const onSubmitUpdateTrainerEmail = async () => {
                                 </USelect>
                             </UFormGroup>
 
+
                             <UFormGroup class="col-span-3" label="Tagi trenera" name="trainerTags" required>
                                 <USelectMenu 
                                         v-model="trainerTags" 
-                                        :options="trainerStore.trainerTags" 
+                                        :options="tagOptionsValue"
                                         multiple 
                                         placeholder="Wybierz tagi"  
                                         searchable
                                         searchable-placeholder="Wyszukaj tagi" 
                                     >
                                         <template #label>
-                                            <span v-if="trainerTags.length" >{{ trainerTags.join(', ') }}</span>
+                                            <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label).join(', ') }}</span>
                                             <span v-else>Wybierz tagi trenera</span>
                                         </template>
                                         <template #option-empty="{ query }">
@@ -233,7 +249,6 @@ const onSubmitUpdateTrainerEmail = async () => {
                 <h3 class="font-bold text-lg">Formularz zmiany danych logowania trenera</h3>
             </template>
             <div class="w-full">
-                <!-- <pre>{{memberByEmail}}</pre> -->
                 <div class="changeMemberDetailsContainer flex flex-row gap-8 rounded-lg p-4 bg-white w-full">
                     <div class="flex flex-col gap-2 p-4 border-2">
                         <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić hasło.</h3>

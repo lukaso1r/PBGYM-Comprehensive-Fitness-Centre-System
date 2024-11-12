@@ -339,3 +339,4 @@ export interface TrainerDataToEdit {
     visible: boolean;
     trainerTags: string[];
 }
+

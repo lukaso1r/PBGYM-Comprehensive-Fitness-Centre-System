@@ -4,12 +4,14 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     const { createTrainerObject } = useObjectFactory();
 
+
     const trainerData = ref<TrainerData>(createTrainerObject());
     const allTrainers = ref<TrainerData[]>([] as TrainerData[]);
     const trainerEntries = ref<TrainerEntries[]>([] as TrainerEntries[]);
-    const trainerTags = ref<string[]>(['Test', 'Lubię', 'Gziby'] as string[]);
+
 
     const toast = useToast();
+    const router = useRouter();
 
         
     const doSomething = () => {
@@ -156,6 +158,8 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Zaktualizowany email trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Email trenera został zaktualizowany.' });
+                getTrainerByEmail(newEmail);
+                router.push(`/admin-panel/zarzadzanie/trenerzy/${newEmail}`);
             } else {
                 throw new Error('Nie udało się zaktualizować emaila trenera.');
             }
@@ -170,7 +174,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         trainerData,
         allTrainers,
         trainerEntries,
-        trainerTags,
 
         getTrainerByEmail,
         getAllTrainers,

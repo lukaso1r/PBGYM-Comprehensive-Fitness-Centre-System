@@ -3,7 +3,6 @@ import { useLoginStore } from './loginStore';
 
 export const useRegisterStore = defineStore('register', () => {
 
-
     const { createTrainerToRegisterObject, createMemberToRegisterObject } = useObjectFactory();
 
     // TODO: not sure if it stays here like that
@@ -61,6 +60,7 @@ export const useRegisterStore = defineStore('register', () => {
     }
 
     const clearData = () => {
+        // change to object factory
         memberToRegister.value = {
             email: "",
             password: "",
