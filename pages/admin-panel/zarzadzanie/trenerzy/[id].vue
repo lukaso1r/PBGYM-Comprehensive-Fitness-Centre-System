@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import type { TrainerData, TrainerDataToEdit} from '~/types';
 import { trainerTagTranslations } from '~/utils/trainerTagTranslations';
 
 const route = useRoute();
@@ -20,29 +19,20 @@ const editTrainerData = (type: string) => {
 
 onMounted( async () => {
     await trainerStore.getTrainerByEmail(email.value);
-    // await passStore.getMemberPassHistory(email.value);
-    // await passStore.getActiveMemberPass(email.value);
+    await trainerStore.getTrainerEntries(email.value);
 });
 
 onBeforeRouteLeave(() => {
-    // membersManagmentStore.clearData();
-    passStore.clearData();
+    trainerStore.clearData();
 });
 
-const buyPassForMember = () =>{
-    console.log('buyPassForMember');
-    // passStore.buyPassForMember(email.value);
-}
 
-const test = () => {
-    console.log('test', passStore.activeMemberPass);
-}
+
 
 
 </script>
 
 <template>
-<!-- <UButton @click="test">test</UButton> -->
 
 <workerComponents-header-worker></workerComponents-header-worker>
 
@@ -123,10 +113,9 @@ const test = () => {
         </div>  
 
         <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
+            <span class="font-semibold text-lg">Historia wejść na siłownię</span>
             <ul class="flex flex-col gap-5 w-full justify-between ">
-                <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
-                <h1 class="text-red-600 font-bold text-xl">/trainers/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
+                <pre class="">{{trainerStore.trainerEntries?.length ? trainerStore.trainerEntries :'Brak historii wejść' }}</pre>
             </ul>
         </div>
         

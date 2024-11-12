@@ -340,3 +340,10 @@ export interface TrainerDataToEdit {
     trainerTags: string[];
 }
 
+export interface TrainerOffer {
+    title: string,
+    price: number,
+    trainingSessionCount: number,
+    trainingSessionDurationInMinutes: number,
+    visible: boolean
+}

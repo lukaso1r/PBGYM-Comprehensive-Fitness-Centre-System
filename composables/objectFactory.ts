@@ -1,4 +1,4 @@
-import type { MemberToRegisterData, TrainerDataToRegister, TrainerData, TrainerDataToEdit } from '~/types';
+import type { MemberToRegisterData, TrainerDataToRegister, TrainerData, TrainerDataToEdit, TrainerOffer } from '~/types';
 
 export const useObjectFactory = () => {
 
@@ -89,12 +89,23 @@ export const useObjectFactory = () => {
         }
     }
 
+    const createTrainerOfferObject = (): TrainerOffer => {
+        return {
+            title: '',
+            price: 0,
+            trainingSessionCount: 0,
+            trainingSessionDurationInMinutes: 0,
+            visible: false
+        }
+    }
+
 
 
     return {
         createMemberToRegisterObject,
         createTrainerToRegisterObject,
         createTrainerObject,
-        createTrainerDataToEditObject
+        createTrainerDataToEditObject,
+        createTrainerOfferObject
     };
 };

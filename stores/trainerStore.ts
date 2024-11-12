@@ -1,13 +1,19 @@
-import type { TrainerData, DefaultLoginData, TrainerEntries, TrainerDataToEdit } from '~/types';
+import type { TrainerData, DefaultLoginData, TrainerEntries, TrainerDataToEdit, TrainerOffer } from '~/types';
 
 export const useTrainerStore = defineStore('trainerStore', () => {
 
-    const { createTrainerObject } = useObjectFactory();
+    const { 
+        createTrainerObject, 
+        createTrainerOfferObject,
+
+    } = useObjectFactory();
 
 
     const trainerData = ref<TrainerData>(createTrainerObject());
     const allTrainers = ref<TrainerData[]>([] as TrainerData[]);
     const trainerEntries = ref<TrainerEntries[]>([] as TrainerEntries[]);
+    const trainerOffer = ref<TrainerOffer>(createTrainerOfferObject())
+    const trainerOwnOffers = ref<TrainerOffer[]>([] as TrainerOffer[]);
 
 
     const toast = useToast();
@@ -70,7 +76,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerEntries[]>('https://pbgym.onrender.com/trainers/getOwnGymEntries', {
+            response = await $fetch<TrainerEntries[]>(`https://pbgym.onrender.com/trainers/getGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,6 +94,31 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         } catch (error) {
             console.error('Error:', error);
             toast.add({ title: 'Błąd.', description: 'Nie udało się pobrać listy wejść trenera.' });
+        }
+    }
+
+    const getTrainerOwnOffers = async (email: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<TrainerOffer[]>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                trainerOwnOffers.value = response;
+                console.log('Oferty trenera:', response);
+                toast.add({ title: 'Sukces.', description: 'Oferty trenera zostały pobrane.' });
+            } else {
+                throw new Error('Nie udało się pobrać ofert trenera.');
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Błąd.', description: 'Nie udało się pobrać ofert trenera.' });
         }
     }
 
@@ -168,21 +199,113 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             toast.add({ title: 'Błąd.', description: 'Nie udało się zaktualizować emaila trenera.' });
         }   
     }
+
+    const putUpdateTrainerOffer = async (trainerOffer: TrainerOffer, id: number) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                },
+                body: JSON.stringify(trainerOffer)
+            });
+            if (response) {
+                console.log('Zaktualizowana oferta trenera:', response);
+                toast.add({ title: 'Sukces.', description: 'Oferta trenera została zaktualizowana.' });
+            } else {
+                throw new Error('Nie udało się zaktualizować oferty trenera.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Błąd.', description: 'Nie udało się zaktualizować oferty trenera.' });
+        }
+    }
+
+
+    // DELETE
+
+    const deleteTrainerOffer = async (id: number) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                console.log('Usunięta oferta trenera:', response);
+                toast.add({ title: 'Sukces.', description: 'Oferta trenera została usunięta.' });
+            } else {
+                throw new Error('Nie udało się usunąć oferty trenera.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Błąd.', description: 'Nie udało się usunąć oferty trenera.' });
+        }
+    }
+
+    // POST
+
+    const postTrainerOffer = async (trainerOffer: TrainerOffer, email: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<TrainerOffer>('https://pbgym.onrender.com/trainerOffers/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                },
+                body: JSON.stringify({ ...trainerOffer, email })
+            });
+            if (response) {
+                console.log('Dodana oferta trenera:', response);
+                toast.add({ title: 'Sukces.', description: 'Oferta trenera została dodana.' });
+            } else {
+                throw new Error('Nie udało się dodać oferty trenera.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Błąd.', description: 'Nie udało się dodać oferty trenera.' });
+        }
+    }
+        
+
+    const clearData = () => {
+        trainerData.value = createTrainerObject();
+        allTrainers.value = [];
+        trainerEntries.value = [];
+    }
     
     
     return {
         trainerData,
         allTrainers,
         trainerEntries,
-
+        trainerOffer,
+        trainerOwnOffers,
+        
         getTrainerByEmail,
         getAllTrainers,
         getTrainerEntries,
+        getTrainerOwnOffers,
+        
         putUpdateTrainer,
         putUpdateTrainerPassword,
         putUpdateTrainerEmail,
+        putUpdateTrainerOffer,
 
+        postTrainerOffer,
+        
+        deleteTrainerOffer,
 
+        clearData,
         doSomething
     }
 
