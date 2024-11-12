@@ -1,4 +1,4 @@
-import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData, MemberPaymentHistory} from "~/types";
+import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData, MemberPaymentHistory, MemberGymEntriesHistory} from "~/types";
 
 export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
@@ -9,6 +9,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const memberDataToChange = useState<ChangeMemberDetailsData>('memberDataToChange', () => ({} as ChangeMemberDetailsData));
     const memberToRegister = useState<MemberToRegisterData>('memberToRegister', createMemberToRegisterObject);
     const memberPaymentHistory = useState<MemberPaymentHistory[]>('memberPaymentHistory', () => ([] as MemberPaymentHistory[]));
+    const memberGymEntriesHistory = useState<MemberGymEntriesHistory[]>('MemberGymEntriesHistory', () => ([] as MemberGymEntriesHistory[]));
 
     const router = useRouter();
     const toast = useToast();
@@ -77,6 +78,30 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             } else {
                 toast.add({ title: 'Nie udało się pobrać historii płatności członka' });
                 throw new Error('Nie udało się pobrać historii płatności członka.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const getMemberGymEntriesHistoryByEmail = async (memberEmail: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<MemberGymEntriesHistory[]>(`https://pbgym.onrender.com/members/getGymEntriesHistory/${memberEmail}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                memberGymEntriesHistory.value = response;
+                console.log('Historia wejść do siłowni członka:', response);
+                toast.add({ title: 'Pobrano historię wejść do siłowni członka' });
+            } else {
+                toast.add({ title: 'Nie udało się pobrać historii wejść do siłowni członka' });
+                throw new Error('Nie udało się pobrać historii wejść do siłowni członka.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -182,10 +207,12 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         memberDataToChange,
         memberToRegister,
         memberPaymentHistory,
+        memberGymEntriesHistory,
 
         getMemberByEmail,
         getAllMembers,
         getMemberPaymentHistoryByEmail,
+        getMemberGymEntriesHistoryByEmail,
 
         putMemberDetails,
         putMemberPassword,

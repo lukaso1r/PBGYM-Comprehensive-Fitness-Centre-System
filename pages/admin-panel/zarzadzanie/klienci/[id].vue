@@ -24,6 +24,7 @@ onMounted( async () => {
     await passStore.getMemberPassHistory(email.value);
     await passStore.getActiveMemberPass(email.value);
     await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
+    await membersManagmentStore.getMemberEntriesHistoryByEmail(email.value);
 });
 
 onBeforeRouteLeave(() => {
@@ -176,7 +177,7 @@ const test = () => {
             </div>
 
             <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
+                <span class="font-semibold text-lg">Dokumenty</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
                     <li v-for="(payment, paymentId) in membersManagmentStore.memberPaymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
@@ -195,11 +196,26 @@ const test = () => {
                     </li>
                     <hr class="w-full"/>
                     <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
-                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
-                    
+                    <ul class="flex flex-col gap-5 w-full justify-between ">
+                        <template v-if="membersManagmentStore.memberGymEntriesHistory.length === 0">
+                            <p>Brak historii wejść na siłownię</p>
+                        </template>
+                        <template v-else>
+                            <li v-for="(entry, entryId) in membersManagmentStore.memberGymEntriesHistory" :key="entry.id" class="flex flex-row w-full place-items-center">
+                                <div class="document-name w-full pr-14 flex flex-col gap-1">
+                                    <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(entry.dateTimeOfEntry))}} </h3>
+                                    <h6 class="font-thin text-slate-500">{{dateToTimeString(new Date(entry.dateTimeOfEntry))}} - {{dateToTimeString(new Date(entry.dateTimeOfExit))}}</h6>
+                                </div>
+                                <div class="flex flex-row gap-2 items-center pr-2">
+                                    <UIcon name="i-heroicons-clock" class="w-5 h-5" />
+                                    <p class="w-max">{{entryDuration(entry.dateTimeOfEntry, entry.dateTimeOfExit)}} min</p>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
                     <hr class="w-full"/>
                     <h2 class="font-medium text-xl">Historia karnetów</h2>
-                    <p v-if="passStore.memberPassHistory.length === 0" >Brak historii kanrnetów</p>
+                    <p v-if="passStore.memberPassHistory.length === 0" >Brak historii kanrnetów - karnet pojawi się w historii dopiero po wygaśnięciu</p>
                     <li v-for="pass in passStore.memberPassHistory" :key="pass.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{pass.title}} - {{pass.monthlyPrice}} zł</h3>
