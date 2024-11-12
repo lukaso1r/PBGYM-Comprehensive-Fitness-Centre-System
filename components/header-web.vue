@@ -6,7 +6,7 @@ const userType = ref<string | undefined>(undefined);
 
 onMounted(() => {
   const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData').value;
-  userType.value = defaultLoginData?.userType || ''; // Ustawienie wartości po zamontowaniu komponentu
+  userType.value = defaultLoginData?.userType || ''; 
   console.log('useCookie(\'defaultLoginData\')', defaultLoginData);
   console.log('userType', userType.value);
 });
@@ -38,7 +38,7 @@ const test = () => {
 
     <!-- Button -->
     <div>
-      <NuxtLink :to="userType ? userType==='Worker' ? '/admin-panel' : '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
+      <NuxtLink :to="userType ? userType==='Worker' ? '/admin-panel' : userType==='Trainer' ? '/trainer' : userType==='Member' ? '/twoj-profil' : '/login' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
         {{userType ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
       </NuxtLink>
 <!-- 

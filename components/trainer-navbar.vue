@@ -2,7 +2,7 @@
 
 const items = [
     {
-        label: 'Sprawdź ofertę',
+        label: 'Twoja oferta *WIP*',
         icon: 'i-ic-round-local-offer',
         defaultOpen: false,
         slot: 'checkoffer',
@@ -10,7 +10,7 @@ const items = [
         class: 'py-4 hover:bg-orange-100'        
     },
     {
-        label: 'Zajęcia *WIP*',
+        label: 'Twoje zajęcia *WIP*',
         icon: 'i-ic-outline-sports-kabaddi',
         defaultOpen: false,
         slot: 'checkoffer',
@@ -24,7 +24,7 @@ const items = [
         slot: 'checkoffer',
         color: 'red',
         variant: 'soft',
-        class: 'py-4 hover:bg-red-100'
+        class: 'py-4 hover:bg-red-100' 
     }
 ]
 
@@ -51,14 +51,14 @@ const instructions = [
             <NuxtLink to="/"><img class="max-w-[80%] my-0 mx-auto " src="/images/logo-blue.svg"/></NuxtLink>
             <hr/>
             <div class="navigationContainer flex flex-col gap-y-0">
-                <UButton  class="w-full py-4 " to="/twoj-profil" icon="i-ic-sharp-home" variant="ghost" color="blue">
+                <UButton  class="w-full py-4 " to="/trainer" icon="i-ic-sharp-home" variant="ghost" color="blue">
                     Kokpit
                 </UButton>
                 <!-- TODO: change text color to black -->
                 <UAccordion :items="items" size="sm" >
                     <template #checkoffer >
-                        <NuxtLink to="/twoj-profil/oferty" >
-                            <p class="hover:text-blue-500 hover:text-base transit pl-9">Sprawdź ofertę!</p>
+                        <NuxtLink to="/trainer/oferty" >
+                            <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoją ofertę</p>
                         </NuxtLink>
                     </template>
                 </UAccordion>  

@@ -11,30 +11,29 @@ export const useOffersStore = defineStore('offersStore', () => {
     const offerStandardAll = useState<Offer[]>(() => []);
     const offerSpecialAll = useState<SpecialOffer[]>(() => []);
     const offerAll = useState<Offer[]>(() => []);
-
-
+    
     // GET /offers  
 
     const getOffersPublicActive = async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
         try {
-            const { data, error } = await useFetch<Offer[]>('https://pbgym.onrender.com/offers/public/active', {
+            response = await $fetch<Offer[]>('https://pbgym.onrender.com/offers/public/active', {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             });
-            if (error.value) {
-                throw new Error('Błąd pobrania ofert');
-            }
-            console.log('Dane z serwera:', data.value);
-            if (data.value) {
-                offersPublicActive.value = data.value;
+            if (response) {
+                offersPublicActive.value = response;
+                console.log('Oferty public active:', response);
+            } else {
+                throw new Error('Nie udało się pobrać aktywnych ofert publicznych.');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Błąd pobrania ofert');
         }
-    };
+    }
 
     const getOfferStandardByTitle = async (title: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

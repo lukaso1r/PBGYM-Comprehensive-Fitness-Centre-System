@@ -101,93 +101,114 @@
     <div id="pricing-section " class="flex flex-col align-middle justify-center py-32 mx-[10%]  ">
         <h3 id="cennik" class="mb-7 text-4xl font-bold text-center">Cennik Karnetów</h3>
         <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
-        <div id="price-list" class="flex flex-row gap-12 my-7">
-            <UCard >
-                <template #header>
-                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - STUDENT</h4>
-                </template>
-                <p> <span class="text-6xl font-bold">79</span> /miesiąc</p>
-                <div class="list-pass mx-auto mt-7 pl-7" >
-                    <ul class="list-disc" >
-                        <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>30 dni ważności</li>
-                        <li>panel użytkownika online</li>
-                        <li>konsultacja trenerska</li>
-                        <li>dostęp do zajęć</li>
-                        <li>udogodnienia klubowe</li>
-                    </ul>
+        <div id="price-list" class="flex flex-row gap-12 my-7 offers-container items-center w-full justify-center">
+            <template v-if="loading">
+                <div class="specialPass flex flex-row items-center">
+                    <p class="verticalSpecialText text-blue-600 font-medium shadow-2xl" style="z-50">
+                        <USkeleton class="h-6 w-10" />
+                    </p>
+                    <UCard class="w-max z-0">
+                        <template #header>
+                            <USkeleton class="h-8 w-48 mb-2" />
+                            <USkeleton class="h-4 w-32" />
+                        </template>
+                        <USkeleton class="h-16 w-40" />
+                        <USkeleton class="h-4 w-48 mt-2" />
+                        <USkeleton class="h-4 w-48 mt-2" />
+                        <div class="list-pass mx-auto mt-7 pl-7">
+                            <ul>
+                                <li><USkeleton class="h-4 w-56" /></li>
+                                <li><USkeleton class="h-4 w-56 mt-2" /></li>
+                            </ul>
+                        </div>
+                        <template #footer>
+                            <USkeleton class="h-10 w-32 mt-5" />
+                        </template>
+                    </UCard>
                 </div>
-                <template #footer>
-                  <div class="flex flex-column justify-center">
-                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                  </div>
+        
+                <template v-for="index in 3" :key="index">
+                    <UCard class="offer-card max-w-1/4 w-1/4 rounded-lg">
+                        <template #header>
+                            <USkeleton class="h-6 w-40" />
+                        </template>
+                        <USkeleton class="h-12 w-32" />
+                        <div class="list-pass mx-auto mt-7 pl-7">
+                            <ul>
+                                <li><USkeleton class="h-4 w-48" /></li>
+                                <li><USkeleton class="h-4 w-48 mt-2" /></li>
+                            </ul>
+                        </div>
+                        <template #footer>
+                            <USkeleton class="h-10 w-32 mt-5" />
+                        </template>
+                    </UCard>
                 </template>
-            </UCard>
-            <UCard >
-                <template #header>
-                  <h4 class="text-xl font-bold">Karnet 1 Miesiąc - Normalny</h4>
+            </template>
+        
+            <template v-else>
+                <template v-for="offer in specialOffers" :key="offer.id">
+                    <div v-if="offer.type === 'SPECIAL'" class="specialPass flex flex-row items-center">
+                        <p class="verticalSpecialText text-blue-600 font-medium shadow-2xl" style="z-50">{{ offer.borderText }}</p>
+                        <UCard 
+                            class="w-max z-0"
+                            :ui="{shadow: 'shadow-2xl', ring: 'ring-[12px] ring-white dark:ring-gray-800', divide: 'divide-y divide-gray-200 dark:divide-gray-800', background: 'bg-blue-600 dark:bg-slate-200' }"
+                        >
+                            <template #header>
+                                <h4 class="text-2xl font-bold text-white">{{ offer.title }}</h4>
+                                <h6 class="pt-2 text-white text-lg">{{ offer.subtitle }}</h6>
+                            </template>
+                            <p class="text-white"><span class="text-6xl font-bold text-white">{{ offer.monthlyPrice }}</span> zł / miesiąc</p>
+                            <p class="w-4/6 text-zinc-300 text-sm pt-2">{{ offer.previousPriceInfo }}</p>
+                            <p class="pt-3 text-white">Opłata aktywacyjna: {{ offer.entryFee }} zł</p>
+                            <div class="list-pass mx-auto mt-7 pl-7 text-white">
+                                <ul class="list-disc text-white font-medium text-lg">
+                                    <li>Ważność karnetu: {{ offer.durationInMonths }} miesięcy</li>
+                                    <li v-for="(property, key) in offer.properties" :key="key">{{ property }}</li>
+                                </ul>
+                            </div>
+                            <p class="text-white text-lg font-medium mt-5">{{ offer.specialOfferText }}</p>
+                            <template #footer>
+                                <div class="flex flex-column justify-center">
+                                    <UButton 
+                                        label="Wybierz ten plan" 
+                                        class="bg-white text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" 
+                                        @click="buyPass('1', offer.type, offer.title)"
+                                    />
+                                </div>
+                            </template>
+                        </UCard>
+                    </div>
                 </template>
-                <p> <span class="text-6xl font-bold">85</span> /miesiąc</p>
-                <div class="list-pass mx-auto mt-7 pl-7" >
-                    <ul class="list-disc" >
-                        <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>30 dni ważności</li>
-                        <li>panel użytkownika online</li>
-                        <li>konsultacja trenerska</li>
-                        <li>dostęp do zajęć</li>
-                        <li>udogodnienia klubowe</li>
-                    </ul>
-                </div>
-                <template #footer>
-                  <div class="flex flex-column justify-center">
-                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                  </div>
+        
+                <template v-for="offer in standardOffers" :key="offer.id">
+                    <UCard v-if="offer.type === 'STANDARD'" class="offer-card max-w-1/4 w-1/4 rounded-lg" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                        <template #header>
+                            <h4 class="text-xl font-bold">{{ offer.title }}</h4>
+                        </template>
+                        <p><span class="text-6xl font-bold">{{ offer.monthlyPrice }}</span> /miesiąc</p>
+                        <div class="list-pass mx-auto mt-7 pl-7">
+                            <ul class="list-disc">
+                                <li v-for="(property, index) in offer.properties" :key="index">{{ property }}</li>
+                            </ul>
+                        </div>
+                        <template #footer>
+                            <div class="flex flex-column justify-center">
+                                <UButton 
+                                    label="Wybierz ten plan" 
+                                    class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]"
+                                    @click="buyPass('1', offer.type, offer.title)" 
+                                />
+                            </div>
+                        </template>
+                    </UCard>
                 </template>
-            </UCard><UCard >
-                <template #header>
-                  <h4 class="text-xl font-bold">Karnet 12 Miesięcy - STUDENT</h4>
-                </template>
-                <p> <span class="text-6xl font-bold">70</span> /miesiąc</p>
-                <div class="list-pass mx-auto mt-7 pl-7" >
-                    <ul class="list-disc" >
-                        <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>365 dni ważności</li>
-                        <li>panel użytkownika online</li>
-                        <li>konsultacja trenerska</li>
-                        <li>dostęp do zajęć</li>
-                        <li>udogodnienia klubowe</li>
-                    </ul>
-                </div>
-                <template #footer>
-                  <div class="flex flex-column justify-center">
-                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                  </div>
-                </template>
-            </UCard><UCard >
-                <template #header>
-                  <h4 class="text-xl font-bold">Karnet 12 Miesięcy - Normalny</h4>
-                </template>
-                <p> <span class="text-6xl font-bold">75</span> /miesiąc</p>
-                <div class="list-pass mx-auto mt-7 pl-7" >
-                    <ul class="list-disc" >
-                        <li>dostęp do klubu w godzinach otwarcia</li>
-                        <li>365 dni ważności</li>
-                        <li>panel użytkownika online</li>
-                        <li>konsultacja trenerska</li>
-                        <li>dostęp do zajęć</li>
-                        <li>udogodnienia klubowe</li>
-                    </ul>
-                </div>
-                <template #footer>
-                  <div class="flex flex-column justify-center">
-                    <UButton label="Wybierz ten plan" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" />
-                  </div>
-                </template>
-            </UCard>
+            </template>
         </div>
+        
     </div>
 
-    <div id="opinions" class="relative pb-32">
+    <div id="opinions" class="relative pb-32 ">
         <h3 class="mb-7 text-4xl font-bold text-center">Sprawdź co o nas mówią!</h3>
         <p class="text-center">Wielu naszych klientów podzieliło się pozytywną opinią o naszych usługach</p>
         <img class="absolute right-40 -top-20 -z-50" src="/public/images/home-opinions/apostrof-left.svg" alt="">
@@ -258,12 +279,47 @@
 
 <script setup lang="ts">
 
-    const scrollDown = () =>{
-        const targetElement = document.querySelector('#promo-section'); 
-        if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' }); 
+import type { Offer, DefaultLoginData } from '~/types';
+
+const offersStore = useOffersStore();
+const router = useRouter();
+const toast = useToast();
+
+const specialOffers = ref<Offer[]>([]);
+const standardOffers = ref<Offer[]>([]);
+const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData').value;
+
+const loading = ref(true);
+
+onMounted(async () => {
+    await offersStore.getOffersPublicActive();
+    specialOffers.value = offersStore.offersPublicActive ? offersStore.offersPublicActive.filter((offer: Offer) => offer.type === 'SPECIAL') : [];
+    standardOffers.value = offersStore.offersPublicActive ? offersStore.offersPublicActive.filter((offer: Offer) => offer.type === 'STANDARD') : [];
+    loading.value = false;
+})
+
+const scrollDown = () =>{
+    const targetElement = document.querySelector('#promo-section'); 
+    if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' }); 
+    }
+}
+
+const buyPass = (id: string, type: string, title: string) => {
+    if(defaultLoginData){
+        if(defaultLoginData.userType === 'Member'){
+            console.log('buy pass')
+            router.push('/twoj-profil/oferty')
+        }else if(defaultLoginData.userType === 'Trainer' || defaultLoginData.userType === 'Worker'){
+            toast.add({ title: 'Nie masz uprawnień do zakupu karnetu' });
+        } else {
+            router.push('/login')
+            toast.add({ title: 'Zaloguj się aby zakupić karnet' });
         }
     }
+}
+
+
 
 </script>
 
@@ -274,6 +330,15 @@
         width: 100%;
         margin: 0;
         padding: 0;
+    }
+
+    .verticalSpecialText{
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        z-index: 50;
+        background-color: white;
+        border-radius: 15px 0 0 15px;
+        padding: 10px 7px 10px 7px;
     }
 
     

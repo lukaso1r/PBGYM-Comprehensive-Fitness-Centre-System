@@ -88,9 +88,9 @@ const onSubmitUpdateTrainerEmail = async () => {
 }
 
 const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
-        label,
-        value,
-    }));
+    label,
+    value,
+}));
 
 const selectedPolishTags = computed(() =>
     trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)

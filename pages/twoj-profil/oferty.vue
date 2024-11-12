@@ -109,7 +109,7 @@ const buyPass = (passId: number, passType: string, passTitle: string) => {
    
 </template>
 
-<style scoped>
+<style>
 
 .verticalSpecialText{
     writing-mode: vertical-lr;

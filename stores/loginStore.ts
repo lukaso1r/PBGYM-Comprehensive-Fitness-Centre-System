@@ -1,4 +1,4 @@
-import type { UserToLoginCredentials, DefaultLoginData, LoggedMemberData, LoggedWorkerData  } from "~/types";
+import type {  UserToLoginCredentials,  DefaultLoginData,  LoggedMemberData,  LoggedWorkerData, TrainerData  } from "~/types";
 
 export const useLoginStore = defineStore('login', () => {
 
@@ -18,6 +18,11 @@ export const useLoginStore = defineStore('login', () => {
     });
 
     const loggedWorkerData = useCookie<LoggedWorkerData>('loggedWorkerData', {
+        maxAge: weekInMilliseconds.value,
+        expires: nextWeekDate.value 
+    });
+
+    const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData', {
         maxAge: weekInMilliseconds.value,
         expires: nextWeekDate.value 
     });
@@ -75,8 +80,25 @@ export const useLoginStore = defineStore('login', () => {
                     }
                     case 'Trainer': {
                         // TODO: fetch trainer data
-                        console.log('/trener-panel');
-                        navigateTo('/trener-panel');
+                        console.log('/trainer');
+                        const { data, error } = await useFetch<TrainerData>(`https://pbgym.onrender.com/trainers/${userToLoginCredentials.value.email}`, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${defaultLoginData.value.jwt}`
+                            },
+                            method: 'GET'
+                        });
+                        if (error.value) {
+                            console.error('Error:', error.value);
+                            alert('Błąd pobierania danych trenera');
+                        } else if (data.value) {
+                            loggedTrainerData.value = data.value;
+                            console.log('Dane z serwera loogedTrainerData:', toRaw(loggedTrainerData.value));
+                            navigateTo('/trainer');
+                        } else {
+                            console.error('Brak danych w odpowiedzi');
+                            alert('Brak danych w odpowiedzi');
+                        }
                         break;
                     }
                     case 'Worker': {
@@ -121,6 +143,8 @@ export const useLoginStore = defineStore('login', () => {
     const logOut = () => {
         defaultLoginData.value = {} as DefaultLoginData
         loggedMemberData.value = {} as LoggedMemberData
+        loggedWorkerData.value = {} as LoggedWorkerData
+        loggedTrainerData.value = {} as TrainerData
         navigateTo('/');
     };
 
@@ -136,6 +160,7 @@ export const useLoginStore = defineStore('login', () => {
         defaultLoginData,
         loggedMemberData,
         loggedWorkerData,
+        loggedTrainerData,
         login,
         logOut
     };
