@@ -1,4 +1,4 @@
-import type { MemberToRegisterData, TrainerDataToRegister, TrainerData, TrainerDataToEdit, TrainerOffer } from '~/types';
+import type { MemberToRegisterData, TrainerDataToRegister, TrainerData, TrainerDataToEdit, TrainerOffer, MemberPaymentHistory } from '~/types';
 
 export const useObjectFactory = () => {
 
@@ -99,6 +99,21 @@ export const useObjectFactory = () => {
         }
     }
 
+    const createMemberPaymentHistoryObject = (): MemberPaymentHistory => {
+        return {
+            id: 0,
+            amount: 0,
+            dateTime: '',
+            cardNumber: '',
+            expirationMonth: '',
+            expirationYear: '',
+            name: '',
+            surname: '',
+            email: '',
+            pesel: '',
+        }
+    }
+
 
 
     return {
@@ -106,6 +121,7 @@ export const useObjectFactory = () => {
         createTrainerToRegisterObject,
         createTrainerObject,
         createTrainerDataToEditObject,
-        createTrainerOfferObject
+        createTrainerOfferObject,
+        createMemberPaymentHistoryObject
     };
 };

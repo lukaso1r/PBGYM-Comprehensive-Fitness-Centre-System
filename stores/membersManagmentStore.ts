@@ -1,4 +1,4 @@
-import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData} from "~/types";
+import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData, MemberPaymentHistory} from "~/types";
 
 export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
@@ -8,6 +8,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const allMembers = useState<LoggedMemberData[]>('allMembers', () => ([] as LoggedMemberData[]));
     const memberDataToChange = useState<ChangeMemberDetailsData>('memberDataToChange', () => ({} as ChangeMemberDetailsData));
     const memberToRegister = useState<MemberToRegisterData>('memberToRegister', createMemberToRegisterObject);
+    const memberPaymentHistory = useState<MemberPaymentHistory[]>('memberPaymentHistory', () => ([] as MemberPaymentHistory[]));
 
     const router = useRouter();
     const toast = useToast();
@@ -52,6 +53,30 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
                 console.log('Wszyscy członkowie:', response);
             } else {
                 throw new Error('Nie udało się pobrać danych członków.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const getMemberPaymentHistoryByEmail = async (memberEmail: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<MemberPaymentHistory[]>(`https://pbgym.onrender.com/members/getPaymentHistory/${memberEmail}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                memberPaymentHistory.value = response;
+                console.log('Historia płatności członka:', response);
+                toast.add({ title: 'Pobrano historię płatności członka' });
+            } else {
+                toast.add({ title: 'Nie udało się pobrać historii płatności członka' });
+                throw new Error('Nie udało się pobrać historii płatności członka.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -156,9 +181,11 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         allMembers,
         memberDataToChange,
         memberToRegister,
+        memberPaymentHistory,
 
         getMemberByEmail,
         getAllMembers,
+        getMemberPaymentHistoryByEmail,
 
         putMemberDetails,
         putMemberPassword,

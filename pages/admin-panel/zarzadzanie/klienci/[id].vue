@@ -23,6 +23,7 @@ onMounted( async () => {
     await membersManagmentStore.getMemberByEmail(email.value);
     await passStore.getMemberPassHistory(email.value);
     await passStore.getActiveMemberPass(email.value);
+    await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
 });
 
 onBeforeRouteLeave(() => {
@@ -178,11 +179,7 @@ const test = () => {
                 <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
-                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnPayments - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
-                    <hr class="w-full"/>
-                    <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
-                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
-                    <!-- <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
+                    <li v-for="(payment, paymentId) in membersManagmentStore.memberPaymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
                             <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
@@ -195,7 +192,11 @@ const test = () => {
                             label="PDF"
                             :trailing="false"
                         />
-                    </li> -->
+                    </li>
+                    <hr class="w-full"/>
+                    <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
+                    <h1 class="text-red-600 font-bold text-xl">/members/getOwnGymEntries - BRAK UPRAWIEŃ DLA PRACOWNIKA **WIP**</h1>
+                    
                     <hr class="w-full"/>
                     <h2 class="font-medium text-xl">Historia karnetów</h2>
                     <p v-if="passStore.memberPassHistory.length === 0" >Brak historii kanrnetów</p>
