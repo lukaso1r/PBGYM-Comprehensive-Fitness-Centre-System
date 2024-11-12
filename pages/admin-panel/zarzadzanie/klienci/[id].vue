@@ -8,11 +8,12 @@ const membersManagmentStore = useMembersManagmentStore();
 const loginStore = useLoginStore();
 const passStore = usePassStore();
 
-const loggedWorker = computed(() => loginStore.loggedWorkerData);
-
 const showMemberDataEditModal = ref(false);
 const showPassDetailsModal = ref(false);
+const showNewCreditCardForMemberModal = ref(false);
+
 const typeDataToEdit = ref('');
+const paymentOptionAvailability = ref(false);
 
 const editMemberData = (type: string) => {
     showMemberDataEditModal.value = true;
@@ -24,7 +25,7 @@ onMounted( async () => {
     await passStore.getMemberPassHistory(email.value);
     await passStore.getActiveMemberPass(email.value);
     await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
-    await membersManagmentStore.getMemberEntriesHistoryByEmail(email.value);
+    await membersManagmentStore.getMemberGymEntriesHistoryByEmail(email.value);
 });
 
 onBeforeRouteLeave(() => {
@@ -32,13 +33,16 @@ onBeforeRouteLeave(() => {
     passStore.clearData();
 });
 
-const buyPassForMember = () =>{
+const buyPassForMember = async () => {
     console.log('buyPassForMember');
-    // passStore.buyPassForMember(email.value);
+    paymentOptionAvailability.value = await membersManagmentStore.getMemberPaymentOptionsStatus(email.value) ?? false;
+    showNewCreditCardForMemberModal.value = true;
 }
 
+
+
 const test = () => {
-    console.log('test', passStore.activeMemberPass);
+    console.log('test', loginStore.defaultLoginData);
 }
 
 
@@ -46,12 +50,11 @@ const test = () => {
 
 <template>
 
-    <!-- <UButton @click="test" label="test" /> -->
+    
     <HeaderTrainerProfile />
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
       <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
-        
         <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
 
             <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
@@ -158,20 +161,21 @@ const test = () => {
                         color="blue"
                         variant="solid"
                         label="Kup karnet klientowi"
-                        @click="buyPassForMember"
+                        @click="buyPassForMember()"
                     />
                     <WorkerComponentsMemberDataEditModal 
                         v-model:showMemberDataEditModal="showMemberDataEditModal"
                         :typeDataToEdit="typeDataToEdit"   
                         :memberByEmail="membersManagmentStore.memberByEmail" 
                     />
-                    <!-- <BuyNewPassModal 
-                        v-model:showPassDetailsModal="showPassDetailsModal"
-                        :memberByEmail="membersManagmentStore.memberByEmail"
-                    /> -->
+
+                    <WorkerComponentsBuyPassForMemberAddCreditCardForMember 
+                        v-model:showNewCreditCardForMemberModal="showNewCreditCardForMemberModal"
+                        :memberEmail="membersManagmentStore.memberByEmail?.email"
+                    />
                 </div>
             </div>
-            <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="stats w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Statystyki</h1>
                 <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące pracownika</p>
             </div>
@@ -180,6 +184,9 @@ const test = () => {
                 <span class="font-semibold text-lg">Dokumenty</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
+                    <template v-if="membersManagmentStore.memberPaymentHistory.length === 0">
+                        <p>Brak historii płatności</p>
+                    </template>
                     <li v-for="(payment, paymentId) in membersManagmentStore.memberPaymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>

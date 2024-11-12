@@ -1,4 +1,7 @@
-import type { LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, ChangePasswordData, MemberToRegisterData, MemberPaymentHistory, MemberGymEntriesHistory} from "~/types";
+import type { 
+    LoggedMemberData, DefaultLoginData, ChangeMemberDetailsData, 
+    ChangePasswordData, MemberToRegisterData, MemberPaymentHistory, 
+    MemberGymEntriesHistory, CreditCardData} from "~/types";
 
 export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
@@ -10,6 +13,8 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const memberToRegister = useState<MemberToRegisterData>('memberToRegister', createMemberToRegisterObject);
     const memberPaymentHistory = useState<MemberPaymentHistory[]>('memberPaymentHistory', () => ([] as MemberPaymentHistory[]));
     const memberGymEntriesHistory = useState<MemberGymEntriesHistory[]>('MemberGymEntriesHistory', () => ([] as MemberGymEntriesHistory[]));
+    const creditCardDataToAdd = useState<CreditCardData>('creditCardDataToAdd', () => ({} as CreditCardData));
+    const paymentOptionsStatus = useState<boolean>('paymentOptionsStatus', () => false);
 
     const router = useRouter();
     const toast = useToast();
@@ -88,7 +93,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberGymEntriesHistory[]>(`https://pbgym.onrender.com/members/getGymEntriesHistory/${memberEmail}`, {
+            response = await $fetch<MemberGymEntriesHistory[]>(`https://pbgym.onrender.com/members/getGymEntries/${memberEmail}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -105,6 +110,33 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             }
         } catch (error) {
             console.error('Error:', error);
+        }
+    }
+
+    const getMemberPaymentOptionsStatus = async (memberEmail: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<CreditCardData[]>(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}/hidden`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                console.log('Status opcji płatności:', response);
+                toast.add({ title: 'Sprawdzono status opcji płatności klienta' });
+                paymentOptionsStatus.value = true;
+            } else {
+                toast.add({ title: 'Nie udało się pobrać statusu opcji płatności', description: 'Klient nie ma przypisanej karty płatniczej.' });
+                paymentOptionsStatus.value = false;
+                throw new Error('Nie udało się pobrać statusu opcji płatności klienta.');
+                
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            return false;
         }
     }
 
@@ -130,6 +162,30 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             toast.add({ title: 'Nie udało się dodać nowego członka' });
         }
     }
+
+    const postNewCreditCardForMember = async (memberEmail: string) => {
+        console.log('creditCardDataToAdd.value:', creditCardDataToAdd.value);
+        try {
+            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                },
+                body: JSON.stringify(creditCardDataToAdd.value)
+            });
+            console.log('Dodano nową kartę płatniczą.');
+            toast.add({ title: 'Dodano nową kartę płatniczą' });
+            creditCardDataToAdd.value = {} as CreditCardData;
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Nie udało się dodać nowej karty płatniczej' });
+        }
+    }
+
+
+    
+
 
     // PUT _______________________________________________________________
 
@@ -199,6 +255,10 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         memberByEmail.value = {} as LoggedMemberData;
         allMembers.value = [] as LoggedMemberData[];
         memberDataToChange.value = {} as ChangeMemberDetailsData;
+        memberToRegister.value = createMemberToRegisterObject();
+        memberPaymentHistory.value = [] as MemberPaymentHistory[];
+        memberGymEntriesHistory.value = [] as MemberGymEntriesHistory[];
+        creditCardDataToAdd.value = {} as CreditCardData;
     }
 
     return {
@@ -208,17 +268,21 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         memberToRegister,
         memberPaymentHistory,
         memberGymEntriesHistory,
+        creditCardDataToAdd,
+        paymentOptionsStatus,
 
         getMemberByEmail,
         getAllMembers,
         getMemberPaymentHistoryByEmail,
         getMemberGymEntriesHistoryByEmail,
+        getMemberPaymentOptionsStatus,
 
         putMemberDetails,
         putMemberPassword,
         putMemberEmail,
 
         postRegisterNewMember,
+        postNewCreditCardForMember,
 
         clearData
         
