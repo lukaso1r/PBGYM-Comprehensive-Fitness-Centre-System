@@ -57,10 +57,6 @@ const closeAddNewTrainerModal = () => {
     </main>
 </div>
 
-
-<h1>Trenerzy **WIP**</h1>
-
-
 <UModal 
     :model-value="showAddNewTrainerModal"
     :closable="true"

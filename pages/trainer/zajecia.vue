@@ -16,7 +16,7 @@ onMounted(() => {
     <Trainer-navbar class="basis-1/5 max-w-[350px]  px-6" />
     <main class="basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <h1>Twoja oferta **WIP**</h1>
+            <h1>Twoje zajęcia **WIP**</h1>
             <pre>{{trainerStore.trainerOwnOffers}}</pre>
         </div>
     </main>

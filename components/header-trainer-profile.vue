@@ -26,7 +26,7 @@
             <div class="col1">
                 <UBreadcrumb
                     divider="/"
-                    :links="[{ label: 'PBGYM', to: '/' }, { label: 'Panel Trenera', to: '/twoj-profil'}]"
+                    :links="[{ label: 'PBGYM', to: '/' }, { label: 'Panel Trenera', to: '/trainer'}]"
                 />
             </div>
             <div class="col2">
@@ -40,7 +40,7 @@
 
                 <UButton
                     class="bg-[#203983] hover:bg-[#617F9B]"
-                    to="/admin-panel/ustawienia-konta"
+                    to="/trainer/ustawienia-konta"
                     icon="i-ic-baseline-settings"
                 >
                     Ustawienia konta

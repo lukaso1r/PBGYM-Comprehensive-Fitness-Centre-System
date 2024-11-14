@@ -166,6 +166,25 @@ export const validateTrainerPersonalData = (data: TrainerDataToEdit) => {
     return errors
 } 
 
+export const validateTrainerToEditByTrainer = (data: TrainerDataToEdit) => {
+    const errors: FormError<string>[] = []
+    if (!data.name) errors.push({ path: 'name', message: 'Imię jest wymagane' })
+    if (!data.surname) errors.push({ path: 'surname', message: 'Nazwisko jest wymagane' })
+    if (!data.pesel) errors.push({ path: 'pesel', message: 'PESEL jest wymagany' })
+    if (!data.gender) errors.push({path: 'gender', message: 'Płeć jest wymagana'})
+    if (!data.birthdate) errors.push({ path: 'birthdate', message: 'Data urodzenia jest wymagana' })
+    if (!data.phoneNumber) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest wymagany' })
+    if (validatePesel(data.pesel) === false) errors.push({ path: 'pesel', message: 'PESEL jest nieprawidłowy' })
+    if (validatePhoneNumber(data.phoneNumber) === false) errors.push({ path: 'phoneNumber', message: 'Numer telefonu jest nieprawidłowy' })
+    if (data.address.streetName === '') errors.push({ path: 'streetName', message: 'Ulica jest wymagana' })
+    if (data.address.city === '') errors.push({ path: 'city', message: 'Miasto jest wymagane' })
+    if (!data.address.postalCode) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest wymagany' })
+    if (validatePostalCode(data.address.postalCode) === false) errors.push({ path: 'postalCode', message: 'Kod pocztowy jest nieprawidłowy' })
+    if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
+    return errors
+} 
+
+
 export const validateTrainerToRegister = (data: TrainerDataToRegister) => {
     const errors: FormError<string>[] = []
     if (!data.email) errors.push({ path: 'email', message: 'Email jest wymagany' })

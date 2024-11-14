@@ -2,9 +2,11 @@ import type { TrainerData, DefaultLoginData, TrainerEntries, TrainerDataToEdit, 
 
 export const useTrainerStore = defineStore('trainerStore', () => {
 
+    const loginStore = useLoginStore();
     const { 
         createTrainerObject, 
         createTrainerOfferObject,
+        createTrainerDataToEditObject
 
     } = useObjectFactory();
 
@@ -15,14 +17,8 @@ export const useTrainerStore = defineStore('trainerStore', () => {
     const trainerOffer = ref<TrainerOffer>(createTrainerOfferObject())
     const trainerOwnOffers = ref<TrainerOffer[]>([] as TrainerOffer[]);
 
-
     const toast = useToast();
     const router = useRouter();
-
-        
-    const doSomething = () => {
-        return 'soon'
-    }
 
     const getTrainerByEmail = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -139,6 +135,9 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Zaktualizowane dane trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Dane trenera zostały zaktualizowane.' });
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
+                    loginStore.logOut();
+                }
             } else {
                 throw new Error('Nie udało się zaktualizować danych trenera.');
             }
@@ -165,6 +164,9 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Zaktualizowane hasło trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Hasło trenera zostało zaktualizowane.' });
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
+                    loginStore.logOut();
+                }
             } else {
                 throw new Error('Nie udało się zaktualizować hasła trenera.');
             }
@@ -189,8 +191,12 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Zaktualizowany email trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Email trenera został zaktualizowany.' });
-                getTrainerByEmail(newEmail);
-                router.push(`/admin-panel/zarzadzanie/trenerzy/${newEmail}`);
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
+                    loginStore.logOut();
+                }else{
+                    getTrainerByEmail(newEmail);
+                    router.push(`/admin-panel/zarzadzanie/trenerzy/${newEmail}`);
+                }
             } else {
                 throw new Error('Nie udało się zaktualizować emaila trenera.');
             }
@@ -306,7 +312,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         deleteTrainerOffer,
 
         clearData,
-        doSomething
     }
 
 
