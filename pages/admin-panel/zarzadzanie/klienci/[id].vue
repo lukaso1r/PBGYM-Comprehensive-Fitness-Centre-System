@@ -42,7 +42,7 @@ const buyPassForMember = async () => {
 
 
 const test = () => {
-    console.log('test', loginStore.defaultLoginData);
+    console.log('test', membersManagmentStore.getMemberPaymentOptionsStatus(email.value));
 }
 
 
@@ -52,6 +52,7 @@ const test = () => {
 
     
     <HeaderTrainerProfile />
+    
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
       <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>

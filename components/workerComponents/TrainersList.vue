@@ -107,7 +107,7 @@ const items = (row: any) => [
     <UModal v-model="isOpen">
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
-                <h3 class="font-medium text-lg">{{selectedRow ? `${selectedRow.name}  ${selectedRow.surname} - ${selectedRow.position}` : 'nic'}}</h3>
+                <h3 class="font-medium text-lg">{{selectedRow ? `${selectedRow.name}  ${selectedRow.surname}` : 'Błąd wczytania danych'}}</h3>
             </template>
             <table class="table-auto">
                 <tbody>
