@@ -23,9 +23,16 @@ const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" |
 const maxDate = ref(currentDate.value)
 
 const validGender = ref('valid')
+const isTrainerVisible = ref('false')
+const trainerTags = ref<string[]>(trainerStore.trainerData?.trainerTags ? [...trainerStore.trainerData.trainerTags] : []);
+    const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
+    label,
+    value,
+}));
 
 onMounted(() => {
     trainerStore.getTrainerByEmail(loggedTrainerData.value.email)
+    isTrainerVisible.value = trainerStore.trainerData.visible ? 'true' : 'false'
 })
 
 watch(
@@ -35,6 +42,25 @@ watch(
         date.value = new Date(newVal.birthdate);
     },
     { immediate: true }
+);
+
+watch(
+    () => isTrainerVisible.value,
+    (newVal) => {
+        trainerDataToEdit.value.visible = newVal === 'true'
+    }
+)
+
+watch (
+    () => trainerTags.value,
+    (newVal) => {
+        trainerDataToEdit.value.trainerTags = newVal;
+        console.log('trainerTags' , trainerTags.value.map(tag => tag.value));
+    }
+)
+
+const selectedPolishTags = computed(() =>
+    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
 );
 
 const changeTrainerData = async () => {
@@ -71,6 +97,17 @@ const changeTrainerEmail = async () => {
     }
 }
 
+const changeTrainerSettings = async () => {
+    trainerDataToEdit.value.birthdate = birthdate.value;
+    trainerDataToEdit.value.trainerTags = trainerTags.value.map(tag => tag.value)
+    console.log('trainerDataToEdit', trainerDataToEdit.value, trainerStore.trainerData.email);
+    try {
+        await trainerStore.putUpdateTrainer(trainerDataToEdit.value, trainerStore.trainerData.email);
+        await trainerStore.getTrainerByEmail(trainerStore.trainerData.email);
+    } catch (error) {
+        console.error('error', error)
+    }
+}
 
 
 const test = () => {
@@ -220,6 +257,50 @@ const test = () => {
                     
                 </UForm>
             </div>
+
+            <div class="changeTrainerSettingsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Ustawienia trenerskie **WIP**</span>
+                <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje ustawienia trenerskie.</p>
+                <UForm class="space-y-4 grid grid-cols-1 gap-5 items-end" :validate="validateTrainerToEditByTrainer" :state="trainerDataToEdit" @submit="changeTrainerSettings">
+                    <UFormGroup label="Nowy opis profilu trenera" required>
+                        <UTextarea v-model="trainerDataToEdit.description" type="textarea" placeholder="Twój nowy opis trenera" icon="i-ic-baseline-mail-outline" />
+                    </UFormGroup>
+
+                    <UFormGroup label="Status aktywności" name="visible" required>
+                        <USelect v-model="isTrainerVisible" 
+                        :options="[
+                            { label: 'Aktywny', value: true },
+                            { label: 'Nieaktywny', value: false }
+                        ]" 
+                        :required="true"
+                        >
+                        </USelect>
+                    </UFormGroup>
+
+                    <UFormGroup class="col-span-1" label="Tagi trenera" name="trainerTags" required>
+                        <USelectMenu 
+                                v-model="trainerTags" 
+                                :options="tagOptionsValue"
+                                multiple 
+                                placeholder="Wybierz tagi"  
+                                searchable
+                                searchable-placeholder="Wyszukaj tagi" 
+                            >
+                                <template #label>
+                                    <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label).join(', ') }}</span>
+                                    <span v-else>Wybierz tagi trenera</span>
+                                </template>
+                                <template #option-empty="{ query }">
+                                    <q>{{ query }}</q> nie znaleziono takiego uprawnienia
+                                </template>
+                        </USelectMenu>
+                    </UFormGroup>
+
+                    <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B]">
+                        Zmień swój login
+                    </UButton>
+                </UForm>
+            </div>  
         </div>
     </main>
 </div>

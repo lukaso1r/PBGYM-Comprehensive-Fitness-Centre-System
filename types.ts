@@ -347,3 +347,25 @@ export interface TrainerOffer {
     trainingSessionDurationInMinutes: number,
     visible: boolean
 }
+
+export interface TrainerWithOffers {
+    trainerInfo: {
+        id: number;
+        email: string;
+        name: string;
+        surname: string;
+        phoneNumber: string;
+        description: string;
+        photo: string[];
+        gender: string;
+        trainerTags: string[];
+    };
+    trainerOffers: {
+        id: number;
+        title: string;
+        price: number;
+        trainingSessionCount: number;
+        trainingSessionDurationInMinutes: number;
+        visible: boolean;
+    }[];
+}

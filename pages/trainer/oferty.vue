@@ -4,7 +4,7 @@ const trainerStore = useTrainerStore();
 const loginStore = useLoginStore();
 
 onMounted(() => {
-    trainerStore.getTrainerOwnOffers(loginStore.loggedTrainerData.email);
+    trainerStore.getTrainerOfferByEmail(loginStore.loggedTrainerData.email);
 })
 
 </script>
@@ -17,7 +17,7 @@ onMounted(() => {
     <main class="basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1>Twoja oferta **WIP**</h1>
-            <pre>{{trainerStore.trainerOwnOffers}}</pre>
+            <pre>{{trainerStore.trainerOffersByEmail}}</pre>
         </div>
     </main>
 </div>  

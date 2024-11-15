@@ -15,10 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:showTrainerDataEditModal']);
 
-const closeshowTrainerDataEditModal = () => {
-    trainerDataToEdit.value = props.trainerByEmail;
-    emit('update:showTrainerDataEditModal', false);
-}
+
 
 const { createTrainerObject } = useObjectFactory();
 const trainerStore = useTrainerStore();
@@ -38,16 +35,30 @@ const trainerTags = ref<string[]>(props.trainerByEmail?.trainerTags ? [...props.
 const changePasswordState = ref<ChangePasswordData>({oldPassword: '', newPassword: ''});
 const changeEmailState = ref<ChangeEmailData>({newEmail: ''});
 
+const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
+    label,
+    value,
+}));
 
-
-watch(
-    () => props.trainerByEmail,
-    (newVal) => {
-        trainerDataToEdit.value = cloneDeep(newVal);  // Stworzenie głębokiej kopii
-        date.value = new Date(newVal.birthdate);
-    },
-    { immediate: true }
+const selectedPolishTags = computed(() =>
+    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
 );
+
+watch (
+    () => props.showTrainerDataEditModal,
+    (newVal) => {
+        if (newVal) {
+            trainerDataToEdit.value = cloneDeep(props.trainerByEmail);
+            date.value = new Date(props.trainerByEmail.birthdate);
+            isTrainerVisible.value = props.trainerByEmail.visible ? 'true' : 'false';
+            trainerTags.value = tagOptionsValue.filter(option => props.trainerByEmail.trainerTags.includes(option.value));
+        } else{
+            trainerDataToEdit.value = createTrainerObject();
+            date.value = new Date();
+            trainerTags.value = [];
+        }
+    }
+)
 
 watch(
     () => isTrainerVisible.value,
@@ -60,7 +71,7 @@ watch (
     () => trainerTags.value,
     (newVal) => {
         trainerDataToEdit.value.trainerTags = newVal;
-        console.log('trainerTags' , trainerTags.value.map(tag => tag.value));
+        console.log('trainerTags' , trainerTags.value.map(tag => tag));
     }
 )
 
@@ -87,20 +98,22 @@ const onSubmitUpdateTrainerEmail = async () => {
     closeshowTrainerDataEditModal();
 }
 
-const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
-    label,
-    value,
-}));
+const closeshowTrainerDataEditModal = () => {
+    trainerDataToEdit.value = props.trainerByEmail;
+    emit('update:showTrainerDataEditModal', false);
+}
 
-const selectedPolishTags = computed(() =>
-    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
-);
+const test = () => {
+    console.log('test', trainerTags.value.map(tag => tag.value));
+}
 
 
 
 </script>
 
 <template>
+
+    {{ trainerByEmail  }}
     <UModal 
         :model-value="showTrainerDataEditModal"
         :closable="true"
@@ -208,7 +221,12 @@ const selectedPolishTags = computed(() =>
                             </UFormGroup>
 
 
-                            <UFormGroup class="col-span-3" label="Tagi trenera" name="trainerTags" required>
+                            <UFormGroup class="col-span-3 flex flex-col gap-2" label="Tagi trenera" name="trainerTags" required>
+                                <p class="border-2 p-1 m-2">z store trainerData: {{ trainerStore.trainerData.trainerTags }} </p>
+                                <p class="border-2 p-1  m-2">selectedPolishTags: {{selectedPolishTags}} </p>
+                                <p class="border-2 p-1  m-2">.join: {{ selectedPolishTags.join(', ') }}</p>
+                                <p class="border-2 p-1  m-2">trainerTags: {{ trainerTags }} </p>
+                                
                                 <USelectMenu 
                                         v-model="trainerTags" 
                                         :options="tagOptionsValue"
@@ -218,7 +236,7 @@ const selectedPolishTags = computed(() =>
                                         searchable-placeholder="Wyszukaj tagi" 
                                     >
                                         <template #label>
-                                            <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label).join(', ') }}</span>
+                                            <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label ?? tag).join(', ') }}</span>
                                             <span v-else>Wybierz tagi trenera</span>
                                         </template>
                                         <template #option-empty="{ query }">
@@ -234,6 +252,8 @@ const selectedPolishTags = computed(() =>
                         <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
                             Zapisz nowe dane
                         </UButton>
+
+                        <UButton label="test" @click="test" color="blue" icon="i-material-symbols-save" />
                         
                     </UForm>
                 </div>

@@ -1,4 +1,4 @@
-import type { TrainerData, DefaultLoginData, TrainerEntries, TrainerDataToEdit, TrainerOffer } from '~/types';
+import type { TrainerData, DefaultLoginData, TrainerEntries, TrainerDataToEdit, TrainerOffer, TrainerWithOffers } from '~/types';
 
 export const useTrainerStore = defineStore('trainerStore', () => {
 
@@ -10,12 +10,12 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     } = useObjectFactory();
 
-
     const trainerData = ref<TrainerData>(createTrainerObject());
     const allTrainers = ref<TrainerData[]>([] as TrainerData[]);
     const trainerEntries = ref<TrainerEntries[]>([] as TrainerEntries[]);
     const trainerOffer = ref<TrainerOffer>(createTrainerOfferObject())
-    const trainerOwnOffers = ref<TrainerOffer[]>([] as TrainerOffer[]);
+    const trainerOffersByEmail = ref<TrainerOffer[]>([] as TrainerOffer[]);
+    const allTrainersWithOffers = ref<TrainerWithOffers[]>([] as TrainerWithOffers[]);
 
     const toast = useToast();
     const router = useRouter();
@@ -67,6 +67,31 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         }
     }
 
+    const getAllTrainersWithOffers = async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<TrainerWithOffers[]>('https://pbgym.onrender.com/trainerOffers/allTrainersWithOffers', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                allTrainersWithOffers.value = response;
+                console.log('Lista trenerów z ofertami:', response);
+                toast.add({ title: 'Sukces.', description: 'Lista trenerów z ofertami została pobrana.' });
+            } else {
+                throw new Error('Nie udało się pobrać listy trenerów z ofertami.');
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({ title: 'Błąd.', description: 'Nie udało się pobrać listy trenerów z ofertami.' });
+        }
+    }
+
     // DAĆ ADMINOWI UPRAWNIENIA DO WYŚWIETLANIA WEJŚĆ TRERNERA
     const getTrainerEntries = async (email?: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -93,7 +118,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         }
     }
 
-    const getTrainerOwnOffers = async (email: string) => {
+    const getTrainerOfferByEmail = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
@@ -105,7 +130,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                 }
             });
             if (response) {
-                trainerOwnOffers.value = response;
+                trainerOffersByEmail.value = response;
                 console.log('Oferty trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Oferty trenera zostały pobrane.' });
             } else {
@@ -295,12 +320,14 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         allTrainers,
         trainerEntries,
         trainerOffer,
-        trainerOwnOffers,
+        trainerOffersByEmail,
+        allTrainersWithOffers,
         
         getTrainerByEmail,
         getAllTrainers,
         getTrainerEntries,
-        getTrainerOwnOffers,
+        getTrainerOfferByEmail,
+        getAllTrainersWithOffers,
         
         putUpdateTrainer,
         putUpdateTrainerPassword,

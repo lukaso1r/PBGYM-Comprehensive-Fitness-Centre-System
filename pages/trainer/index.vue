@@ -69,7 +69,7 @@ onMounted(() => {
                             variant="ghost"
                             label=""
                             :trailing="false"
-                            :to="'/twoj-profil/ustawienia-konta'"
+                            :to="'/trainer/ustawienia-konta'"
                         />
                     </div>
                     <div class="inf-row-info">
