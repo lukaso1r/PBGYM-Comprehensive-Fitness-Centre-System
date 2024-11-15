@@ -112,8 +112,6 @@ const test = () => {
 </script>
 
 <template>
-
-    {{ trainerByEmail  }}
     <UModal 
         :model-value="showTrainerDataEditModal"
         :closable="true"
@@ -220,13 +218,7 @@ const test = () => {
                                 </USelect>
                             </UFormGroup>
 
-
                             <UFormGroup class="col-span-3 flex flex-col gap-2" label="Tagi trenera" name="trainerTags" required>
-                                <p class="border-2 p-1 m-2">z store trainerData: {{ trainerStore.trainerData.trainerTags }} </p>
-                                <p class="border-2 p-1  m-2">selectedPolishTags: {{selectedPolishTags}} </p>
-                                <p class="border-2 p-1  m-2">.join: {{ selectedPolishTags.join(', ') }}</p>
-                                <p class="border-2 p-1  m-2">trainerTags: {{ trainerTags }} </p>
-                                
                                 <USelectMenu 
                                         v-model="trainerTags" 
                                         :options="tagOptionsValue"
@@ -246,13 +238,9 @@ const test = () => {
                             </UFormGroup>
                         </div>
 
-                        
-                        
-        
                         <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
                             Zapisz nowe dane
                         </UButton>
-
                         
                     </UForm>
                 </div>

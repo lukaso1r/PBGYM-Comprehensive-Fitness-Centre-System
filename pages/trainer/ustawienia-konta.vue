@@ -25,14 +25,19 @@ const maxDate = ref(currentDate.value)
 const validGender = ref('valid')
 const isTrainerVisible = ref('false')
 const trainerTags = ref<string[]>(trainerStore.trainerData?.trainerTags ? [...trainerStore.trainerData.trainerTags] : []);
-    const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
+const tagOptionsValue = Object.entries(trainerTagTranslations).map(([value, label]) => ({
     label,
     value,
 }));
 
-onMounted(() => {
-    trainerStore.getTrainerByEmail(loggedTrainerData.value.email)
+const selectedPolishTags = computed(() =>
+    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
+);
+
+onMounted(async () => {
+    await trainerStore.getTrainerByEmail(loggedTrainerData.value.email)
     isTrainerVisible.value = trainerStore.trainerData.visible ? 'true' : 'false'
+    trainerTags.value = tagOptionsValue.filter(option => trainerStore.trainerData.trainerTags.includes(option.value));
 })
 
 watch(
@@ -40,6 +45,9 @@ watch(
     (newVal) => {
         trainerDataToEdit.value = cloneDeep(newVal);  
         date.value = new Date(newVal.birthdate);
+        trainerTags.value = tagOptionsValue.filter(option => trainerStore.trainerData.trainerTags.includes(option.value));
+        isTrainerVisible.value = trainerStore.trainerData.visible ? 'true' : 'false'
+
     },
     { immediate: true }
 );
@@ -55,17 +63,14 @@ watch (
     () => trainerTags.value,
     (newVal) => {
         trainerDataToEdit.value.trainerTags = newVal;
-        console.log('trainerTags' , trainerTags.value.map(tag => tag.value));
+        console.log('trainerTags' , trainerTags.value.map(tag => tag));
     }
 )
-
-const selectedPolishTags = computed(() =>
-    trainerTags.value.map(tag => trainerTagTranslations[tag] || tag)
-);
 
 const changeTrainerData = async () => {
     console.log('saveDataChange', toRaw(trainerDataToEdit.value))
     trainerDataToEdit.value.birthdate = birthdate.value;
+    trainerDataToEdit.value.trainerTags = trainerTags.value.map(tag => tag.value)
     try {
         await trainerStore.putUpdateTrainer(trainerDataToEdit.value, loggedTrainerData.value.email)
         
@@ -131,8 +136,54 @@ const test = () => {
             <p class="text-slate-500">Możesz z tego miejsca zarządzać danymi osobowymi oraz danymi logowania</p>
         </div>
 
-        <div class="flex flex-row flex-wrap gap-8">
-            <div class="changePasswordContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="grid grid-cols-7 gap-8 items-start">
+
+            <div class="changeTrainerSettingsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 col-span-3" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Ustawienia trenerskie</span>
+                <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje ustawienia trenerskie.</p>
+                <UForm class="space-y-4 grid grid-cols-1 gap-1 items-end" :validate="validateTrainerToEditByTrainer" :state="trainerDataToEdit" @submit="changeTrainerSettings">
+                    <UFormGroup label="Nowy opis profilu trenera" required>
+                        <UTextarea v-model="trainerDataToEdit.description" type="textarea" placeholder="Twój nowy opis trenera" icon="i-ic-baseline-mail-outline" />
+                    </UFormGroup>
+
+                    <UFormGroup label="Status aktywności" name="visible" required>
+                        <USelect v-model="isTrainerVisible" 
+                        :options="[
+                            { label: 'Aktywny', value: true },
+                            { label: 'Nieaktywny', value: false }
+                        ]" 
+                        :required="true"
+                        >
+                        </USelect>
+                    </UFormGroup>
+
+                    <UFormGroup class="col-span-1" label="Tagi trenera" name="trainerTags" required>
+                        <USelectMenu 
+                            v-model="trainerTags" 
+                            :options="tagOptionsValue"
+                            multiple 
+                            placeholder="Wybierz tagi"  
+                            searchable
+                            searchable-placeholder="Wyszukaj tagi" 
+                        >
+                            <template #label>
+                                <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label ?? tag).join(', ') }}</span>
+                                <span v-else>Wybierz tagi trenera</span>
+                            </template>
+                            <template #option-empty="{ query }">
+                                <q>{{ query }}</q> nie znaleziono takiego uprawnienia
+                            </template>
+                        </USelectMenu>
+                    </UFormGroup>
+                    <p class="text-gray-500">Uwaga po zmianie danych zostaniesz wylogowany!</p>
+
+                    <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] w-fit">
+                        Zapisz nowe ustawienia
+                    </UButton>
+                </UForm>
+            </div> 
+            
+            <div class="changePasswordContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Zmiana hasła</span>
                 <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje hasło</p>
 
@@ -161,7 +212,7 @@ const test = () => {
                 </UForm>
             </div>
 
-            <div class="changeEmailContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="changeEmailContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2  col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Zmiana adresu email</span>
                 <p class="text-slate-500">Użyj poniższego formularza aby zmienić swój email.</p>
                 
@@ -177,131 +228,91 @@ const test = () => {
                 </UForm>
             </div>
 
-            <div class="changeMemberDetailsContainer flex flex-col w-full rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">    
-                <span class="font-semibold text-lg">Zmiana danych personalnych</span>
-                <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje dane personalne.</p>
-                
-                <UForm class="space-y-4 grid grid-cols-3 gap-5 items-end" :validate="validateTrainerToEditByTrainer" :state="trainerDataToEdit" @submit="changeTrainerData">
-                    <UFormGroup label="Nowe imię" name="name" required>
-                        <UInput v-model="trainerDataToEdit.name" type="string" placeholder="Twoje nowe imię" :value="trainerDataToEdit.name"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowe nazwisko"  name="surname" required>
-                        <UInput v-model="trainerDataToEdit.surname" type="string" placeholder="Twój nowy numer telefonu" :value="trainerDataToEdit.surname"  />
-                    </UFormGroup>
-
-                    <UFormGroup label="Nowy pesel" name="pesel" required>
-                        <UInput v-model="trainerDataToEdit.pesel" type="number" placeholder="Twój nowy pesel" :value="trainerDataToEdit.pesel"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Data urodzenia" name="birthdate"  required>
-                        <VueDatePicker v-model="date" 
-                            :max-date="maxDate" 
-                            :min-date="'1900'" 
-                            :year-range="[1900, maxDate.getFullYear()]" 
-                            prevent-min-max-navigation 
-                            :enable-time-picker="false" 
-                            :flow="flow" 
-                            locale="pl" 
-                            cancelText="anuluj" 
-                            selectText="potwierdź" 
-                        />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Płeć" name="gender" required>
-                        <USelect v-model="trainerDataToEdit.gender" 
-                        :options="[
-                            { label: 'Kobieta', value: 'FEMALE' },
-                            { label: 'Mężczyzna', value: 'MALE' },
-                            { label: 'Inne', value: 'OTHER' }
-                        ]" 
-                        :required="true"
-                        :style="{
-                            borderColor: validGender === 'invalid' ? 'red' : 'transparent',
-                            borderWidth: validGender === 'invalid' ? '1px' : '0px',
-                            borderStyle: 'solid',
-                            borderRadius: '5px',
-                        }"
-                        >
-                        </USelect>
-                        <p v-show="validGender==='invalid'" class="mt-2 text-red-500 dark:text-red-400 text-sm">Wymagane</p>
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowy numer telefonu" name="phoneNumber" required>
-                        <UInput v-model="trainerDataToEdit.phoneNumber" type="number" placeholder="Twój nowy numer telefonu" :value="trainerDataToEdit.phoneNumber"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowe miasto" name="city" required>
-                        <UInput v-model="trainerDataToEdit.address.city" type="text" placeholder="Twoje nowe miasto"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowa ulica" name="streetName" required>
-                        <UInput v-model="trainerDataToEdit.address.streetName" type="text" placeholder="Twoja nowa ulica"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowy numer budynku" name="buildingNumber" required>
-                        <UInput v-model="trainerDataToEdit.address.buildingNumber" type="text" placeholder="Twój nowy numer budynku"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowy numer mieszkania" name="apartmentNumber" required>
-                        <UInput v-model="trainerDataToEdit.address.apartmentNumber" type="text" placeholder="Twój nowy numer mieszkania"  />
-                    </UFormGroup>
-    
-                    <UFormGroup label="Nowy kod pocztowy" name="postalCode" required>
-                        <UInput v-model="trainerDataToEdit.address.postalCode" type="text" placeholder="Twój nowy kod pocztowy"  />
-                    </UFormGroup>
-
-                    <UButton type="submit"  color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
-                        Zapisz nowe dane
-                    </UButton>
-                    
-                </UForm>
-            </div>
-
-            <div class="changeTrainerSettingsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Ustawienia trenerskie **WIP**</span>
-                <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje ustawienia trenerskie.</p>
-                <UForm class="space-y-4 grid grid-cols-1 gap-5 items-end" :validate="validateTrainerToEditByTrainer" :state="trainerDataToEdit" @submit="changeTrainerSettings">
-                    <UFormGroup label="Nowy opis profilu trenera" required>
-                        <UTextarea v-model="trainerDataToEdit.description" type="textarea" placeholder="Twój nowy opis trenera" icon="i-ic-baseline-mail-outline" />
-                    </UFormGroup>
-
-                    <UFormGroup label="Status aktywności" name="visible" required>
-                        <USelect v-model="isTrainerVisible" 
-                        :options="[
-                            { label: 'Aktywny', value: true },
-                            { label: 'Nieaktywny', value: false }
-                        ]" 
-                        :required="true"
-                        >
-                        </USelect>
-                    </UFormGroup>
-
-                    <UFormGroup class="col-span-1" label="Tagi trenera" name="trainerTags" required>
-                        <USelectMenu 
-                                v-model="trainerTags" 
-                                :options="tagOptionsValue"
-                                multiple 
-                                placeholder="Wybierz tagi"  
-                                searchable
-                                searchable-placeholder="Wyszukaj tagi" 
-                            >
-                                <template #label>
-                                    <span v-if="trainerTags.length" >{{ selectedPolishTags.map(tag => tag.label).join(', ') }}</span>
-                                    <span v-else>Wybierz tagi trenera</span>
-                                </template>
-                                <template #option-empty="{ query }">
-                                    <q>{{ query }}</q> nie znaleziono takiego uprawnienia
-                                </template>
-                        </USelectMenu>
-                    </UFormGroup>
-
-                    <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B]">
-                        Zmień swój login
-                    </UButton>
-                </UForm>
-            </div>  
+             
         </div>
+
+        <div class="changeMemberDetailsContainer flex flex-col w-full rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">    
+            <span class="font-semibold text-lg">Zmiana danych personalnych</span>
+            <p class="text-slate-500">Użyj poniższego formularza aby zmienić swoje dane personalne.</p>
+            
+            <UForm class="space-y-4 grid grid-cols-3 gap-x-6 items-end" :validate="validateTrainerToEditByTrainer" :state="trainerDataToEdit" @submit="changeTrainerData">
+                <UFormGroup label="Nowe imię" name="name" required>
+                    <UInput v-model="trainerDataToEdit.name" type="string" placeholder="Twoje nowe imię" :value="trainerDataToEdit.name"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowe nazwisko"  name="surname" required>
+                    <UInput v-model="trainerDataToEdit.surname" type="string" placeholder="Twój nowy numer telefonu" :value="trainerDataToEdit.surname"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowy pesel" name="pesel" required>
+                    <UInput v-model="trainerDataToEdit.pesel" type="number" placeholder="Twój nowy pesel" :value="trainerDataToEdit.pesel"  />
+                </UFormGroup>
+
+                <UFormGroup label="Data urodzenia" name="birthdate"  required>
+                    <VueDatePicker v-model="date" 
+                        :max-date="maxDate" 
+                        :min-date="'1900'" 
+                        :year-range="[1900, maxDate.getFullYear()]" 
+                        prevent-min-max-navigation 
+                        :enable-time-picker="false" 
+                        :flow="flow" 
+                        locale="pl" 
+                        cancelText="anuluj" 
+                        selectText="potwierdź" 
+                    />
+                </UFormGroup>
+
+                <UFormGroup label="Płeć" name="gender" required>
+                    <USelect v-model="trainerDataToEdit.gender" 
+                    :options="[
+                        { label: 'Kobieta', value: 'FEMALE' },
+                        { label: 'Mężczyzna', value: 'MALE' },
+                        { label: 'Inne', value: 'OTHER' }
+                    ]" 
+                    :required="true"
+                    :style="{
+                        borderColor: validGender === 'invalid' ? 'red' : 'transparent',
+                        borderWidth: validGender === 'invalid' ? '1px' : '0px',
+                        borderStyle: 'solid',
+                        borderRadius: '5px',
+                    }"
+                    >
+                    </USelect>
+                    <p v-show="validGender==='invalid'" class="mt-2 text-red-500 dark:text-red-400 text-sm">Wymagane</p>
+                </UFormGroup>
+
+                <UFormGroup label="Nowy numer telefonu" name="phoneNumber" required>
+                    <UInput v-model="trainerDataToEdit.phoneNumber" type="number" placeholder="Twój nowy numer telefonu" :value="trainerDataToEdit.phoneNumber"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowe miasto" name="city" required>
+                    <UInput v-model="trainerDataToEdit.address.city" type="text" placeholder="Twoje nowe miasto"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowa ulica" name="streetName" required>
+                    <UInput v-model="trainerDataToEdit.address.streetName" type="text" placeholder="Twoja nowa ulica"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowy numer budynku" name="buildingNumber" required>
+                    <UInput v-model="trainerDataToEdit.address.buildingNumber" type="text" placeholder="Twój nowy numer budynku"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowy numer mieszkania" name="apartmentNumber" required>
+                    <UInput v-model="trainerDataToEdit.address.apartmentNumber" type="text" placeholder="Twój nowy numer mieszkania"  />
+                </UFormGroup>
+
+                <UFormGroup label="Nowy kod pocztowy" name="postalCode" required>
+                    <UInput v-model="trainerDataToEdit.address.postalCode" type="text" placeholder="Twój nowy kod pocztowy"  />
+                </UFormGroup>
+                <p class="text-gray-500 col-span-3">Uwaga po zmianie danych zostaniesz wylogowany!</p>
+                <UButton type="submit"color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid w-fit">
+                    Zapisz nowe dane
+                </UButton>
+                
+            </UForm>
+        </div>
+
+        
     </main>
 </div>
 
