@@ -341,6 +341,7 @@ export interface TrainerDataToEdit {
 }
 
 export interface TrainerOffer {
+    id?: number,
     title: string,
     price: number,
     trainingSessionCount: number,

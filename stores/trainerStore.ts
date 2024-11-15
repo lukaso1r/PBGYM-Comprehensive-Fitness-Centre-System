@@ -92,7 +92,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         }
     }
 
-    // DAĆ ADMINOWI UPRAWNIENIA DO WYŚWIETLANIA WEJŚĆ TRERNERA
+
     const getTrainerEntries = async (email?: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
@@ -231,11 +231,12 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         }   
     }
 
-    const putUpdateTrainerOffer = async (trainerOffer: TrainerOffer, id: number) => {
+    const putUpdateTrainerOffer = async (trainerOffer: TrainerOffer, email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
+        console.log('Oferta trenera:', trainerOffer, email);
         try {
-            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${id}`, {
+            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -258,11 +259,11 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     // DELETE
 
-    const deleteTrainerOffer = async (id: number) => {
+    const deleteTrainerOffer = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${id}`, {
+            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -283,17 +284,17 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     // POST
 
-    const postTrainerOffer = async (trainerOffer: TrainerOffer, email: string) => {
+    const postTrainerOffer = async (trainerOffer: TrainerOffer, email: string, offerId: number) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerOffer>('https://pbgym.onrender.com/trainerOffers/', {
+            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 },
-                body: JSON.stringify({ ...trainerOffer, email })
+                body: JSON.stringify(toRaw(offerId))
             });
             if (response) {
                 console.log('Dodana oferta trenera:', response);

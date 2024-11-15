@@ -57,7 +57,7 @@ const instructions = [
                 <!-- TODO: change text color to black -->
                 <UAccordion :items="items" size="sm" >
                     <template #checkoffer >
-                        <NuxtLink to="/trainer/oferty" >
+                        <NuxtLink to="/trainer/oferty/" >
                             <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoją ofertę</p>
                         </NuxtLink>
                     </template>
