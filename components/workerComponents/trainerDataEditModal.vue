@@ -253,7 +253,6 @@ const test = () => {
                             Zapisz nowe dane
                         </UButton>
 
-                        <UButton label="test" @click="test" color="blue" icon="i-material-symbols-save" />
                         
                     </UForm>
                 </div>
