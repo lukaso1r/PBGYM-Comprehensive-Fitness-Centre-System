@@ -1,16 +1,18 @@
 <script setup lang="ts">
 
 import { trainerTagTranslations } from '~/utils/trainerTagTranslations';
+import type { TrainerOffer } from '~/types';
 
+const { createTrainerOfferObject } = useObjectFactory();
 const route = useRoute();
 const email = ref<string>(route.params.id as string);
 
 const trainerStore = useTrainerStore();
-const passStore = usePassStore();
-
 
 const showTrainerDataEditModal = ref(false);
+const showAddOfferModal = ref(false);
 const typeDataToEdit = ref('');
+const offerToEdit = ref<TrainerOffer>(createTrainerOfferObject())
 
 const editTrainerData = (type: string) => {
     showTrainerDataEditModal.value = true;
@@ -20,15 +22,110 @@ const editTrainerData = (type: string) => {
 onMounted( async () => {
     await trainerStore.getTrainerByEmail(email.value);
     await trainerStore.getTrainerEntries(email.value);
+    await trainerStore.getTrainerOfferByEmail(email.value);
 });
 
 onBeforeRouteLeave(() => {
     trainerStore.clearData();
 });
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const selectOffer = (row: any) => {
+    console.log(row)
+    offerToEdit.value = row;
+    toggleEditOfferModal();
+}
+
+const deactivateOffer = async (row: any) => {
+    offerToEdit.value = row;
+    offerToEdit.value.visible = false
+    await trainerStore.putUpdateTrainerOffer(offerToEdit.value, trainerStore.trainerData?.email);
+}
+
+const activateOffer = async (row: any) => {
+    offerToEdit.value = row;
+    offerToEdit.value.visible = true
+    await trainerStore.putUpdateTrainerOffer(offerToEdit.value, trainerStore.trainerData?.email);
+}
 
 
+const columnsTrainerSingleOffer = [{
+        key: 'trainerOffers.id',
+        label: 'Id'
+    },
+    {
+        key: 'trainerOffers.title',
+        label: 'Tytuł'    
+    },
+    {
+        key: 'trainerOffers.price',
+        label: 'Cena'
+    },
+    {
+        key: 'trainerOffers.trainingSessionCount',
+        label: 'Ilość sesji'
+    },
+    {
+        key: 'trainerOffers.trainingSessionDurationInMinutes',
+        label: 'Długość sesji'
+    },
+    {
+        key: 'trainerOffers.visible',
+        label: 'Aktywność'
+    },
+    {
+        key: 'options',
+        label: 'Opcje'
+    }
+]
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const items = (row: any) => [
+    [
+        {
+            label: 'Szczegóły',
+            icon: 'i-heroicons-document-magnifying-glass-16-solid',
+            click: () => selectOffer(row)
+        }
+    ], 
+    [
+        {
+            label: `${row.visible ? 'Deaktywuj' : 'Aktywuj'}`,
+            icon:  'i-material-symbols-delete-forever',
+            click: () => `${row.visible ? deactivateOffer(row) : activateOffer(row)}`
+        }
+    ], 
+    [
+        {
+            label: 'Usuń ofertę',
+            icon:  `${row.visible ? 'i-ic-baseline-cancel' : 'i-material-symbols-check-circle'}`,
+            click: () => trainerStore.deleteTrainerOffer(trainerStore.trainerData?.email, row.id)
+        }
+    ]
+]
+
+const showEditOfferModal = ref(false);
+
+const toggleEditOfferModal = () => {
+    showEditOfferModal.value = !showEditOfferModal.value;
+}
+
+const toggleAddOfferModal = () => {
+    offerToEdit.value = createTrainerOfferObject();
+    showAddOfferModal.value = !showAddOfferModal.value;
+}
+
+const onSubmitEditOffer = async () => {
+    console.log('submit', offerToEdit.value)
+    await trainerStore.putUpdateTrainerOffer(offerToEdit.value, trainerStore.trainerData?.email);
+    toggleEditOfferModal();
+}
+
+const onSubmitAddOffer = async () => {
+    console.log('submit', offerToEdit.value)
+    await trainerStore.postTrainerOffer(offerToEdit.value, trainerStore.trainerData?.email);
+    toggleAddOfferModal();
+}
 
 </script>
 
@@ -40,7 +137,7 @@ onBeforeRouteLeave(() => {
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
     <!-- TODO: poprawić margines -->
-    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-stretch justify-start gap-8">
+    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
         <div class="active-pass w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <div>
                 <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Trener: </span>{{trainerStore.trainerData?.name}} {{trainerStore.trainerData?.surname}}</h1>
@@ -52,35 +149,6 @@ onBeforeRouteLeave(() => {
                 <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Widoczność: </span>{{trainerStore.trainerData?.visible ? 'Aktywny' : 'Nieaktywny'}}</p>
             </div>
             <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
-        </div>
-
-        <div class="active-pass w-max flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <ul>
-                <li class="text-lg"><span class="text-slate-500 text-base pr-3">Data urodzenia: </span>{{trainerStore.trainerData?.birthdate}}</li>
-                <li class="text-lg"><span class="text-slate-500 text-base pr-3">Pesel: </span>{{trainerStore.trainerData?.pesel}}</li>
-                <li class="text-lg">
-                    <span class="text-slate-500 text-base pr-3">Adres: </span>
-                    {{
-                        trainerStore.trainerData?.address.city 
-                        + ' ' + trainerStore.trainerData?.address.streetName 
-                        + ' ' + trainerStore.trainerData?.address.buildingNumber 
-                        + (trainerStore.trainerData?.address.apartmentNumber ? ('/' + trainerStore.trainerData?.address.apartmentNumber) : ' ') 
-                        + trainerStore.trainerData?.address.postalCode 
-                    }}
-                </li>
-                <li class="text-lg"><span class="text-slate-500 text-base pr-3">Opis: </span>{{trainerStore.trainerData?.description ?? 'Brak'}}</li>
-                <li class="text-lg">
-                    <span class="text-slate-500 text-base pr-3">Tagi: </span>
-                    {{
-                        trainerStore.trainerData?.trainerTags
-                            .map(tag => trainerTagTranslations[tag] || tag)
-                            .join(', ') ?? 'Brak'
-                    }}
-                </li>
-            </ul>
-            <div class="flex flex-row gap-4">
-                
-            </div>
         </div>
 
         <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
@@ -107,31 +175,203 @@ onBeforeRouteLeave(() => {
 
         </div>
 
+        <div class="trainer-info w-max max-w-[79vw] flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="text-lg text-slate-500  pr-3">Data urodzenia:</td>
+                        <td class="text-lg">{{trainerStore.trainerData?.birthdate}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg text-slate-500 pr-3">Pesel:</td>
+                        <td class="text-lg">{{trainerStore.trainerData?.pesel}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg text-slate-500  pr-3">Adres:</td>
+                        <td class="text-lg flex flex-row gap-4">
+                            <p>{{ trainerStore.trainerData?.address.city }}</p>
+                            <p>ul. {{ trainerStore.trainerData?.address.streetName }} {{ trainerStore.trainerData?.address.buildingNumber }} {{ trainerStore.trainerData?.address.apartmentNumber ? ('/ ' + trainerStore.trainerData?.address.apartmentNumber) : ' ' }}</p>
+                            <p>Kod pocztowy: {{ trainerStore.trainerData?.address.postalCode }}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg text-slate-500  pr-3">Opis:</td>
+                        <td class="text-lg">{{trainerStore.trainerData?.description ?? 'Brak'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-lg text-slate-500  pr-3">Tagi:</td>
+                        <td class="text-lg">
+                            {{
+                                trainerStore.trainerData?.trainerTags
+                                    .map(tag => trainerTagTranslations[tag] || tag)
+                                    .join(', ') ?? 'Brak'
+                            }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="flex flex-row gap-4">
+                
+            </div>
+        </div>
+
+        <div class="offersContainer w-full max-w-[79vw] flex flex-col gap-8 ">
+            <div class="offers flex flex-row flex-wrap gap-8 ">
+                <div class="offer flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start  gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                    <span class="font-semibold text-lg">Oferty trenera</span>
+                    <UTable :rows="trainerStore.trainerOffersByEmail" :columns="columnsTrainerSingleOffer" @select="selectOffer">
+                        <template #trainerOffers.id-data="{ row }">
+                            {{ row.id }}
+                        </template>
+                        <template #trainerOffers.title-data="{ row }">
+                            {{ row.title }}
+                        </template>
+                        <template #trainerOffers.price-data="{ row }">
+                            {{ row.price }}
+                        </template>
+                        <template #trainerOffers.trainingSessionCount-data="{ row }">
+                            {{ row.trainingSessionCount }}
+                        </template>
+                        <template #trainerOffers.trainingSessionDurationInMinutes-data="{ row }">
+                            {{ row.trainingSessionDurationInMinutes }}
+                        </template>
+                        <template #trainerOffers.visible-data="{ row }">
+                            {{ row.visible ? 'Tak ✅' : 'Nie ❌' }}
+                        </template>
+                        <template #empty-state>
+                            <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                <span class="italic text-sm">Brak ofert</span>
+                            </div>
+                        </template>
+                        <template #options-data="{ row }" @click.stop>
+                            <UDropdown :items="items(row)" @click.stop>
+                                <UButton  color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                            </UDropdown>
+                        </template>
+                    </UTable>
+                    <UButton label="Dodaj ofertę" @click="toggleAddOfferModal()" color="blue" icon="i-material-symbols-add" />
+                </div>
+            </div>
+            <UModal 
+                :model-value="showEditOfferModal"
+                :closable="true"
+                @close="toggleEditOfferModal()"
+                :ui="{}"
+                >
+                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <h3 class="font-bold text-lg">Formularz dodania nowego trenera</h3>
+                    </template>
+                    <div class="w-full">
+                        <div class="changeMemberDetailsContainer flex flex-col rounded-lg px-4 bg-white w-full">
+                            <UForm class="flex flex-col gap-4 justify-start" :state="offerToEdit" :validate="validateNewTrainerOffer" @submit="onSubmitEditOffer()">
+                                <div class="grid grid-cols-3 gap-5 items-end" >
+                                    <h4 class="col-span-3 text-xl font-semibold">Edycja oferty</h4>
+                                    <UFormGroup class="col-span-3" label="Tytuł oferty" name="title" required>
+                                        <UInput v-model="offerToEdit.title" type="string" placeholder="Tytuł oferty" :value="offerToEdit.title"  />
+                                    </UFormGroup>
+                                    <UFormGroup label="Cena" name="price" required>
+                                        <UInput v-model="offerToEdit.price" type="number" placeholder="Cena" :value="offerToEdit.price" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Ilość sesji" name="trainingSessionCount" required>
+                                        <UInput v-model="offerToEdit.trainingSessionCount" type="number" placeholder="Ilość sesji" :value="offerToEdit.trainingSessionCount" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Długość sesji" name="trainingSessionDurationInMinutes" required>
+                                        <UInput v-model="offerToEdit.trainingSessionDurationInMinutes" type="number" placeholder="Długość sesji" :value="offerToEdit.trainingSessionDurationInMinutes" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Aktywność" name="visible" required>
+                                        <USelect v-model="offerToEdit.visible" :options="[{label: 'Aktywna', value: true}, {label: 'Nieaktywna', value: false}]"/>
+                                    </UFormGroup>
+                                    
+                                    <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
+                                        Zapisz dane oferty
+                                    </UButton>
+                                </div>
+                            </UForm>
+                        </div>
+                    </div>
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Anuluj" @click="toggleEditOfferModal()" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
+            <UModal 
+                :model-value="showAddOfferModal"
+                :closable="true"
+                @close="toggleAddOfferModal()"
+                :ui="{}"
+                >
+                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <h3 class="font-bold text-lg">Formularz dodania nowej oferty</h3>
+                    </template>
+                    <div class="w-full">
+                        <div class="changeMemberDetailsContainer flex flex-col rounded-lg px-4 bg-white w-full">
+                            <UForm class="flex flex-col gap-4 justify-start" :state="offerToEdit" :validate="validateNewTrainerOffer" @submit="onSubmitAddOffer()">
+                                <div class="grid grid-cols-3 gap-5 items-end" >
+                                    <h4 class="col-span-3 text-xl font-semibold">Dodanie nowej oferty</h4>
+                                    <UFormGroup class="col-span-3" label="Tytuł oferty" name="title" required>
+                                        <UInput v-model="offerToEdit.title" type="string" placeholder="Tytuł oferty" :value="offerToEdit.title"  />
+                                    </UFormGroup>
+                                    <UFormGroup label="Cena" name="price" required>
+                                        <UInput v-model="offerToEdit.price" type="number" placeholder="Cena" :value="offerToEdit.price" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Ilość sesji" name="trainingSessionCount" required>
+                                        <UInput v-model="offerToEdit.trainingSessionCount" type="number" placeholder="Ilość sesji" :value="offerToEdit.trainingSessionCount" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Długość sesji" name="trainingSessionDurationInMinutes" required>
+                                        <UInput v-model="offerToEdit.trainingSessionDurationInMinutes" type="number" placeholder="Długość sesji" :value="offerToEdit.trainingSessionDurationInMinutes" />
+                                    </UFormGroup>
+                                    <UFormGroup label="Aktywność" name="visible" required>
+                                        <USelect v-model="offerToEdit.visible" :options="[{label: 'Aktywna', value: true}, {label: 'Nieaktywna', value: false}]"/>
+                                    </UFormGroup>
+                                    
+                                    <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
+                                        Zapisz dane oferty
+                                    </UButton>
+                                </div>
+                            </UForm>
+                        </div>
+                    </div>
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Anuluj" @click="toggleAddOfferModal()" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
+        </div>
+
         <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Statystyki</h1>
             <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
         </div>  
 
-        <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <span class="font-semibold text-lg">Historia wejść na siłownię</span>
-            <ul class="flex flex-col gap-5 w-full justify-between ">
-                <pre class="">{{trainerStore.trainerEntries?.length ? trainerStore.trainerEntries :'Brak historii wejść' }}</pre>
-            </ul>
-        </div>
-        
-        <div class="flex flex-row flex-nowrap gap-8 items-start">
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-              <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-              <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-              <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
+        <div class="statsContainer flex flex-row flex-wrap gap-8 ">
+            
+            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Historia wejść na siłownię</span>
+                <ul class="flex flex-col gap-5 w-full justify-between ">
+                    <pre class="">{{trainerStore.trainerEntries?.length ? trainerStore.trainerEntries :'Brak historii wejść' }}</pre>
+                </ul>
             </div>
-      
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                <img src="/images/worker/diagram.jpg" alt="" srcset="">
-            </div>  
+            
+            <div class="flex flex-row flex-nowrap gap-8 items-start">
+                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
+                <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
+                <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
+                </div>
+        
+                <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                    <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
+                    <img src="/images/worker/diagram.jpg" alt="" srcset="">
+                </div>  
+            </div>
+        
         </div>
-
         
 
     </main> 

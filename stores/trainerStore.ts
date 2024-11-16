@@ -274,6 +274,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Usunięta oferta trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Oferta trenera została usunięta.' });
+                getTrainerOfferByEmail(email);
                 if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
                     router.push('/trainer/oferty');    
                 }else{
@@ -305,6 +306,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 console.log('Dodana oferta trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Oferta trenera została dodana.' });
+                getTrainerOfferByEmail(email);
             } else {
                 throw new Error('Nie udało się dodać oferty trenera.');
             }

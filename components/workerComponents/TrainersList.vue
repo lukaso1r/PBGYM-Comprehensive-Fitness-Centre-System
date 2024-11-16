@@ -3,6 +3,7 @@
 import type { TrainerOffer, TrainerWithOffers } from '~/types';
 
 const trainerStore = useTrainerStore();
+const router = useRouter();
 
 const { data: allTrainers} = await useAsyncData('trainers', async () => {
     await trainerStore.getAllTrainers();
@@ -128,21 +129,29 @@ const trainer = ref<TrainerWithOffers>({} as TrainerWithOffers);
 
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const select = (row: any) => {
-    console.log('Selected', row)
-    isOpen.value = true
-    selectedRow.value = row
-}
+    const select = (row: any) => {
+    console.log('Selected Row:', row);
+    if (!row.email) {
+        console.error('Row does not contain email!');
+        return;
+    }
+    isOpen.value = true;
+    selectedRow.value = row;
+};
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const selectOffer = (row: any) => {
-    isOpen.value = true
-    selectedRow.value = row
-    offerId.value = row.id
-    trainer.value = trainerStore.allTrainersWithOffers.find(trainer => trainer.trainerOffers.some(offer => offer.id === offerId.value as unknown as number)) as TrainerWithOffers;   
-}
-
-
+    console.log('Selected Offer Row:', row);
+    if (!row.id) {
+        console.error('Row does not contain id!');
+        return;
+    }
+    isOpen.value = true;
+    selectedRow.value = row;
+    offerId.value = row.id;
+    trainer.value = trainerStore.allTrainersWithOffers.find(trainer =>
+        trainer.trainerOffers.some(offer => offer.id === offerId.value as unknown as number)
+    ) as TrainerWithOffers;
+};
 
 
 </script>
@@ -216,8 +225,8 @@ const selectOffer = (row: any) => {
             </table>
             <template #footer >
                 <div class="optionButtons flex flex-row justify-between">
-                    <div class="flex flex-row">
-                        <UButton label="Edytuj" :to="{ name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: trainer.trainerInfo?.email } }" color="blue" icon="i-material-symbols-edit-square-outline-rounded"/>
+                    <div class="flex flex-row" v-if="trainer?.trainerInfo?.email">
+                        <UButton label="Edytuj" @click="router.push({ name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: trainer?.trainerInfo?.email } })" color="blue" icon="i-material-symbols-edit-square-outline-rounded"/>
                     </div>
                     <div class="flex flex-row">
                         <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
