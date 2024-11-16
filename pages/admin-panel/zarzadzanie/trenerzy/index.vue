@@ -69,7 +69,7 @@ const closeAddNewTrainerModal = () => {
         </template>
         <div class="w-full">
             <div class="changeMemberDetailsContainer flex flex-col rounded-lg px-4 bg-white w-full">
-                <h3 class="[word-spacing:4px] font-medium pb-4">Użyj poniższego formularza aby zmienić dane trenera.</h3>
+                <h3 class="[word-spacing:4px] font-medium pb-4">Użyj poniższego formularza aby dodać nowego trenera.</h3>
                 <UForm class="flex flex-col gap-4 justify-start" :state="registerStore.trainerToRegister" :validate="validateTrainerToRegister"  @submit="onSubmitAddNewTrainer">
                     <div class="grid grid-cols-3 gap-5 items-end p-6 border-2" >
 
