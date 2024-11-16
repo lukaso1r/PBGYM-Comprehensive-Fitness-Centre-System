@@ -13,7 +13,7 @@ const items = [
         label: 'Twoje zajęcia *WIP*',
         icon: 'i-ic-outline-sports-kabaddi',
         defaultOpen: false,
-        slot: 'checkoffer',
+        slot: 'checkClasses',
         color: 'cyan',
         class: 'py-4 hover:bg-cyan-100'
     },
@@ -59,6 +59,11 @@ const instructions = [
                     <template #checkoffer >
                         <NuxtLink to="/trainer/oferty/" >
                             <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoją ofertę</p>
+                        </NuxtLink>
+                    </template>
+                    <template #checkClasses >
+                        <NuxtLink to="/trainer/zajecia/" >
+                            <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoje zajęcia</p>
                         </NuxtLink>
                     </template>
                 </UAccordion>  

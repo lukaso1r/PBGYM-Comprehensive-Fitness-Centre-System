@@ -1,5 +1,5 @@
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import type { CreditCardData, LoggedMemberData, MemberToRegisterData, TrainerDataToEdit, TrainerDataToRegister } from '~/types'
+import type { CreditCardData, LoggedMemberData, MemberToRegisterData, TrainerDataToEdit, TrainerDataToRegister, TrainerOffer } from '~/types'
 
 export const validatePassword = (password: string) => {
     if (!(/^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])(?=.{8,})/.test(password)) && password !== '') {
@@ -205,3 +205,14 @@ export const validateTrainerToRegister = (data: TrainerDataToRegister) => {
     if (data.address.buildingNumber === '') errors.push({ path: 'buildingNumber', message: 'Numer domu jest wymagany' })
     return errors
 }
+
+export const validateNewTrainerOffer = (data: TrainerOffer) => {
+    const errors: FormError<string>[] = []
+    if (!data.title || data.title==='') errors.push({ path: 'title', message: 'Tytuł oferty jest wymagany' })
+    if (!data.price) errors.push({ path: 'price', message: 'Cena oferty jest wymagana' })
+    if (!data.trainingSessionCount) errors.push({ path: 'trainingSessionCount', message: 'Ilość sesji jest wymagana' })
+    if (!data.trainingSessionDurationInMinutes) errors.push({ path: 'trainingSessionDurationInMinutes', message: 'Czas trwania sesji jest wymagany' })
+    if (data.price === 0) errors.push({ path: 'price', message: 'Cena nie może być ujemna' })
+    return errors
+}
+

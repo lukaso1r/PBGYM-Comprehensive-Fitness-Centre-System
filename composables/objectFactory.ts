@@ -115,7 +115,6 @@ export const useObjectFactory = () => {
     }
 
 
-
     return {
         createMemberToRegisterObject,
         createTrainerToRegisterObject,

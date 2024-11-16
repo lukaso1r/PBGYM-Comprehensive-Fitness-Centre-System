@@ -259,7 +259,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     // DELETE
 
-    const deleteTrainerOffer = async (email: string) => {
+    const deleteTrainerOffer = async (email: string, id: number) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
@@ -268,11 +268,17 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
-                }
+                },
+                body: JSON.stringify(id)
             });
             if (response) {
                 console.log('Usunięta oferta trenera:', response);
                 toast.add({ title: 'Sukces.', description: 'Oferta trenera została usunięta.' });
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
+                    router.push('/trainer/oferty');    
+                }else{
+                    router.push(`/admin-panel/zarzadzanie/trenerzy/${email}`);
+                }
             } else {
                 throw new Error('Nie udało się usunąć oferty trenera.');
             }
@@ -284,7 +290,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     // POST
 
-    const postTrainerOffer = async (trainerOffer: TrainerOffer, email: string, offerId: number) => {
+    const postTrainerOffer = async (trainerOffer: TrainerOffer, email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
@@ -294,7 +300,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 },
-                body: JSON.stringify(toRaw(offerId))
+                body: JSON.stringify(toRaw(trainerOffer))
             });
             if (response) {
                 console.log('Dodana oferta trenera:', response);

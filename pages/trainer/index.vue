@@ -58,7 +58,7 @@ onMounted(() => {
                             variant="ghost"
                             label="Zobacz więcej"
                             :trailing="false"
-                            :to="'/trenerzy'"
+                            :to="'/trainer/oferty'"
                         />
                     </div>
                     <hr class="mt-3 mb-3"/>

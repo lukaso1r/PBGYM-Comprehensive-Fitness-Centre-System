@@ -7,6 +7,7 @@ const trainerStore = useTrainerStore();
 const loginStore = useLoginStore();
 
 const offerDataById = ref<TrainerOffer>({} as TrainerOffer)
+const showDeleteOfferModal = ref(false)
 
 onMounted(async () => {
     await trainerStore.getTrainerOfferByEmail(loginStore.loggedTrainerData.email);
@@ -17,6 +18,14 @@ const submitOfferChane = async () => {
     await trainerStore.putUpdateTrainerOffer(offerDataById.value, loginStore.loggedTrainerData.email);
 }
 
+const deleteTrainerOffer = async () => {
+    console.log('deleteTrainerOffer', offerDataById.value.id)
+    await trainerStore.deleteTrainerOffer(loginStore.loggedTrainerData.email, offerDataById.value.id as unknown as number);
+}
+
+const toggleShowDeleteOfferModal = () => {
+    showDeleteOfferModal.value = !showDeleteOfferModal.value
+}
 </script>
 
 <template>
@@ -80,6 +89,47 @@ const submitOfferChane = async () => {
 
             </UForm>
         </div>
+
+        <UButton class="deleteOffer" @click="toggleShowDeleteOfferModal()" icon="i-heroicons-trash-20-solid" color="red" variant="solid" label="Usuń ofertę" />
+        <UModal v-model="showDeleteOfferModal">
+            <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                <template #header>
+                    <h3 class="font-medium text-lg">Czy na pewno chcesz usunąć ofertę:</h3>
+                </template>
+                <table class="table-auto">
+                    <tbody>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tytuł</td>
+                            <td>{{ offerDataById.title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Cena</td>
+                            <td>{{ offerDataById.price }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Ilość spotkań</td>
+                            <td>{{ offerDataById.trainingSessionCount }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Długość jednego spotkania w minutach</td>
+                            <td>{{ offerDataById.trainingSessionDurationInMinutes }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Widoczność oferty</td>
+                            <td>{{ offerDataById.visible ? 'Tak' : 'Nie' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <UButton @click="deleteTrainerOffer" color="red" class="mt-5 hover:bg-red-800 mx-auto px-5" icon="i-material-symbols-delete-forever">
+                    Potwierdzam usunięcie oferty
+                </UButton>
+                <template #footer >
+                    <div class="flex flex-row justify-end">
+                        <UButton label="Zamknij" @click="showDeleteOfferModal = false" color="blue" icon="i-material-symbols-cancel"/>
+                    </div>
+                </template>
+            </UCard>
+        </UModal>
     </main>
 </div>
 
