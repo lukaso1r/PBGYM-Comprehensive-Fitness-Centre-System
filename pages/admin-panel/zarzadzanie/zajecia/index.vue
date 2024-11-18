@@ -12,7 +12,7 @@ const allTrainersMailList = ref<string[]>([]);
 const isAddClassesModalOpen = ref(false);
 
 const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.date));
-const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>(["year", "month", "calendar", "time", "minutes", "hours"]);
+const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>([ "month", "calendar", "time"]);
 const maxDate = ref(nextYearDate.value)
 const dateFormatForPicker = (date: Date) => {
     const day = date.getDate();
@@ -80,7 +80,7 @@ watch(date, (newValue) => {
     >
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
-            <h3 class="font-bold text-lg">Formularz dodania nowego trenera</h3>
+            <h3 class="font-bold text-lg">Formularz dodania nowych zajęć</h3>
         </template>
         <div class="w-full">
             <div class="addNewGroupClasses flex flex-col rounded-lg px-4 bg-white w-full">
@@ -127,7 +127,7 @@ watch(date, (newValue) => {
                         </UFormGroup>
 
                     <UButton  type="submit" color="blue" class="col-span-2 bg-[#203983] hover:bg-[#617F9B] text-center grid">
-                        Dodaj nowego trenera
+                        Dodaj nowe zajęcia
                     </UButton>
 
                 </UForm>
