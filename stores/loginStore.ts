@@ -8,23 +8,23 @@ export const useLoginStore = defineStore('login', () => {
     }));
 
     const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData', {
-        maxAge: weekInMilliseconds.value,
-        expires: nextWeekDate.value 
+        maxAge: dayInMilliseconds.value,
+        expires: nextDayDate.value 
     });
       
     const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData', {
-        maxAge: weekInMilliseconds.value,
-        expires: nextWeekDate.value 
+        maxAge: dayInMilliseconds.value,
+        expires: nextDayDate.value 
     });
 
     const loggedWorkerData = useCookie<LoggedWorkerData>('loggedWorkerData', {
-        maxAge: weekInMilliseconds.value,
-        expires: nextWeekDate.value 
+        maxAge: dayInMilliseconds.value,
+        expires: nextDayDate.value 
     });
 
     const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData', {
-        maxAge: weekInMilliseconds.value,
-        expires: nextWeekDate.value 
+        maxAge: dayInMilliseconds.value,
+        expires: nextDayDate.value 
     });
     
     const login = () => {

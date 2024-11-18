@@ -8,6 +8,18 @@ export const weekInMilliseconds = computed(() => {
     return 7 * 24 * 60 * 60 * 1000;
 });
 
+export const dayInMilliseconds = computed(() => {
+    return 24 * 60 * 60 * 1000;
+});
+
+export const nextDayDate = computed(() => {
+    return new Date(currentDate.value.getTime() + 24 * 60 * 60 * 1000);
+});
+
+export const nextYearDate = computed(() => {
+    return new Date(currentDate.value.getTime() + 365 * 24 * 60 * 60 * 1000);
+});
+
 export const dateToString = (date: Date | string) => {
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
     return new Date(date).toLocaleDateString('pl-PL', options);
@@ -39,3 +51,7 @@ export const daysLeft = (end: Date) => {
     const difference = end.getTime() - start.getTime();
     return Math.ceil(difference/1000/60/60/24);
 };
+
+export const dateWithTimeString = (date: Date) => {
+    return `${dateToString(date)} ${dateToTimeString(date)}`;
+}

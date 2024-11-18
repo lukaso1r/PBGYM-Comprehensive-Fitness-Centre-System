@@ -34,9 +34,9 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             if (response) {
                 memberByEmail.value = response;
-                console.log('Dane członka:', response);
+                console.log('Dane klienta:', response);
             } else {
-                throw new Error('Nie udało się pobrać danych członka.');
+                throw new Error('Nie udało się pobrać danych klienta.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -78,11 +78,11 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             if (response) {
                 memberPaymentHistory.value = response;
-                console.log('Historia płatności członka:', response);
-                toast.add({ title: 'Pobrano historię płatności członka' });
+                console.log('Historia płatności klienta:', response);
+                toast.add({ title: 'Pobrano historię płatności klienta' });
             } else {
-                toast.add({ title: 'Nie udało się pobrać historii płatności członka' });
-                throw new Error('Nie udało się pobrać historii płatności członka.');
+                toast.add({ title: 'Nie udało się pobrać historii płatności klienta' });
+                throw new Error('Nie udało się pobrać historii płatności klienta.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -102,11 +102,11 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             if (response) {
                 memberGymEntriesHistory.value = response;
-                console.log('Historia wejść do siłowni członka:', response);
-                toast.add({ title: 'Pobrano historię wejść do siłowni członka' });
+                console.log('Historia wejść do siłowni klienta:', response);
+                toast.add({ title: 'Pobrano historię wejść do siłowni klienta' });
             } else {
-                toast.add({ title: 'Nie udało się pobrać historii wejść do siłowni członka' });
-                throw new Error('Nie udało się pobrać historii wejść do siłowni członka.');
+                toast.add({ title: 'Nie udało się pobrać historii wejść do siłowni klienta' });
+                throw new Error('Nie udało się pobrać historii wejść do siłowni klienta.');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -153,13 +153,13 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
                 },
                 body: JSON.stringify(memberToRegister.value)
             });
-            console.log('Dodano nowego członka.');
-            toast.add({ title: 'Dodano nowego członka' });
+            console.log('Dodano nowego klienta.');
+            toast.add({ title: 'Dodano nowego klienta' });
             getAllMembers();
             memberToRegister.value = createMemberToRegisterObject();
         } catch (error) {
             console.error('Error:', error);
-            toast.add({ title: 'Nie udało się dodać nowego członka' });
+            toast.add({ title: 'Nie udało się dodać nowego klienta' });
         }
     }
 
@@ -200,12 +200,12 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
                 },
                 body: JSON.stringify(memberDataToChange.value)
             });
-            console.log('Zmieniono dane członka.');
-            toast.add({ title: 'Zmieniono dane członka' });
+            console.log('Zmieniono dane klienta.');
+            toast.add({ title: 'Zmieniono dane klienta' });
             getMemberByEmail(memberEmail);
         } catch (error) {
             console.error('Error:', error);
-            toast.add({ title: 'Nie udało się zmienić danych członka' });
+            toast.add({ title: 'Nie udało się zmienić danych klienta' });
         }
     }
 
@@ -219,11 +219,11 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
                 },
                 body: JSON.stringify({ newPassword })
             });
-            console.log('Zmieniono hasło członka.');
-            toast.add({ title: 'Zmieniono hasło członka' });
+            console.log('Zmieniono hasło klienta.');
+            toast.add({ title: 'Zmieniono hasło klienta' });
         } catch (error) {
             console.error('Error:', error);
-            toast.add({ title: 'Nie udało się zmienić hasła członka' });
+            toast.add({ title: 'Nie udało się zmienić hasła klienta' });
         }
     }
 
@@ -237,14 +237,14 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
                 },
                 body: JSON.stringify({ newEmail })
             });
-            console.log('Zmieniono email członka.');
-            toast.add({ title: 'Zmieniono email członka' });
+            console.log('Zmieniono email klienta.');
+            toast.add({ title: 'Zmieniono email klienta' });
             router.push(`/admin-panel/zarzadzanie/klienci/${newEmail}`);
             
             await getMemberByEmail(newEmail);
         } catch (error) {
             console.error('Error:', error);
-            toast.add({ title: 'Nie udało się zmienić emaila członka' });
+            toast.add({ title: 'Nie udało się zmienić emaila klienta' });
         }
     }
 

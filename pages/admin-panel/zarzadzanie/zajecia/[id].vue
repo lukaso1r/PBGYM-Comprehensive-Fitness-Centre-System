@@ -7,6 +7,7 @@
 <WorkerComponentsHeaderWorker />
 
 
+
 </template>
 
 <style scoped>
