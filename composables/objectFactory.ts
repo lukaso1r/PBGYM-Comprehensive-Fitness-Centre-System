@@ -1,4 +1,8 @@
-import type { MemberToRegisterData, TrainerDataToRegister, TrainerData, TrainerDataToEdit, TrainerOffer, MemberPaymentHistory } from '~/types';
+import type { 
+    MemberToRegisterData, TrainerDataToRegister, TrainerData, 
+    TrainerDataToEdit, TrainerOffer, MemberPaymentHistory, 
+    EditableGroupClassData, GroupClassWithTrainer
+} from '~/types';
 
 export const useObjectFactory = () => {
 
@@ -114,6 +118,15 @@ export const useObjectFactory = () => {
         }
     }
 
+    const createEditableGroupClassObject = (): EditableGroupClassData => {
+        return {
+            title: '',
+            date: '',
+            durationInMinutes: 0,
+            memberLimit: 0,
+            trainerEmail: ''
+        }
+    }
 
     return {
         createMemberToRegisterObject,
@@ -121,6 +134,7 @@ export const useObjectFactory = () => {
         createTrainerObject,
         createTrainerDataToEditObject,
         createTrainerOfferObject,
-        createMemberPaymentHistoryObject
+        createMemberPaymentHistoryObject,
+        createEditableGroupClassObject
     };
 };

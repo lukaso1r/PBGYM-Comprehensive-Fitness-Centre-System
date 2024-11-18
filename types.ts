@@ -370,3 +370,32 @@ export interface TrainerWithOffers {
         visible: boolean;
     }[];
 }
+
+export interface EditableGroupClassData {
+    id?: number,
+    title: string,
+    date: string,
+    durationInMinutes: number,
+    memberLimit: number,
+    trainerEmail: string
+}
+
+export interface GroupClassWithTrainer {
+    id: number;
+    title: string;
+    date: string;
+    durationInMinutes: number;
+    memberLimit: number;
+    trainer: {
+        id: number;
+        email: string;
+        name: string;
+        surname: string;
+        phoneNumber: string;
+        description: string;
+        photo: string[];
+        gender: string;
+        trainerTags: string[];
+    };
+    currentMemberCount: number;
+}

@@ -15,22 +15,22 @@ const loginStore = useLoginStore();
     <Trainer-navbar class="basis-1/5 max-w-[350px]  px-6" />
     <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
         
-        <div class="trainer-card-info">
-            
-            <h1>Zajęcia</h1>
-            <p>W tym miejscu możesz zarządzać swoimi zajęciami</p>
+        <div class="offer flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start  gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <span class="font-semibold text-lg">Oferty trenera</span>
             <div class="flex flex-row gap-5 align-middle justify-start items-center">
                 <UButton 
                     icon="i-ic-baseline-manage-search"
                     size="sm"
                     color="blue"
-                    variant="ghost"
+                    variant="solid"
                     label="Dodaj zajęcia"
                     :trailing="false"
                     to="/trainer/zajecia/dodaj"
                 />
             </div>
         </div>
+
+        
     </main>
 </div>
 

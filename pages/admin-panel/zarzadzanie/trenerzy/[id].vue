@@ -91,7 +91,7 @@ const items = (row: any) => [
     [
         {
             label: `${row.visible ? 'Deaktywuj' : 'Aktywuj'}`,
-            icon:  'i-material-symbols-delete-forever',
+            icon:  row.visible ? 'i-material-symbols-delete-forever' : 'i-material-symbols-mode-off-on',
             click: () => `${row.visible ? deactivateOffer(row) : activateOffer(row)}`
         }
     ], 
