@@ -56,10 +56,10 @@ const settings = [
         
     },
     {
-        label: 'Dziennik zdarzeń  *WIP*',
+        label: 'Dziennik zdarzeń',
         icon: 'i-ic-baseline-format-align-left',
         defaultOpen: false,
-        slot: 'insctruction',
+        slot: 'sysLogs',
         color:'gray',
         variant: 'ghost',
         content: 'Lorem ipsum dolor sit amet',
@@ -118,7 +118,7 @@ const settings = [
                 
                 <hr/>
                 
-                <p class="pt-4 pl-2 text-slate-600">Ustawienia</p>
+                <p class="pt-4 pl-2 text-slate-600">Serwis</p>
                 <UAccordion :items="settings" color="primary"
                     variant="soft"
                     size="sm"
@@ -127,6 +127,13 @@ const settings = [
                     <template #Konto>
                         <div>
                             <p>Tu instrukcje</p>
+                        </div>
+                    </template>
+                    <template #sysLogs>
+                        <div>
+                            <NuxtLink to="/admin-panel/adminLogs" >
+                                <p class="hover:text-blue-500 pl-9">Dziennik zdarzeń</p>
+                            </NuxtLink>
                         </div>
                     </template>
                 </UAccordion>  

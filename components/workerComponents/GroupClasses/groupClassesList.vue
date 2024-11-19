@@ -24,47 +24,30 @@ const columns = [{
     },
     {
         key: 'date',
-        label: 'Data'
+        label: 'Data',
+        sortable: true,
+        direction: 'asc' as const
     },
     {
         key: 'trainer',
-        label: 'Trener'
+        label: 'Trener',
+        sortable: true,
     },
     {
         key: 'currentMemberCount',
-        label: 'Liczba zapisanych osób'
+        label: 'Liczba zapisanych osób',
+        sortable: true,
     },
     {
         key: 'memberLimit',
-        label: 'Maksymalna liczba osób'
+        label: 'Maksymalna liczba osób',
+        sortable: true,
     }
 ]
 
-const items = (row: any) => [
-    [
-        {
-            label: 'Szczegóły',
-            icon: 'i-heroicons-document-magnifying-glass-16-solid',
-            click: () => select(row)
-            
-        },
-        {
-            label: 'Edytuj',
-            icon: 'i-heroicons-pencil-square-20-solid',
-            to: { name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: row.email } }
-        }
-    ], 
-    [
-        {
-            label: 'Deaktywuj',
-            icon: 'i-ic-baseline-cancel'
-        }
-    ]
-]
-
-
 const isOpen = ref(false)
 const selectedRow = ref()
+const currentDateTime = new Date();
 
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -90,7 +73,12 @@ const selectedRow = ref()
             {{ row.trainer.name + " " + row.trainer.surname + " " + row.trainer.email }}
         </template> 
         <template #date-data="{ row }">
+            <span :class="{
+            'text-green-400': new Date(row.date) < currentDateTime,
+            'text-orange-300': new Date(row.date) >= currentDateTime && new Date(row.date) <= new Date(currentDateTime.getTime() + 30 * 60000)
+            }">
             {{ dateWithTimeString(new Date(row.date)) }}
+            </span>
         </template>
     </UTable>
 </div>
@@ -119,15 +107,48 @@ const selectedRow = ref()
         </template>
         <table class="table-auto">
             <tbody>
-                <tr v-for="(value, key) in selectedRow" :key="key">
-                    <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                    <td>{{ value }}</td>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8 ">id</td>
+                    <td>{{selectedRow.id}}</td>
                 </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Tytuł</td>
+                    <td>{{selectedRow.title}}</td>
+                </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Trener</td>
+                    <td>{{selectedRow.trainer.name + " " + selectedRow.trainer.surname + " " + selectedRow.trainer.email + " tel: " + selectedRow.trainer.phoneNumber}}</td>
+                </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Data</td>
+                    <td>{{dateWithTimeString(new Date(selectedRow.date))}}</td>
+                </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Liczba zapisanych osób</td>
+                    <td>{{selectedRow.currentMemberCount}}</td>
+                </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Maksymalna liczba osób</td>
+                    <td>{{selectedRow.memberLimit}}</td>
+                </tr>
+                <tr class="pb-2">
+                    <td class="font-bold pr-8">Czas trwania w minutach</td>
+                    <td>{{selectedRow.durationInMinutes}}</td>
+                </tr>
+                {{ selectedRow.date }}
             </tbody>
         </table>
         <template #footer >
             <div class="optionButtons flex flex-row justify-between">
-                <div class="flex flex-row justify-end">
+                <div class="flex flex-row justify-end w-full gap-6">
+                    <UButton label="Przejdź do panelu oferty" 
+                        color="blue" icon="i-material-symbols-edit"
+                        @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
+                            isDateFromPast(new Date(new Date(selectedRow.date).getTime() + selectedRow.durationInMinutes * 60000)) 
+                              ? 'past' 
+                              : 'future' 
+                          }/${selectedRow.id}`)"
+                    />
                     <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
                 </div>
             </div>

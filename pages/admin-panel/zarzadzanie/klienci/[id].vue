@@ -51,7 +51,7 @@ const test = () => {
 <template>
 
     
-    <HeaderTrainerProfile />
+    <WorkerComponentsHeaderWorker />
     
 
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">

@@ -55,3 +55,9 @@ export const daysLeft = (end: Date) => {
 export const dateWithTimeString = (date: Date) => {
     return `${dateToString(date)} ${dateToTimeString(date)}`;
 }
+
+export const isDateFromPast = (date: Date) => {
+    const currentDate = new Date(); // Pobierz aktualną datę i czas
+    return date.getTime() < currentDate.getTime(); // Porównaj czas w milisekundach
+}
+

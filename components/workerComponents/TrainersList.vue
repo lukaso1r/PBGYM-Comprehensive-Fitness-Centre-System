@@ -5,11 +5,6 @@ import type { TrainerOffer, TrainerWithOffers } from '~/types';
 const trainerStore = useTrainerStore();
 const router = useRouter();
 
-const { data: allTrainers} = await useAsyncData('trainers', async () => {
-    await trainerStore.getAllTrainers();
-    return trainerStore.allTrainers;
-});
-
 const props = defineProps(['showButton'])
 
 const columns = [{
@@ -46,6 +41,7 @@ const columns = [{
     }
 ]
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const items = (row: any) => [
     [
         {
@@ -58,12 +54,6 @@ const items = (row: any) => [
             label: 'Edytuj',
             icon: 'i-heroicons-pencil-square-20-solid',
             to: { name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: row.email } }
-        }
-    ], 
-    [
-        {
-            label: 'Deaktywuj',
-            icon: 'i-ic-baseline-cancel'
         }
     ]
 ]
@@ -116,8 +106,9 @@ const columnsTrainerSingleOffer = [{
     }
 ]
 
-onMounted(() => {
-    trainerStore.getAllTrainersWithOffers();
+onMounted(async () => {
+    await trainerStore.getAllTrainersWithOffers();
+    await trainerStore.getAllTrainers();
 
 })
 
@@ -163,7 +154,7 @@ const selectOffer = (row: any) => {
         <p class="text-slate-500">Trenerzy zarejestrowani w systemie</p>
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
     </div>
-    <UTable :rows="allTrainers" :columns="columns" @select="select">
+    <UTable :rows="trainerStore.allTrainers" :columns="columns" @select="select">
         <template #actions-data="{ row }" @click.stop>
             <UDropdown :items="items(row)" @click.stop>
                 <UButton  color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />

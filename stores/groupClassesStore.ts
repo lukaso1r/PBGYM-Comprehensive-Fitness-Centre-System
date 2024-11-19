@@ -183,14 +183,31 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                 await getGroupClassesUpcoming();
                 toast.add({title: 'Sukces', description: `Pomyślnie utworzono zajęcia grupowe: ${editableGroupClass.value.title}`});
                 editableGroupClass.value = createEditableGroupClassObject();
-                
+                return true;
+            // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
-                toast.add({title: 'Błąd', description: 'Nie udało się utworzyć zajęć grupowych.'});
                 throw new Error('Nie udało się utworzyć zajęć grupowych.');
             }
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } catch (error: any) {
             console.error('Error:', error.response);
+            switch (error.response.status) {
+                case 409:
+                    toast.add({title: 'Błąd', description: 'Zajęcia grupowe nakładają się na inne.'});
+                    break;
+                case 400:
+                    toast.add({title: 'Błąd', description: 'Niepoprawne data.'});
+                    break;
+                case 403:
+                    toast.add({title: 'Błąd', description: 'Nie masz uprawnień do utworzenia zajęć grupowych.'});
+                    break;
+                case 404:
+                    toast.add({title: 'Błąd', description: 'Nie znaleziono trenera.'});
+                    break;	
+                default:
+                    toast.add({title: 'Błąd', description: 'Nie udało się utworzyć zajęć grupowych.'});
+            }
+            return false
         }
     }
 

@@ -34,13 +34,13 @@ import { UIcon } from '../../.nuxt/components';
                 />
             </div>
             <div class="col2">
-                <UButton
+                <!-- <UButton
                     class="bg-[#203983] hover:bg-[#617F9B]"
                     @click="powiadomienie"
                     icon="i-ic-baseline-notifications"
                 >
                     Powiadomienia  *WIP*
-                </UButton>
+                </UButton> -->
 
                 <UButton
                     class="bg-[#203983] hover:bg-[#617F9B]"

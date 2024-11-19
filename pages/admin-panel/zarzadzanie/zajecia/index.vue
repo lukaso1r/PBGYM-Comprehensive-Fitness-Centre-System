@@ -34,8 +34,8 @@ const toggleAddNewClassModal = async () => {
 
 const onSubmitAddNewGroupClasses = async () => {
     console.log('submit', groupClassesStore.editableGroupClass);
-    await groupClassesStore.postNewGroupClass();
-    toggleAddNewClassModal();
+    const status = await groupClassesStore.postNewGroupClass();
+    if(status) toggleAddNewClassModal();
 }
 
 const changeClassTime = (operation: string, value: number) => {
@@ -47,7 +47,11 @@ const changeClassTime = (operation: string, value: number) => {
 }
 
 watch(date, (newValue) => {
-    groupClassesStore.editableGroupClass.date = newValue ? newValue.toISOString() : "";
+    console.log('data przed iso', newValue);
+    const offset = newValue.getTimezoneOffset() * 60000;
+    groupClassesStore.editableGroupClass.date = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
+    console.log('data po iso', groupClassesStore.editableGroupClass.date);
+
 });
 
 
@@ -94,9 +98,9 @@ watch(date, (newValue) => {
                         <UFormGroup class="col-span-2" label="Data zajęć" name="date" required>
                             <VueDatePicker v-model="date" 
                                 :max-date="maxDate" 
-                                :min-date="currentDate"
-                                :start-date="currentDate" 
-                                :year-range="[currentDate.getFullYear(), nextYearDate.getFullYear()]" 
+                                :min-date="new Date()"
+                                :start-date="new Date()" 
+                                :year-range="[new Date().getFullYear(), nextYearDate.getFullYear()]" 
                                 prevent-min-max-navigation 
                                 :enable-time-picker="true" 
                                 :flow="flow" 

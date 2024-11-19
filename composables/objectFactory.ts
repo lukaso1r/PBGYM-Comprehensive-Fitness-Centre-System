@@ -128,6 +128,28 @@ export const useObjectFactory = () => {
         }
     }
 
+    const createGroupClassWithTrainerObject = (): GroupClassWithTrainer => {
+        return {
+            id: 0,
+            title: '',
+            date: '',
+            durationInMinutes: 0,
+            memberLimit: 0,
+            trainer: {
+                id: 0,
+                email: '',
+                name: '',
+                surname: '',
+                phoneNumber: '',
+                description: '',
+                photo: [],
+                gender: '',
+                trainerTags: []
+            },
+            currentMemberCount: 0
+        }
+    }
+
     return {
         createMemberToRegisterObject,
         createTrainerToRegisterObject,
@@ -135,6 +157,7 @@ export const useObjectFactory = () => {
         createTrainerDataToEditObject,
         createTrainerOfferObject,
         createMemberPaymentHistoryObject,
-        createEditableGroupClassObject
+        createEditableGroupClassObject,
+        createGroupClassWithTrainerObject
     };
 };

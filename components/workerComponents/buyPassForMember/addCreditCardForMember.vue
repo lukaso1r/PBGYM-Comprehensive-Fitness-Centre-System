@@ -23,10 +23,16 @@ const addNewPaymentMethod = async () => {
     toast.add({ title: 'Karta płatnicza dodana', description: 'Karta płatnicza została dodana do Twojego konta' });
 }
 
-onBeforeMount( async () => {
-    await membersManagmentStore.getMemberPaymentOptionsStatus(props.memberEmail)   
-    console.log('status', creditCardStatus.value);
-})
+watch(
+    () => props.memberEmail,
+    async (newEmail) => {
+        if (newEmail) {
+            await membersManagmentStore.getMemberPaymentOptionsStatus(newEmail);
+            console.log('status', creditCardStatus.value);
+        }
+    },
+    { immediate: true }
+);
 
 </script>
 
