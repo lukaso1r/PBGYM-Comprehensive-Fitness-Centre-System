@@ -38,7 +38,7 @@ const refreshSysLogs = async () => {
             </div>
             <ul>                
                 <template v-for="(log, index) in adminLogsStore.sysLogs.split('\n').reverse()" :key="index"> 
-                    <li :class="{'bg-gray-50': index % 2 === 0, 'bg-blue-50': index % 2 !== 0}" class="my-[8px] px-2">
+                    <li :class="{'bg-gray-50': index % 2 === 0, 'bg-blue-50': index % 2 !== 0}" class="my-[8px] px-2 break-words">
                         {{ log }}
                     </li>
                 </template>

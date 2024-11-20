@@ -151,31 +151,9 @@ const onSubmitAddOffer = async () => {
             <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
         </div>
 
-        <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <UButton
-                icon="i-material-symbols-key"
-                size="sm"
-                color="blue"
-                variant="solid"
-                label="Edytuj dane logowania trenera"
-                @click="editTrainerData('login')"
-            />
-            <UButton
-                icon="i-material-symbols-manage-accounts-rounded"
-                size="sm"
-                color="blue"
-                variant="solid"
-                label="Edytuj dane personalne trenera"
-                @click="editTrainerData('personal')"
-            />
+       
 
-            <WorkerComponentsTrainerDataEditModal v-model:showTrainerDataEditModal="showTrainerDataEditModal" :typeDataToEdit="typeDataToEdit" :trainerByEmail="trainerStore.trainerData" />
-
-
-
-        </div>
-
-        <div class="trainer-info w-max max-w-[79vw] flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="trainer-info w-max max-w-1/2 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <table>
                 <tbody>
                     <tr>
@@ -188,7 +166,7 @@ const onSubmitAddOffer = async () => {
                     </tr>
                     <tr>
                         <td class="text-lg text-slate-500  pr-3">Adres:</td>
-                        <td class="text-lg flex flex-row gap-4">
+                        <td class="text-lg flex flex-row flex-wrap gap-4">
                             <p>{{ trainerStore.trainerData?.address.city }}</p>
                             <p>ul. {{ trainerStore.trainerData?.address.streetName }} {{ trainerStore.trainerData?.address.buildingNumber }} {{ trainerStore.trainerData?.address.apartmentNumber ? ('/ ' + trainerStore.trainerData?.address.apartmentNumber) : ' ' }}</p>
                             <p>Kod pocztowy: {{ trainerStore.trainerData?.address.postalCode }}</p>
@@ -215,7 +193,27 @@ const onSubmitAddOffer = async () => {
             </div>
         </div>
 
-        <div class="offersContainer w-full max-w-[79vw] flex flex-col gap-8 ">
+         <div class="options w-fit flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <UButton
+                icon="i-material-symbols-key"
+                size="sm"
+                color="blue"
+                variant="solid"
+                label="Edytuj dane logowania trenera"
+                @click="editTrainerData('login')"
+            />
+            <UButton
+                icon="i-material-symbols-manage-accounts-rounded"
+                size="sm"
+                color="blue"
+                variant="solid"
+                label="Edytuj dane personalne trenera"
+                @click="editTrainerData('personal')"
+            />
+            <WorkerComponentsTrainerDataEditModal v-model:showTrainerDataEditModal="showTrainerDataEditModal" :typeDataToEdit="typeDataToEdit" :trainerByEmail="trainerStore.trainerData" />
+        </div>
+
+        <div class="offersContainer w-fit max-w-[79vw] flex flex-col gap-8 ">
             <div class="offers flex flex-row flex-wrap gap-8 ">
                 <div class="offer flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start  gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <span class="font-semibold text-lg">Oferty trenera</span>
@@ -344,32 +342,32 @@ const onSubmitAddOffer = async () => {
             </UModal>
         </div>
 
-        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <h1 class="text-xl font-semibold">Statystyki</h1>
-            <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
-        </div>  
+         
 
-        <div class="statsContainer flex flex-row flex-wrap gap-8 ">
+        <div class="statsContainer grid grid-cols-2 gap-8 ">
             
-            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="stats-title col-span-2 w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <h1 class="text-xl font-semibold">Statystyki</h1>
+                <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
+            </div> 
+
+            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść na siłownię</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <pre class="">{{trainerStore.trainerEntries?.length ? trainerStore.trainerEntries :'Brak historii wejść' }}</pre>
                 </ul>
             </div>
             
-            <div class="flex flex-row flex-nowrap gap-8 items-start">
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
                 <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
                 <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-                </div>
-        
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                    <img src="/images/worker/diagram.jpg" alt="" srcset="">
-                </div>  
             </div>
+    
+            <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
+                <img src="/images/worker/diagram.jpg" alt="" srcset="">
+            </div>  
         
         </div>
         
