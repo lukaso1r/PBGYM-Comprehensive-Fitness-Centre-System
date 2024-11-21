@@ -399,3 +399,11 @@ export interface GroupClassWithTrainer {
     };
     currentMemberCount: number;
 }
+
+export interface GroupClassMember {
+    id: number;
+    email: string;
+    name: string;
+    surname: string;
+}
+    

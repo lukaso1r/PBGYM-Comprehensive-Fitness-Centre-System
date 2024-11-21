@@ -1,6 +1,6 @@
 import type { 
     EditableGroupClassData, GroupClassWithTrainer,
-    DefaultLoginData,
+    DefaultLoginData, GroupClassMember
 
 } from "~/types";
 
@@ -15,6 +15,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
     const groupClassesHistoricalByTrainerEmail = useState<GroupClassWithTrainer[]>(() => []);
     const groupClassesUpcomingForMember = useState<GroupClassWithTrainer[]>(() => []);
     const groupClassesHistoricalForMember = useState<GroupClassWithTrainer[]>(() => []);
+    const groupClassesMembers = useState<GroupClassMember[]>(() => []);
 
     const toast = useToast();
 
@@ -41,6 +42,30 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             }
         } catch (error) {
             console.error('Error:', error);
+        }
+    }
+
+    const getGroupClassesMembers = async (groupClassId: number) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<GroupClassMember[]>(`https://pbgym.onrender.com/groupClasses/${groupClassId}/members`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                groupClassesMembers.value = response;
+                console.log('Członkowie zajęć grupowych:', response);
+                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano członków zajęć grupowych.'});
+            } else {
+                throw new Error('Nie udało się pobrać członków zajęć grupowych.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.add({title: 'Błąd', description: 'Nie udało się pobrać członków zajęć grupowych.'});
         }
     }
 
@@ -240,6 +265,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
     const putUpdateGroupClass = async () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
+        console.log('editableGroupClass.value:', editableGroupClass.value);
         try {
             response = await $fetch('https://pbgym.onrender.com/groupClasses', {
                 method: 'PUT',
@@ -247,11 +273,14 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 },
-                body: JSON.stringify(editableGroupClass.value)
+                body: JSON.stringify(toRaw(editableGroupClass.value))
             });
+            console.log('response:', response);
             if(response === 'Group class updated successfully'){
                 toast.add({title: 'Sukces', description: `Pomyślnie zaktualizowano zajęcia grupowe: ${editableGroupClass.value.title}`});
                 editableGroupClass.value = createEditableGroupClassObject();
+                return true
+            // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się zaktualizować zajęć grupowych.'});
                 console.log('Error:', response);
@@ -260,6 +289,8 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } catch (error: any) {
             console.error('Error:', error.response);
+            toast.add({title: 'Błąd', description: 'Nie udało się zaktualizować zajęć grupowych.'});
+            return false
         }
     }
 
@@ -322,6 +353,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         groupClassesUpcomingForMember,
         groupClassesHistoricalForMember,
         groupClassesHistorical,
+        groupClassesMembers,
 
         getGroupClassesUpcoming,
         getGroupClassesUpcomingByTrainerEmail,
@@ -329,6 +361,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         getGroupClassesUpcomingForMember,
         getGroupClassesHistoricalForMember,
         getGroupClassesHistorical,
+        getGroupClassesMembers,
 
         postNewGroupClass,
         postEnrollMemberToGroupClass,

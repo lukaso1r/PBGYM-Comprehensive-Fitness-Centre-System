@@ -228,7 +228,7 @@ export const validateGroupClassData = (data: EditableGroupClassData) => {
     if (!data.durationInMinutes || data.durationInMinutes===0) errors.push({ path: 'durationInMinutes', message: 'Czas trwania zajęć jest wymagany' })
     if (!data.memberLimit || data.memberLimit<=0) errors.push({ path: 'memberLimit', message: 'Limit uczestników jest wymagany' })
     if (!data.trainerEmail || data.trainerEmail==='') errors.push({ path: 'trainerEmail', message: 'Email trenera jest wymagany' })
-        
+    console.log('errors', errors)
     
     return errors
 }

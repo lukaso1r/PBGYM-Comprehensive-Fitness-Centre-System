@@ -7,7 +7,6 @@ const allTrainersMailList = ref<string[]>([]);
 
 const isAddClassesModalOpen = ref(false);
 
-const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.date));
 
 const toggleAddNewClassModal = async () => {
     isAddClassesModalOpen.value = !isAddClassesModalOpen.value;
@@ -17,15 +16,10 @@ const toggleAddNewClassModal = async () => {
     }
 }
 
-watch(date, (newValue) => {
-    console.log('data przed iso', newValue);
-    const offset = newValue.getTimezoneOffset() * 60000;
-    groupClassesStore.editableGroupClass.date = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
-    console.log('data po iso', groupClassesStore.editableGroupClass.date);
-
-});
-
-
+onMounted(() => {
+    groupClassesStore.getGroupClassesUpcoming();
+    groupClassesStore.getGroupClassesHistorical();
+})
 
 
 
@@ -48,7 +42,7 @@ watch(date, (newValue) => {
         <WorkerComponentsGroupClassesList :showButton="false"/>
 
         
-        <CallendarComponentsGroupClassesCalendarForAdmin :group-classes="groupClassesStore.groupClassesUpcoming" />
+        <CallendarComponentsGroupClassesCalendarForAdmin :groupClassesUpcoming="groupClassesStore.groupClassesUpcoming" :groupClassesHistory="groupClassesStore.groupClassesHistorical" />
 
         
     </main>

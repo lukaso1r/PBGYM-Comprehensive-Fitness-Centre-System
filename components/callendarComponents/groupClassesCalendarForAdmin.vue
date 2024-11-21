@@ -5,12 +5,16 @@ import { pl } from 'date-fns/locale';
 import type { GroupClassWithTrainer } from '@/types';
 
 const prop = defineProps<{
-    groupClasses: GroupClassWithTrainer[];
+    groupClassesUpcoming: GroupClassWithTrainer[];
+    groupClassesHistory: GroupClassWithTrainer[];
+    singleClass?: GroupClassWithTrainer;
 }>();
 
 const router = useRouter();
+const route = useRoute();
 
 const groupClassesStore = useGroupClassesStore();
+const fullDateHourZero = new Date(new Date().setHours(0, 0, 0, 0));
 const currentDate = ref(new Date());
 const isAddClassesModalOpen = ref(false);
 const isClassDetailsModalOpen = ref(false);
@@ -32,11 +36,23 @@ const calendar = computed(() => {
             week = [];
         }
 
-        const classes = prop.groupClasses.filter(groupClass =>
-            isSameDay(new Date(groupClass.date), day)
-        );
+        const classes = ref([] as GroupClassWithTrainer[]);
 
-        week.push({ date: day, classes });
+        if(prop.singleClass){
+            classes.value = [prop.singleClass].filter(groupClass => isSameDay(new Date(groupClass.date), day))
+        }else{
+            console.log('singleClass', 'no single class');
+            classes.value = prop.groupClassesUpcoming.filter(groupClass =>
+            isSameDay(new Date(groupClass.date), day)
+        ).concat(
+            prop.groupClassesHistory.filter(groupClass =>
+                isSameDay(new Date(groupClass.date), day)
+            )
+        );
+        }
+        
+
+        week.push({ date: day, classes: classes.value });
     });
 
     if (week.length) {
@@ -68,16 +84,16 @@ const onClickedClass = (groupClass: GroupClassWithTrainer) => {
     toggleDetailClassModal();
 };
 
-
-
-
+const test = () => {
+    console.log('test', new Date(fullDateHourZero));
+};
 
 </script>
 
 
 <template>
 
-    <div class="w-full max-w-[78vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+    <div class="w-full  lg:max-w-[78vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
         <div class="calendar-navigation flex justify-between items-center mb-4  w-full">
             <UButton label="Poprzedni miesiąc" @click="prevMonth" color="blue" />
             <h2 class="text-xl font-semibold">{{ format(currentDate, 'LLLL yyyy', { locale: pl }) }}</h2>
@@ -94,12 +110,15 @@ const onClickedClass = (groupClass: GroupClassWithTrainer) => {
                 <tr v-for="week in calendar" :key="week[0].date.toISOString()">
                     <td v-for="day in week" :key="day.date.toISOString()" 
                         class="border p-2 align-top " 
-                        :class="{'cursor-cell hover:bg-slate-100': new Date(day.date) > currentDate }"
-                        @click="new Date(day.date) > currentDate ? toggleAddClassModal(new Date(day.date)) : null"
+                        :class="{'cursor-cell hover:bg-slate-100': new Date(day.date) >= fullDateHourZero }"
+                        @click="new Date(day.date) >= fullDateHourZero ? toggleAddClassModal(new Date(day.date)) : null"
                     >
                         <div class="date">{{ day.date.getDate() }}</div>
                         <div v-for="groupClass in day.classes" :key="groupClass.id" 
-                            class="class-item cursor-pointer bg-blue-50 py-2 px-2 my-1 rounded hover:bg-blue-200"
+                            :class="['class-item cursor-pointer  py-2 px-2 my-1 rounded', 
+                                {'bg-blue-50 hover:bg-blue-200': new Date(groupClass.date) >= fullDateHourZero}, 
+                                {'bg-yellow-50 hover:bg-yellow-200': new Date(groupClass.date) < fullDateHourZero}
+                            ]"
                             @click.stop="onClickedClass(groupClass)"
                         >
                             <p class="text-sm " >
@@ -107,7 +126,6 @@ const onClickedClass = (groupClass: GroupClassWithTrainer) => {
                                 <span class="text-sx text-slate-500">{{groupClass.currentMemberCount + "/" + groupClass.memberLimit }}</span>
                             </p>
                             <p class="text-xs text-slate-500">{{ groupClass.trainer.name + " " + groupClass.trainer.surname[0]}}</p>
-
                         </div>
                     </td>
                 </tr>
@@ -162,7 +180,7 @@ const onClickedClass = (groupClass: GroupClassWithTrainer) => {
         <template #footer>
             <div class="flex flex-row justify-end gap-5">
                 <UButton
-                        v-if="clickedClasses" 
+                        v-if="clickedClasses && !route.fullPath.includes('zarzadzanie/zajecia/')" 
                         label="Przejdź do panelu oferty" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 

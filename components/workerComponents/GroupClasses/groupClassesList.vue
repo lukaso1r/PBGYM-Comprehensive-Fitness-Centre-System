@@ -135,7 +135,7 @@ const currentDateTime = new Date();
                     <td class="font-bold pr-8">Czas trwania w minutach</td>
                     <td>{{selectedRow.durationInMinutes}}</td>
                 </tr>
-                {{ selectedRow.date }}
+
             </tbody>
         </table>
         <template #footer >
