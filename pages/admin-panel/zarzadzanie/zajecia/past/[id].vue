@@ -83,13 +83,14 @@ const onSubmitEditClasses = async () => {
 <WorkerComponentsHeaderWorker />
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
-    <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
+    <main class="mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Panel zarządzania zajęciami</h1>
             <p class="text-slate-500">Możesz z tego miejsca wyświetlić szczegóły dotyczące zajęć i edytować jej parametry</p>
         </div>
 
-        <div class="group-class-details p-8 bg-white rounded-lg grid grid-cols-2 justify-center items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="group-class-details p-8 bg-white rounded-lg grid grid-cols-2 justify-center items-center lg:max-w-[79vw] lg:min-w-[79vw]" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <h1 class="col-span-2 text-2xl font-bold text-center mb-4 bg-slate-200 py-2 shadow rounded border-2 border-gray-400">Zajęcia Archiwalne</h1>
             <div class="pr-8 flex flex-col gap-2">
                 <div class="flex flex-row justify-start items-center col-span-2">
                     <h2 class="text-lg font-semibold pr-8">Szczegóły zajęć</h2>
@@ -132,7 +133,7 @@ const onSubmitEditClasses = async () => {
             <CallendarComponentsGroupClassesCalendarForAdmin :groupClassesUpcoming="[]" :groupClassesHistory="[]" :singleClass="groupClassById"/>
         </div>
 
-        <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="members-panel-title w-max lg:max-w-[79vw] lg:min-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Zapisani klienci</h1>
             <p class="text-slate-500">Lista zapisanych klientów na zajęcia **WIP**</p>
         </div>

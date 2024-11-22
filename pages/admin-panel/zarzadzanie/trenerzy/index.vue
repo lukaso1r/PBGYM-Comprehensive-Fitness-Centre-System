@@ -7,6 +7,7 @@ import { trainerTagTranslations } from '~/utils/trainerTagTranslations';
 
 const registerStore = useRegisterStore();
 const trainerStore = useTrainerStore();
+const router = useRouter();
 
 const test = () => {
     console.log('test')

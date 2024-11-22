@@ -31,8 +31,6 @@ const columns = [{
 
 const isOpen = ref(false)
 const selectedRow = ref()
-const currentDateTime = new Date();
-
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const select = (row: any) => {
@@ -47,9 +45,9 @@ const currentDateTime = new Date();
 
 <template>
 
-<div class="active-pass w-full max-w-[78vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+<div class="active-pass w-full max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
     <div class="flex flex-row justify-between align-middle">
-        <p class="text-slate-500">Zbliżające zajęcia zarejestrowane w systemie</p>
+        <p class="text-slate-500">Klienci zarejestrowani na zajęcia</p>
     </div>
     <UTable :rows="groupClass" :columns="columns" @select="select">
        

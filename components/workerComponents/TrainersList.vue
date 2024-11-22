@@ -130,6 +130,7 @@ const trainer = ref<TrainerWithOffers>({} as TrainerWithOffers);
     selectedRow.value = row;
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const selectOffer = (row: any) => {
     console.log('Selected Offer Row:', row);
     if (!row.id) {
@@ -215,9 +216,9 @@ const selectOffer = (row: any) => {
                 </tbody>
             </table>
             <template #footer >
-                <div class="optionButtons flex flex-row justify-between">
-                    <div class="flex flex-row" v-if="trainer?.trainerInfo?.email">
-                        <UButton label="Edytuj" @click="router.push({ name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: trainer?.trainerInfo?.email } })" color="blue" icon="i-material-symbols-edit-square-outline-rounded"/>
+                <div class="optionButtons flex flex-row justify-end gap-8">
+                    <div class="flex flex-row" v-if="selectedRow.email">
+                        <UButton label="Zobacz szczegóły" @click="router.push({ name: 'admin-panel-zarzadzanie-trenerzy-id', params: { id: selectedRow.email } })" color="blue" icon="i-material-symbols-edit-square-outline-rounded"/>
                     </div>
                     <div class="flex flex-row">
                         <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>

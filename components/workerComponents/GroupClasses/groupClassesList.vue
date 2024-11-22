@@ -12,7 +12,10 @@ onMounted(async () => {
 
 })
 
-const props = defineProps(['showButton'])
+const props = defineProps<{
+    showButton?: boolean,
+    trainerEmail?: string
+}>();
 
 const columns = [{
         key: 'id',
@@ -63,7 +66,11 @@ const currentDateTime = new Date();
 
 <template>
 
-<div class="active-pass w-full max-w-[78vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+<div 
+    class="active-pass w-full max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" 
+    :class="{ 'border-2 border-slate-300': trainerEmail }"
+    :style="{ boxShadow: trainerEmail ? '' : '0px 0px 24px -8px rgba(66, 68, 90, 1)' }"      
+>
     <div class="flex flex-row justify-between align-middle">
         <p class="text-slate-500">Zbliżające zajęcia zarejestrowane w systemie</p>
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
@@ -80,10 +87,16 @@ const currentDateTime = new Date();
             {{ dateWithTimeString(new Date(row.date)) }}
             </span>
         </template>
+        <template #empty-state>
+            <p class="text-slate-500 text-center pt-2">Brak zajęć</p>
+        </template>
     </UTable>
 </div>
 
-<div class="active-pass w-full max-w-[78vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+<div class="active-pass w-full max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" 
+    :style="{ boxShadow: trainerEmail ? '' : '0px 0px 24px -8px rgba(66, 68, 90, 1)' }"
+    :class="{ 'border-2 border-slate-300': trainerEmail }"
+>
     <div class="flex flex-row justify-between align-middle">
         <p class="text-slate-500">Historia odbytych zajęć</p>
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
@@ -95,6 +108,9 @@ const currentDateTime = new Date();
         <template #trainer-data="{ row }">
             {{ row.trainer.name + " " + row.trainer.surname + " " + row.trainer.email }}
         </template> 
+        <template #empty-state>
+            <p class="text-slate-500 text-center pt-2">Brak zajęć</p>
+        </template>
     </UTable>
 </div>
 
@@ -141,7 +157,7 @@ const currentDateTime = new Date();
         <template #footer >
             <div class="optionButtons flex flex-row justify-between">
                 <div class="flex flex-row justify-end w-full gap-6">
-                    <UButton label="Przejdź do panelu oferty" 
+                    <UButton label="Przejdź do panelu zajęć" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
                             isDateFromPast(new Date(new Date(selectedRow.date).getTime() + selectedRow.durationInMinutes * 60000)) 

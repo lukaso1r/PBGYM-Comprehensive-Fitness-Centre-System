@@ -4,7 +4,8 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = defineProps<{
     isAddClassesModalOpen: boolean,
-    clickedDate?: Date
+    clickedDate?: Date,
+    trainerEmail?: string
 }>();
 
 const emit = defineEmits(['update:isAddClassesModalOpen']);
@@ -45,6 +46,13 @@ watch(() => props.isAddClassesModalOpen, (newValue) => {
     if(isAddClassesModalOpen.value) {
         trainerStore.getAllTrainers();
         allTrainersMailList.value = trainerStore.allTrainers.map((trainer) => trainer.email);
+    }
+});
+
+watch(() => props.trainerEmail, (newValue) => {
+    if(newValue) {
+        groupClassesStore.editableGroupClass.trainerEmail = newValue;
+        console.log('trainerEmail został podany w props: ', newValue);
     }
 });
 

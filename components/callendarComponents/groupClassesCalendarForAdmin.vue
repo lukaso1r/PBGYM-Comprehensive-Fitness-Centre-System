@@ -8,6 +8,7 @@ const prop = defineProps<{
     groupClassesUpcoming: GroupClassWithTrainer[];
     groupClassesHistory: GroupClassWithTrainer[];
     singleClass?: GroupClassWithTrainer;
+    trainerEmail?: string;
 }>();
 
 const router = useRouter();
@@ -93,7 +94,7 @@ const test = () => {
 
 <template>
 
-    <div class="w-full  lg:max-w-[78vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+    <div class="w-full lg:max-w-[79vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
         <div class="calendar-navigation flex justify-between items-center mb-4  w-full">
             <UButton label="Poprzedni miesiąc" @click="prevMonth" color="blue" />
             <h2 class="text-xl font-semibold">{{ format(currentDate, 'LLLL yyyy', { locale: pl }) }}</h2>
@@ -114,13 +115,15 @@ const test = () => {
                         @click="new Date(day.date) >= fullDateHourZero ? toggleAddClassModal(new Date(day.date)) : null"
                     >
                         <div class="date">{{ day.date.getDate() }}</div>
-                        <div v-for="groupClass in day.classes" :key="groupClass.id" 
+                        <div v-for="groupClass in day.classes.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)))" :key="groupClass.id" 
                             :class="['class-item cursor-pointer  py-2 px-2 my-1 rounded', 
                                 {'bg-blue-50 hover:bg-blue-200': new Date(groupClass.date) >= fullDateHourZero}, 
-                                {'bg-yellow-50 hover:bg-yellow-200': new Date(groupClass.date) < fullDateHourZero}
+                                {'bg-yellow-50 hover:bg-yellow-200': new Date(new Date(groupClass.date).getTime() + groupClass.durationInMinutes * 60000) < new Date()},
+                                {'bg-green-300 hover:bg-green-500': (new Date(groupClass.date) < new Date() && new Date(new Date(groupClass.date).getTime() + groupClass.durationInMinutes * 60000) > new Date() )}
                             ]"
                             @click.stop="onClickedClass(groupClass)"
                         >
+
                             <p class="text-sm " >
                                 {{ groupClass.title }} 
                                 <span class="text-sx text-slate-500">{{groupClass.currentMemberCount + "/" + groupClass.memberLimit }}</span>
@@ -181,7 +184,7 @@ const test = () => {
             <div class="flex flex-row justify-end gap-5">
                 <UButton
                         v-if="clickedClasses && !route.fullPath.includes('zarzadzanie/zajecia/')" 
-                        label="Przejdź do panelu oferty" 
+                        label="Przejdź do panelu zajęć" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
                             isDateFromPast(new Date(new Date(clickedClasses.date).getTime() + clickedClasses.durationInMinutes * 60000)) 
@@ -195,6 +198,6 @@ const test = () => {
     </UCard>
     </UModal>
 
-    <WorkerComponentsGroupClassesAddGroupClasses v-model:isAddClassesModalOpen="isAddClassesModalOpen" v-model:clickedDate="clickedDate"/>
+    <WorkerComponentsGroupClassesAddGroupClasses v-model:isAddClassesModalOpen="isAddClassesModalOpen" v-model:clickedDate="clickedDate" :trainerEmail="trainerEmail"/>
 
 </template>

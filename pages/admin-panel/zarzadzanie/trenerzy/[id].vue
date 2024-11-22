@@ -8,11 +8,13 @@ const route = useRoute();
 const email = ref<string>(route.params.id as string);
 
 const trainerStore = useTrainerStore();
+const groupClassesStore = useGroupClassesStore();
 
 const showTrainerDataEditModal = ref(false);
 const showAddOfferModal = ref(false);
 const typeDataToEdit = ref('');
 const offerToEdit = ref<TrainerOffer>(createTrainerOfferObject())
+const isAddClassesModalOpen = ref(false);
 
 const editTrainerData = (type: string) => {
     showTrainerDataEditModal.value = true;
@@ -23,6 +25,8 @@ onMounted( async () => {
     await trainerStore.getTrainerByEmail(email.value);
     await trainerStore.getTrainerEntries(email.value);
     await trainerStore.getTrainerOfferByEmail(email.value);
+    await groupClassesStore.getGroupClassesUpcomingByTrainerEmail(trainerStore.trainerData.email);
+    await groupClassesStore.getGroupClassesHistoricalByTrainerEmail(trainerStore.trainerData.email);
 });
 
 onBeforeRouteLeave(() => {
@@ -91,14 +95,14 @@ const items = (row: any) => [
     [
         {
             label: `${row.visible ? 'Deaktywuj' : 'Aktywuj'}`,
-            icon:  row.visible ? 'i-material-symbols-delete-forever' : 'i-material-symbols-mode-off-on',
+            icon:  row.visible ? 'i-ic-baseline-cancel' : 'i-material-symbols-mode-off-on',
             click: () => `${row.visible ? deactivateOffer(row) : activateOffer(row)}`
         }
     ], 
     [
         {
             label: 'Usuń ofertę',
-            icon:  `${row.visible ? 'i-ic-baseline-cancel' : 'i-material-symbols-check-circle'}`,
+            icon:   'i-material-symbols-delete-forever',
             click: () => trainerStore.deleteTrainerOffer(trainerStore.trainerData?.email, row.id)
         }
     ]
@@ -127,6 +131,10 @@ const onSubmitAddOffer = async () => {
     toggleAddOfferModal();
 }
 
+const toggleAddClassesModal = () => {
+    isAddClassesModalOpen.value = !isAddClassesModalOpen.value;
+}
+
 </script>
 
 <template>
@@ -138,80 +146,78 @@ const onSubmitAddOffer = async () => {
   
     <!-- TODO: poprawić margines -->
     <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
-        <div class="active-pass w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <div>
-                <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Trener: </span>{{trainerStore.trainerData?.name}} {{trainerStore.trainerData?.surname}}</h1>
-                <p class="text-lg"><span class="text-slate-500 text-base pr-3">Id trenera: </span>{{trainerStore.trainerData?.id}}</p>
-                
-                <hr class="mt-3 mb-3"/>
-                <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{trainerStore.trainerData?.email}}</p>
-                <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{trainerStore.trainerData?.phoneNumber}}</p>
-                <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Widoczność: </span>{{trainerStore.trainerData?.visible ? 'Aktywny' : 'Nieaktywny'}}</p>
+        
+        <div class="flex flex-row flex-wrap lg:min-w-[79vw] lg:max-w-[79vw] gap-8">
+            <div class="trainerCardInfo w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <div >
+                    <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Trener: </span>{{trainerStore.trainerData?.name}} {{trainerStore.trainerData?.surname}}</h1>
+                    <p class="text-lg"><span class="text-slate-500 text-base pr-3">Id trenera: </span>{{trainerStore.trainerData?.id}}</p>
+                    
+                    <hr class="mt-3 mb-3"/>
+                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{trainerStore.trainerData?.email}}</p>
+                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{trainerStore.trainerData?.phoneNumber}}</p>
+                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Widoczność: </span>{{trainerStore.trainerData?.visible ? 'Aktywny' : 'Nieaktywny'}}</p>
+                    <UButton
+                        class="lg:mt-6"
+                        icon="i-material-symbols-key"
+                        size="sm"
+                        color="blue"
+                        variant="solid"
+                        label="Edytuj dane logowania trenera"
+                        @click="editTrainerData('login')"
+                    />
+                </div>
+                <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
             </div>
-            <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
-        </div>
 
-       
-
-        <div class="trainer-info w-max max-w-1/2 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <table>
-                <tbody>
-                    <tr>
-                        <td class="text-lg text-slate-500  pr-3">Data urodzenia:</td>
-                        <td class="text-lg">{{trainerStore.trainerData?.birthdate}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-lg text-slate-500 pr-3">Pesel:</td>
-                        <td class="text-lg">{{trainerStore.trainerData?.pesel}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-lg text-slate-500  pr-3">Adres:</td>
-                        <td class="text-lg flex flex-row flex-wrap gap-4">
+            <div class="trainer-info w-max max-w-1/2 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <ul class="list-none space-y-2">
+                    <li>
+                        <span class="text-slate-500 pr-3">Data urodzenia:</span>
+                        <span>{{trainerStore.trainerData?.birthdate}}</span>
+                    </li>
+                    <li>
+                        <span class="text-slate-500 pr-3">Pesel:</span>
+                        <span>{{trainerStore.trainerData?.pesel}}</span>
+                    </li>
+                    <li class="flex flex-row">
+                        <span class="text-slate-500 pr-3">Adres:</span>
+                        <div class="flex flex-row flex-wrap gap-4">
                             <p>{{ trainerStore.trainerData?.address.city }}</p>
                             <p>ul. {{ trainerStore.trainerData?.address.streetName }} {{ trainerStore.trainerData?.address.buildingNumber }} {{ trainerStore.trainerData?.address.apartmentNumber ? ('/ ' + trainerStore.trainerData?.address.apartmentNumber) : ' ' }}</p>
                             <p>Kod pocztowy: {{ trainerStore.trainerData?.address.postalCode }}</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-lg text-slate-500  pr-3">Opis:</td>
-                        <td class="text-lg">{{trainerStore.trainerData?.description ?? 'Brak'}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-lg text-slate-500  pr-3">Tagi:</td>
-                        <td class="text-lg">
+                        </div>
+                    </li>
+                    <li>
+                        <span class="text-slate-500 pr-3">Opis:</span>
+                        <span>{{trainerStore.trainerData?.description ?? 'Brak'}}</span>
+                    </li>
+                    <li>
+                        <span class="text-slate-500 pr-3">Tagi:</span>
+                        <span>
                             {{
-                                trainerStore.trainerData?.trainerTags
+                                trainerStore.trainerData?.trainerTags[0] 
+                                ? trainerStore.trainerData?.trainerTags
                                     .map(tag => trainerTagTranslations[tag] || tag)
-                                    .join(', ') ?? 'Brak'
+                                    .join(', ') 
+                                : 'Brak'
                             }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="flex flex-row gap-4">
-                
+                        </span>
+                    </li>
+                </ul>
+                <UButton
+                    class="w-fit lg:mt-6"
+                    icon="i-material-symbols-manage-accounts-rounded"
+                    size="sm"
+                    color="blue"
+                    variant="solid"
+                    label="Edytuj dane personalne trenera"
+                    @click="editTrainerData('personal')"
+                />
+                <WorkerComponentsTrainerDataEditModal v-model:showTrainerDataEditModal="showTrainerDataEditModal" :typeDataToEdit="typeDataToEdit" :trainerByEmail="trainerStore.trainerData" />
             </div>
         </div>
-
-         <div class="options w-fit flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <UButton
-                icon="i-material-symbols-key"
-                size="sm"
-                color="blue"
-                variant="solid"
-                label="Edytuj dane logowania trenera"
-                @click="editTrainerData('login')"
-            />
-            <UButton
-                icon="i-material-symbols-manage-accounts-rounded"
-                size="sm"
-                color="blue"
-                variant="solid"
-                label="Edytuj dane personalne trenera"
-                @click="editTrainerData('personal')"
-            />
-            <WorkerComponentsTrainerDataEditModal v-model:showTrainerDataEditModal="showTrainerDataEditModal" :typeDataToEdit="typeDataToEdit" :trainerByEmail="trainerStore.trainerData" />
-        </div>
+        
 
         <div class="offersContainer w-fit max-w-[79vw] flex flex-col gap-8 ">
             <div class="offers flex flex-row flex-wrap gap-8 ">
@@ -342,7 +348,18 @@ const onSubmitAddOffer = async () => {
             </UModal>
         </div>
 
-         
+        <div class="groupClassesContainer lg:min-w-[79vw] lg:max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <span class="font-semibold text-lg">Zajęcia grupowe trenera</span>
+            <WorkerComponentsGroupClassesList :showButton="false" :trainerEmail="trainerStore.trainerData.email"/>
+            <UButton label="Dodaj zajęcia" @click="toggleAddClassesModal()" color="blue" icon="i-material-symbols-add" />
+            <WorkerComponentsGroupClassesAddGroupClasses v-model:isAddClassesModalOpen="isAddClassesModalOpen" :trainerEmail="trainerStore.trainerData.email"/>
+        </div>
+        <CallendarComponentsGroupClassesCalendarForAdmin
+            class="lg:min-w-[79vw] lg:max-w-[79vw]" 
+            :groupClassesUpcoming="groupClassesStore.groupClassesUpcomingByTrainerEmail" 
+            :groupClassesHistory="groupClassesStore.groupClassesHistoricalByTrainerEmail" 
+            :trainerEmail="trainerStore.trainerData.email"
+        />
 
         <div class="statsContainer grid grid-cols-2 gap-8 ">
             
