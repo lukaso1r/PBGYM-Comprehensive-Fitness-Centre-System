@@ -50,6 +50,8 @@ onMounted(async () => {
         }else{
             toast.add({title:'Brak zajęć', description: 'Nie znaleziono zajęć o podanym id'});
         }
+    }else{
+        await groupClassesStore.getGroupClassesMembers(groupClassById.value.id);
     }
     console.log('groupClassById', groupClassById, "id", id.value)
 })
@@ -88,7 +90,7 @@ const onSubmitEditClasses = async () => {
             <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać zajęciami.</p>
         </div>
 
-        <div class="group-class-details p-8 bg-white rounded-lg grid grid-cols-2 justify-center items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="w-full lg:max-w-[79vw] group-class-details p-8 bg-white rounded-lg grid grid-cols-2 justify-center items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <div class="pr-8 flex flex-col gap-2">
                 <div class="flex flex-row justify-start items-center col-span-2">
                     <h2 class="text-lg font-semibold pr-8">Szczegóły zajęć</h2>
@@ -114,7 +116,10 @@ const onSubmitEditClasses = async () => {
                     <USkeleton type="text" class="h-4 w-1/2 mb-2" />
                 </div>
                 <div v-if="groupClassById.id!=0" class="trainer-details mt-4">
-                    <h2 class="text-lg font-semibold mb-2">Szczegóły trenera</h2>
+                    <div class="flex flex-row justify-start items-center col-span-2">
+                        <h2 class="text-lg font-semibold pr-8">Szczegóły trenera</h2>
+                        <UButton label="Przejdź do profilu trenera" :to="`/admin-panel/zarzadzanie/trenerzy/${groupClassById.trainer.email}`" color="blue" icon="i-material-symbols-person" variant="ghost"/>
+                    </div>
                     <p><strong>ID:</strong> {{ groupClassById.trainer.id }}</p>
                     <p><strong>Email:</strong> {{ groupClassById.trainer.email }}</p>
                     <p><strong>Imię:</strong> {{ groupClassById.trainer.name }}</p>
@@ -133,7 +138,7 @@ const onSubmitEditClasses = async () => {
             <p class="text-slate-500">Lista zapisanych klientów na zajęcia **WIP**</p>
         </div>
 
-        <!-- <WorkerComponentsGroupClassesEnroledMembersList :groupClass="groupClassesStore.enroledMembersList" /> -->
+        <WorkerComponentsGroupClassesEnroledMembersList :groupClassMembers="groupClassesStore.groupClassesMembers" :groupClassObj="groupClassById" />
 
     </main>
 </div>

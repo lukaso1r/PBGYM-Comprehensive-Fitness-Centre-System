@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
-import type {  } from '~/types';
+import type { GroupClassMember, GroupClassWithTrainer } from '~/types';
 
 const router = useRouter();
 
 const groupClassesStore = useGroupClassesStore();
 
-const props = defineProps([
-    'groupClass'
-])
+const props = defineProps<{
+    groupClassMembers: GroupClassMember[],
+    groupClassObj: GroupClassWithTrainer
+}>();
 
 const columns = [{
         key: 'id',
@@ -39,6 +40,13 @@ const selectedRow = ref()
     selectedRow.value = row;
 };
 
+const removeMemberFromClass = async () => {
+    const status = await groupClassesStore.putRemoveMemberFromGroupClass(props.groupClassObj.id, selectedRow.value.email)
+    if(status){
+        groupClassesStore.getGroupClassesMembers(props.groupClassObj.id)
+        isOpen.value = false
+    }
+}
 
 
 </script>
@@ -49,7 +57,7 @@ const selectedRow = ref()
     <div class="flex flex-row justify-between align-middle">
         <p class="text-slate-500">Klienci zarejestrowani na zajęcia</p>
     </div>
-    <UTable :rows="groupClass" :columns="columns" @select="select">
+    <UTable :rows="groupClassMembers" :columns="columns" @select="select">
        
     </UTable>
 </div>
@@ -58,14 +66,36 @@ const selectedRow = ref()
 <UModal v-model="isOpen">
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
-            <h3 class="font-medium text-lg">
+            <h3 class="font-bold text-lg">
+                Zapisany klient -  
+                <span class="text-sx text-slate-500 font-normal">{{selectedRow.name + " " + selectedRow.surname}}</span> 
             </h3>
         </template>
-        
+        <table>
+            <tr>
+                <td class="font-bold text-lg pr-4">Id: </td>
+                <td>{{selectedRow.id}}</td>
+            </tr>
+            <tr>
+                <td class="font-bold text-lg pr-4">Imię: </td>
+                <td>{{selectedRow.name}}</td>
+            </tr>
+            <tr>
+                <td class="font-bold text-lg pr-4">Nazwisko: </td>
+                <td>{{selectedRow.surname}}</td>
+            </tr>
+            <tr>
+                <td class="font-bold text-lg pr-4">Email: </td>
+                <td>{{selectedRow.email}}</td>
+            </tr>
+        </table>
+        <!-- TODO: WYPISZ Z ZAJĘĆ
+        TODO: PRZEJDŹ DO PROFILU KLIENTA -->
         <template #footer >
             <div class="optionButtons flex flex-row justify-between">
                 <div class="flex flex-row justify-end w-full gap-6">
-                    
+                    <UButton label="Usuń z zajęć" @click="removeMemberFromClass()" color="red" icon="i-material-symbols-delete"/>
+                    <UButton label="Przejdź do profilu" @click="router.push({name: 'admin-panel-zarzadzanie-klienci-id', params: {id: selectedRow.email}})" color="blue" icon="i-material-symbols-person"/>
                     <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
                 </div>
             </div>

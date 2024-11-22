@@ -9,6 +9,7 @@ const prop = defineProps<{
     groupClassesHistory: GroupClassWithTrainer[];
     singleClass?: GroupClassWithTrainer;
     trainerEmail?: string;
+    memberEmail?: string;
 }>();
 
 const router = useRouter();
@@ -82,10 +83,22 @@ const toggleAddClassModal = (date?: Date) => {
 
 const onClickedClass = (groupClass: GroupClassWithTrainer) => {
     clickedClasses.value = groupClass;
+    groupClassesStore.getGroupClassesMembers(groupClass.id);
     toggleDetailClassModal();
 };
 
+const enrolMemberToGroupClasses = (email: string) =>{
+    console.log('insine enrdol')
+    if(clickedClasses.value?.id){
+        groupClassesStore.postEnrollMemberToGroupClass(clickedClasses.value?.id, email);
+    }else{
+        console.log('enrolMemberToGroupClasses', 'no class id');
+    }
+    console.log('enrolMemberToGroupClasses', email);
+}
+
 const test = () => {
+  
     console.log('test', new Date(fullDateHourZero));
 };
 
@@ -94,7 +107,9 @@ const test = () => {
 
 <template>
 
-    <div class="w-full lg:max-w-[79vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+    <div class="w-full lg:max-w-[79vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" 
+    :style="{ boxShadow: memberEmail ? '' : '0px 0px 24px -8px rgba(66, 68, 90, 1)' }"   
+    >
         <div class="calendar-navigation flex justify-between items-center mb-4  w-full">
             <UButton label="Poprzedni miesiąc" @click="prevMonth" color="blue" />
             <h2 class="text-xl font-semibold">{{ format(currentDate, 'LLLL yyyy', { locale: pl }) }}</h2>
@@ -150,8 +165,8 @@ const test = () => {
             </h3>
         </template>
         <div class="w-full">
-            <div class="addNewGroupClasses flex flex-col rounded-lg px-4 bg-white w-full">
-                <h3 class="[word-spacing:4px] font-medium pb-4">Informacje o wybranych zajęciach.</h3>
+            <div class="addNewGroupClasses flex flex-col rounded-lg px-4 bg-white w-full items-center">
+                <h3 class="[word-spacing:4px] font-medium pb-4 w-full ">Informacje o wybranych zajęciach.</h3>
                 <table>
                     <tr class="pb-2">
                         <td class="font-bold pr-8">Id:</td>
@@ -179,11 +194,32 @@ const test = () => {
                     </tr>
                 </table>
             </div>
+            <div v-if="memberEmail && clickedClasses" class="flex flex-row items-center gap-8 px-4">
+                <div v-if="!groupClassesStore.groupClassesMembers.map((member) => member.email).includes(memberEmail)" class="flex flex-row items-center gap-8 pt-10 px-4">
+                    <p>Wybrany klient: <span class="font-medium">{{memberEmail}}</span></p>
+                    <UButton 
+                        @click.stop="enrolMemberToGroupClasses(memberEmail)" 
+                        label="Zapisz klienta na zajęcia" 
+                        color="blue" 
+                        icon="i-material-symbols-add" 
+                    />
+                </div>
+                <div v-else class="flex flex-row items-center gap-8 pt-10 px-4">
+                    <p>Wybrany klient: <span class="font-medium">{{memberEmail}}</span> <br /> jest zapisany na te zajęcia</p>
+                    <UButton 
+                        @click.stop="groupClassesStore.putRemoveMemberFromGroupClass(clickedClasses.id, memberEmail)" 
+                        label="Usuń klienta z zajęć" 
+                        color="red" 
+                        icon="i-material-symbols-delete" 
+                    />
+                </div>
+            </div>
         </div>
         <template #footer>
             <div class="flex flex-row justify-end gap-5">
+                
                 <UButton
-                        v-if="clickedClasses && !route.fullPath.includes('zarzadzanie/zajecia/')" 
+                        v-if="clickedClasses && !route.fullPath.includes('zarzadzanie/zajecia/') " 
                         label="Przejdź do panelu zajęć" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
@@ -198,6 +234,5 @@ const test = () => {
     </UCard>
     </UModal>
 
-    <WorkerComponentsGroupClassesAddGroupClasses v-model:isAddClassesModalOpen="isAddClassesModalOpen" v-model:clickedDate="clickedDate" :trainerEmail="trainerEmail"/>
-
+    <WorkerComponentsGroupClassesAddGroupClasses v-if="!memberEmail" v-model:isAddClassesModalOpen="isAddClassesModalOpen" v-model:clickedDate="clickedDate" :trainerEmail="trainerEmail" />
 </template>

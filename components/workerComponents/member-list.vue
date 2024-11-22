@@ -7,8 +7,8 @@ const workerStore = useWorkerStore();
 const membersManagmentStore = useMembersManagmentStore();
 const { data: allMembers} = await useAsyncData('members', async () => {
     await membersManagmentStore.getAllMembers();
-    return membersManagmentStore.allMembers;
-});
+    return membersManagmentStore.allMembers || [];
+}, { default: () => [] });
 
 const props = defineProps(['showButton'])
 

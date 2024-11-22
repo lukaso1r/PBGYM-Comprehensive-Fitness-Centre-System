@@ -7,10 +7,12 @@ const email = ref<string>(route.params.id as string);
 const membersManagmentStore = useMembersManagmentStore();
 const loginStore = useLoginStore();
 const passStore = usePassStore();
+const groupClassesStore = useGroupClassesStore();
 
 const showMemberDataEditModal = ref(false);
 const showPassDetailsModal = ref(false);
 const showNewCreditCardForMemberModal = ref(false);
+const enrolMemberToClassModal = ref(false);
 
 const typeDataToEdit = ref('');
 const paymentOptionAvailability = ref(false);
@@ -26,6 +28,8 @@ onMounted( async () => {
     await passStore.getActiveMemberPass(email.value);
     await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
     await membersManagmentStore.getMemberGymEntriesHistoryByEmail(email.value);
+    await groupClassesStore.getGroupClassesHistoricalForMember(email.value);
+    await groupClassesStore.getGroupClassesUpcomingForMember(email.value);
 });
 
 onBeforeRouteLeave(() => {
@@ -39,10 +43,15 @@ const buyPassForMember = async () => {
     showNewCreditCardForMemberModal.value = true;
 }
 
-
-
 const test = () => {
     console.log('test', membersManagmentStore.getMemberPaymentOptionsStatus(email.value));
+}
+
+const toggleEnrolMemberToClassModal = async () => {
+    enrolMemberToClassModal.value = true;
+    if(enrolMemberToClassModal){
+        await groupClassesStore.getGroupClassesUpcoming()
+    }
 }
 
 
@@ -176,6 +185,48 @@ const test = () => {
                     />
                 </div>
             </div>
+
+            <div class="memberClasses w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <h1 class="text-xl font-semibold">Zapisy na zajęcia klienta</h1>
+                <p class="text-slate-500 lg:mb-5">Możesz zobaczyć tutaj zobaczyć na jakie zajęcia zapisał się użytkownik i modyfikować zapisy.</p>
+
+                <CallendarComponentsGroupClassesCalendarForAdmin 
+                    :memberEmail="membersManagmentStore.memberByEmail?.email" 
+                    :group-classes-upcoming="groupClassesStore.groupClassesUpcomingForMember" 
+                    :group-classes-history="groupClassesStore.groupClassesHistoricalForMember"
+                />
+
+                <UButton class="w-fit mt-4" label="Zapisz klienta na zajęcia" color="blue" @click="toggleEnrolMemberToClassModal" icon="i-material-symbols-person-add"/>
+
+                <!-- CREATE MODAL TO ENROL MEMBER TO CLASSES BUT CHECK IF MEMBER HAS CREDITCARD VALIABLE WHEN CLASSES START :o  -->
+                <UModal 
+                    :model-value="enrolMemberToClassModal"
+                    :closable="true"
+                    @close="enrolMemberToClassModal = false"
+                    :ui="{}"
+                >
+                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <h1 class="font-bold text-lg">Zapisz klienta na zajęcia</h1>
+                    </template>
+                    <div class="flex flex-col gap-4 lg:min-w-[40vw]">
+                        <h2 class="font-medium">Wybierz zajęcia na które chcesz zapisać klienta</h2>
+                        <CallendarComponentsGroupClassesCalendarForAdmin 
+                            :group-classes-upcoming="groupClassesStore.groupClassesUpcoming"
+                            :group-classes-history="[]"
+                            :memberEmail="membersManagmentStore.memberByEmail.email"
+                        />
+                    </div>
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Anuluj" @click="enrolMemberToClassModal = false" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
+
+            </div>
+
             <div class="stats w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Statystyki</h1>
                 <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące pracownika</p>

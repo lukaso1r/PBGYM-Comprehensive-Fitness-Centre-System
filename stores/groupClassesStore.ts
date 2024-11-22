@@ -241,22 +241,43 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/groupClasses/${groupClassId}/enroll/${memberEmail}`, {
+            response = await $fetch(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/enroll`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
-                }
+                },
+                body: JSON.stringify(groupClassId)
             });
-            if(response === 'Member enrolled successfully'){
+            if(response){
                 toast.add({title: 'Sukces', description: `Pomyślnie zapisano na zajęcia grupowe: ${groupClassId}`});
+                getGroupClassesUpcomingForMember(memberEmail);
+                getGroupClassesMembers(groupClassId);
+                return true
+            // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
-                toast.add({title: 'Błąd', description: 'Nie udało się zapisać na zajęcia grupowe.'});
-                throw new Error('Nie udało się zapisać na zajęcia grupowe.');
+                throw new Error('Nie udało się utworzyć zajęć grupowych.');
             }
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } catch (error: any) {
             console.error('Error:', error.response);
+            switch (error.response.status) {
+                case 409:
+                    toast.add({title: 'Błąd', description: 'Zajęcia grupowe są już zapełnione.'});
+                    break;
+                case 400:
+                    toast.add({title: 'Błąd', description: 'Klient nie posiada aktywnego karnetu lub podano niepoprawne dane.'});
+                    break;
+                case 403:
+                    toast.add({title: 'Błąd', description: 'Nie masz uprawnień do dodania klienta do zajęć.'});
+                    break;
+                case 404:
+                    toast.add({title: 'Błąd', description: 'Nie znaleziono zajęć bądź klienta.'});
+                    break;	
+                default:
+                    toast.add({title: 'Błąd', description: 'Nie udało się utworzyć zajęć grupowych.'});
+            }
+            return false
         }
     }
 
@@ -298,15 +319,20 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/groupClasses/${groupClassId}/remove/${memberEmail}`, {
+            response = await $fetch(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/signOut`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
-                }
+                },
+                body: JSON.stringify(groupClassId)
             });
-            if(response === 'Member signed out successfully'){
+            if(response){
                 toast.add({title: 'Sukces', description: `Pomyślnie usunięto z zajęć grupowych: ${groupClassId}`});
+                getGroupClassesUpcomingForMember(memberEmail);
+                getGroupClassesMembers(groupClassId);
+                return true
+            // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się usunąć z zajęć grupowych.'});
                 throw new Error('Nie udało się usunąć z zajęć grupowych.');
@@ -314,6 +340,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         } catch (error: any) {
             console.error('Error:', error.response);
+            return false
         }
     }
 
