@@ -139,7 +139,7 @@ const columns = [
                     <template #durationInMinutes-data="{ row }">
                         <span>{{row.durationInMinutes}} minut</span>
                     </template>
-                    <template #empty-data="{ row }">
+                    <template #empty-state="{ row }">
                         <span>Nie brano udziału w zajęciach</span>
                     </template>
 

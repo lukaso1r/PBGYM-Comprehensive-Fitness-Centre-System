@@ -4,6 +4,7 @@ import type { DefaultLoginData, TrainerData } from '~/types';
 
 const loginStore = useLoginStore();
 const trainerStore = useTrainerStore();
+const groupClassesStore = useGroupClassesStore();
 
 const selectedTrue = ref(false)
 const selected = ref(true)
@@ -13,9 +14,12 @@ const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData');
 
 const polishTrainerTags = ref<string[]>([]);
 
-onMounted(() => {
+onMounted( async () => {
     polishTrainerTags.value = loggedTrainerData.value.trainerTags.map(tag => trainerTagTranslations[tag]);
     trainerStore.getTrainerOfferByEmail(loggedTrainerData.value.email);
+    await groupClassesStore.getGroupClassesUpcomingByTrainerEmail(loggedTrainerData.value.email);
+    await groupClassesStore.getGroupClassesHistoricalByTrainerEmail(loggedTrainerData.value.email);
+    
 })
 
 </script>
@@ -73,6 +77,22 @@ onMounted(() => {
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Twój panel trenera</h1>
             <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wykonywanymi usługami.</p>
+        </div>
+
+        <div class="calendarView flex flex-col w-full lg:max-w-[79vw] bg-white p-4 rounded-lg gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
+            <h2 class="font-semibold text-lg">Twoje nadchodzące zajęcia grupowe</h2>
+            <CallendarComponentsGroupClassesCalendarForTrainer 
+                :groupClassesUpcoming="groupClassesStore.groupClassesUpcomingByTrainerEmail" 
+                :groupClassesHistory="[]"
+                :trainerEmail="loggedTrainerData?.email"
+            />
+            <UButton 
+                label="Zobacz wszystkie zajęcia" 
+                color="blue" 
+                icon="i-material-symbols-add" 
+                :to="'/trainer/zajecia'"
+                class="w-fit"
+            />
         </div>
 
         <div class="flex flex-row flex-wrap gap-8" >

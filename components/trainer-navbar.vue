@@ -16,15 +16,6 @@ const items = [
         slot: 'checkClasses',
         color: 'cyan',
         class: 'py-4 hover:bg-cyan-100'
-    },
-    {
-        label: 'Dokumenty *WIP*',
-        icon: 'i-ic-round-collections-bookmark',
-        defaultOpen: false,
-        slot: 'checkoffer',
-        color: 'red',
-        variant: 'soft',
-        class: 'py-4 hover:bg-red-100' 
     }
 ]
 
@@ -54,19 +45,12 @@ const instructions = [
                 <UButton  class="w-full py-4 " to="/trainer" icon="i-ic-sharp-home" variant="ghost" color="blue">
                     Kokpit
                 </UButton>
-                <!-- TODO: change text color to black -->
-                <UAccordion :items="items" size="sm" >
-                    <template #checkoffer >
-                        <NuxtLink to="/trainer/oferty/" >
-                            <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoją ofertę</p>
-                        </NuxtLink>
-                    </template>
-                    <template #checkClasses >
-                        <NuxtLink to="/trainer/zajecia/" >
-                            <p class="hover:text-blue-500 w-fit px-4 py-1 hover:bg-slate-200 rounded-md transit ">Zobacz swoje zajęcia</p>
-                        </NuxtLink>
-                    </template>
-                </UAccordion>  
+                <UButton  class="w-full py-4 " to="/trainer/oferty/" icon="i-ic-round-local-offer" variant="ghost" color="orange">
+                    Twoja oferta
+                </UButton>
+                <UButton  class="w-full py-4 " to="/trainer/zajecia/" icon="i-ic-outline-sports-kabaddi" variant="ghost" color="cyan">
+                    Twoje zajęcia
+                </UButton>
                 <hr/>
                 <UAccordion :items="instructions" color="primary"
                     variant="soft"

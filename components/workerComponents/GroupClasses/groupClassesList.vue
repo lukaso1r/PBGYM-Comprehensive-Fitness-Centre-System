@@ -14,7 +14,7 @@ onMounted(async () => {
 
 const props = defineProps<{
     showButton?: boolean,
-    trainerEmail?: string
+    trainerEmail?: string,
 }>();
 
 const columns = [{

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 
-import type { GroupClassMember, GroupClassWithTrainer } from '~/types';
+import type { GroupClassMember, GroupClassWithTrainer, DefaultLoginData } from '~/types';
 
 const router = useRouter();
 
 const groupClassesStore = useGroupClassesStore();
+const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData')
 
 const props = defineProps<{
     groupClassMembers: GroupClassMember[],
-    groupClassObj: GroupClassWithTrainer
+    groupClassObj: GroupClassWithTrainer,
+    hideShadow?: boolean
+
 }>();
 
 const columns = [{
@@ -53,12 +56,16 @@ const removeMemberFromClass = async () => {
 
 <template>
 
-<div class="active-pass w-full max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+<div class="active-pass w-full max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" :style="hideShadow ? 'border: solid 2px gray' : 'box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);'">
     <div class="flex flex-row justify-between align-middle">
         <p class="text-slate-500">Klienci zarejestrowani na zajęcia</p>
     </div>
     <UTable :rows="groupClassMembers" :columns="columns" @select="select">
-       
+       <template #empty-state>
+            <div class="flex flex-col items-center justify-center py-2">
+                <p class="text-slate-500">Brak zapisanych klientów</p>
+            </div>
+        </template>
     </UTable>
 </div>
 
@@ -89,13 +96,11 @@ const removeMemberFromClass = async () => {
                 <td>{{selectedRow.email}}</td>
             </tr>
         </table>
-        <!-- TODO: WYPISZ Z ZAJĘĆ
-        TODO: PRZEJDŹ DO PROFILU KLIENTA -->
         <template #footer >
             <div class="optionButtons flex flex-row justify-between">
                 <div class="flex flex-row justify-end w-full gap-6">
-                    <UButton label="Usuń z zajęć" @click="removeMemberFromClass()" color="red" icon="i-material-symbols-delete"/>
-                    <UButton label="Przejdź do profilu" @click="router.push({name: 'admin-panel-zarzadzanie-klienci-id', params: {id: selectedRow.email}})" color="blue" icon="i-material-symbols-person"/>
+                    <UButton v-if="defaultLoginData.userType==='Worker'" label="Usuń z zajęć" @click="removeMemberFromClass()" color="red" icon="i-material-symbols-delete"/>
+                    <UButton v-if="defaultLoginData.userType==='Worker'" label="Przejdź do profilu" @click="router.push({name: 'admin-panel-zarzadzanie-klienci-id', params: {id: selectedRow.email}})" color="blue" icon="i-material-symbols-person"/>
                     <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
                 </div>
             </div>
