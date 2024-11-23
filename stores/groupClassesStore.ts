@@ -244,10 +244,12 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                 body: JSON.stringify(groupClassId)
             });
             if(response){
-                toast.add({title: 'Sukces', description: `Pomyślnie zapisano na zajęcia grupowe: ${groupClassId}`});
+                toast.add({title: 'Sukces', description: 'Pomyślnie zapisano na zajęcia grupowe'});
                 await getGroupClassesUpcoming()
-                getGroupClassesUpcomingForMember(memberEmail);
-                getGroupClassesMembers(groupClassId);
+                await getGroupClassesUpcomingForMember(memberEmail);
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType==="Worker"){
+                    await getGroupClassesMembers(groupClassId);
+                }
                 return true
             // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
@@ -323,10 +325,12 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                 body: JSON.stringify(groupClassId)
             });
             if(response){
-                toast.add({title: 'Sukces', description: `Pomyślnie usunięto z zajęć grupowych: ${groupClassId}`});
-                getGroupClassesUpcomingForMember(memberEmail);
-                getGroupClassesMembers(groupClassId);
-                await getGroupClassesUpcoming();
+                toast.add({title: 'Sukces', description: 'Pomyślnie usunięto z zajęć grupowych:'});
+                await getGroupClassesUpcomingForMember(memberEmail);
+                await getGroupClassesUpcoming()
+                if(useCookie<DefaultLoginData>('defaultLoginData').value.userType==="Worker"){
+                    await getGroupClassesMembers(groupClassId);
+                }
                 return true
             // biome-ignore lint/style/noUselessElse: <explanation>
             } else {

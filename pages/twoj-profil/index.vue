@@ -7,6 +7,7 @@ const store = useLoginStore();
 const paymentStore = usePaymentStore();
 const loggedMemberStore = useLoggedMemberStore();
 const passStore = usePassStore();
+const groupClassesStore = useGroupClassesStore();
 
 const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
 const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
@@ -75,16 +76,13 @@ const validate = (data: CreditCardData) => {
 </script>
 
 <template>
-<!-- 
-    <UButton @click="test" label="test" color="blue" icon="" variant="ghost"/>
-    <pre>test {{passStore.memberPassHistory}}</pre> -->
 
     <header-user-profile></header-user-profile>
 
     <div class="flex bg-[#F5F7F8]">
         <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
-        <main class=" min-h-svh basis-4/5 -mt-4 flex flex-row flex-wrap justify-start gap-8 pb-10 items-start">
-            <div class="flex flex-row gap-8">
+        <main class=" min-h-svh basis-4/5 -mt-4 grid grid-cols-2 justify-start gap-8 pb-10 items-start">
+            <div class="flex flex-row gap-8 col-span-2">
                 <!-- TODO: fix shadow and hand written css to tailwind -->
                 <div v-if="!isObjectEmpty(paymentStore.cardData) && cardData.cardNumber!==''" class="credit-card aspect-[5/3] bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover w-fit p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
                     <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>
@@ -244,7 +242,25 @@ const validate = (data: CreditCardData) => {
                 </div>
             </div>
             
-            <div class="entriesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="calendarView flex flex-col w-full lg:max-w-[79vw] bg-white p-4 rounded-lg gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
+                <h2 class="font-semibold text-lg">Twoje nadchodzące zajęcia grupowe</h2>
+                <CallendarComponentsGroupClassesCalendarForMember 
+                    :groupClassesUpcoming="groupClassesStore.groupClassesUpcomingForMember" 
+                    :memberEmail="loggedMemberData.email" 
+                    :groupClassesUpcomingForMember="groupClassesStore.groupClassesUpcomingForMember"
+                    :paymentOptionAvailability="paymentStore.cardData ? true : false"
+                    :memberPassStatus="passStore.activeMemberPass"
+                />
+                <UButton 
+                    label="Zobacz wszystkie zajęcia" 
+                    color="blue" 
+                    icon="i-material-symbols-add" 
+                    :to="'/twoj-profil/zajecia'"
+                    class="w-fit"
+                />
+            </div>
+
+            <div class="entriesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <li v-for="(entry, entryId) in entriesHistory" :key="entry.id" class="flex flex-row w-full place-items-center">
@@ -260,7 +276,7 @@ const validate = (data: CreditCardData) => {
                 </ul>
             </div>
 
-            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
@@ -280,7 +296,7 @@ const validate = (data: CreditCardData) => {
                 </ul>
             </div>
 
-            <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Informacje</span>
                 <div class="information-container w-full bg-slate-50 py-3 px-5 flex flex-col rounded-xl">
                     <div class="inf-row-title flex flex-row justify-between items-center">
@@ -334,7 +350,7 @@ const validate = (data: CreditCardData) => {
 
             </div>
 
-            <div class="flex flex-col flex-nowrap place-items-start justify-start w-[47%] gap-8">
+            <div class="flex flex-col flex-nowrap place-items-start justify-start gap-8">
                 <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[100%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
                     <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">

@@ -13,17 +13,18 @@ const items = [
         label: 'Zajęcia *WIP*',
         icon: 'i-ic-outline-sports-kabaddi',
         defaultOpen: false,
-        slot: 'checkoffer',
+        slot: 'checkGroupClasses',
         color: 'cyan',
         class: 'py-4 hover:bg-cyan-100'
     },
     {
-        label: 'Trenerzy *WIP*',
+        label: 'Trenerzy',
         icon: 'i-ic-baseline-emoji-people',
         defaultOpen: false,
         slot: 'checkoffer',
         color: 'green',
-        class: 'py-4 hover:bg-green-100'
+        class: 'py-4 hover:bg-green-100',
+        to: '/twoj-profil/zajecia'
     },
     {
         label: 'Dokumenty *WIP*',
@@ -62,14 +63,19 @@ const instructions = [
                 <UButton  class="w-full py-4 " to="/twoj-profil" icon="i-ic-sharp-home" variant="ghost" color="blue">
                     Kokpit
                 </UButton>
-                <!-- TODO: change text color to black -->
-                <UAccordion :items="items" size="sm" >
-                    <template #checkoffer >
-                        <NuxtLink to="/twoj-profil/oferty" >
-                            <p class="hover:text-blue-500 hover:text-base transit pl-9">Sprawdź ofertę!</p>
-                        </NuxtLink>
-                    </template>
-                </UAccordion>  
+                <UButton  class="w-full py-4 " to="/twoj-profil/oferty" icon="i-ic-round-local-offer" variant="ghost" color="orange">
+                    Oferta karnetów
+                </UButton>
+                <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-outline-sports-kabaddi" variant="ghost" color="cyan">
+                    Zajęcia grupowe
+                </UButton>
+                <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-baseline-emoji-people" variant="ghost" color="green">
+                    Trenerzy personalni **WIP**
+                </UButton>
+                <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-round-collections-bookmark" variant="ghost" color="red">
+                    Dokumenty **WIP**
+                </UButton>
+               
                 <hr/>
                 <UAccordion :items="instructions" color="primary"
                     variant="soft"
