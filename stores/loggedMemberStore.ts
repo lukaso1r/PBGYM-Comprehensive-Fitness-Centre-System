@@ -5,11 +5,11 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
     const memberPaymentHistory = useState<MemberPaymentHistory[]>(() => []);
     const memberGymEntriesHistory = useState<MemberGymEntriesHistory[]>(() => []);
 
-    const getMemberPaymentsHistory = async () => {
+    const getMemberPaymentsHistory = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberPaymentHistory>('https://pbgym.onrender.com/members/getOwnPayments', {
+            response = await $fetch<MemberPaymentHistory>(`https://pbgym.onrender.com/members/getPaymentHistory/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,11 +27,11 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         }
     }
 
-    const getMemberGymEntriesHistory = async () => {
+    const getMemberGymEntriesHistory = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberGymEntriesHistory>('https://pbgym.onrender.com/members/getOwnGymEntries', {
+            response = await $fetch<MemberGymEntriesHistory>(`https://pbgym.onrender.com/members/getGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

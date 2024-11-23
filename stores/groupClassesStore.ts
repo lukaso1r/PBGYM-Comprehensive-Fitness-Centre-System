@@ -18,6 +18,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
     const groupClassesMembers = useState<GroupClassMember[]>(() => []);
 
     const toast = useToast();
+    const router = useRouter();
 
     // GET
 
@@ -35,7 +36,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesUpcoming.value = response;
                 console.log('Nadchodzące zajęcia grupowe:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano nadchodzące zajęcia grupowe.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać nadchodzących zajęć grupowych.'});
                 throw new Error('Nie udało się pobrać nadchodzących zajęć grupowych.');
@@ -59,7 +59,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesMembers.value = response;
                 console.log('Członkowie zajęć grupowych:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano członków zajęć grupowych.'});
             } else {
                 throw new Error('Nie udało się pobrać członków zajęć grupowych.');
             }
@@ -83,7 +82,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesHistorical.value = response;
                 console.log('Historia zajęć grupowych:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano historię zajęć grupowych.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać historii zajęć grupowych.'});
                 console.log('Error:', response);
@@ -108,7 +106,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesUpcomingByTrainerEmail.value = response;
                 console.log('Nadchodzące zajęcia grupowe prowadzone przez trenera:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano nadchodzące zajęcia grupowe prowadzone przez trenera.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać nadchodzących zajęć grupowych prowadzonych przez trenera.'});
                 throw new Error('Nie udało się pobrać nadchodzących zajęć grupowych prowadzonych przez trenera.');
@@ -132,7 +129,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesHistoricalByTrainerEmail.value = response;
                 console.log('Historia zajęć grupowych prowadzonych przez trenera:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano historię zajęć grupowych prowadzonych przez trenera.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać historii zajęć grupowych prowadzonych przez trenera.'});
                 throw new Error('Nie udało się pobrać historii zajęć grupowych prowadzonych przez trenera.');
@@ -156,7 +152,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesUpcomingForMember.value = response;
                 console.log('Nadchodzące zajęcia grupowe dla klienta:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano nadchodzące zajęcia grupowe dla klienta.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać nadchodzących zajęć grupowych dla klienta.'});
                 throw new Error('Nie udało się pobrać nadchodzących zajęć grupowych dla klienta.');
@@ -180,7 +175,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             if (response) {
                 groupClassesHistoricalForMember.value = response;
                 console.log('Historia zajęć grupowych dla klienta:', response);
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano historię zajęć grupowych dla klienta.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać historii zajęć grupowych dla klienta.'});
                 throw new Error('Nie udało się pobrać historii zajęć grupowych dla klienta.');
@@ -251,6 +245,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             });
             if(response){
                 toast.add({title: 'Sukces', description: `Pomyślnie zapisano na zajęcia grupowe: ${groupClassId}`});
+                await getGroupClassesUpcoming()
                 getGroupClassesUpcomingForMember(memberEmail);
                 getGroupClassesMembers(groupClassId);
                 return true
@@ -331,6 +326,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                 toast.add({title: 'Sukces', description: `Pomyślnie usunięto z zajęć grupowych: ${groupClassId}`});
                 getGroupClassesUpcomingForMember(memberEmail);
                 getGroupClassesMembers(groupClassId);
+                await getGroupClassesUpcoming();
                 return true
             // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
@@ -357,8 +353,9 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 }
             });
-            if(response === 'Group class deleted successfully'){
+            if(response){
                 toast.add({title: 'Sukces', description: `Pomyślnie usunięto zajęcia grupowe: ${groupClassId}`});
+                router.push('/admin-panel/zarzadzanie/zajecia');
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się usunąć zajęć grupowych.'});
                 console.log('Error:', response);

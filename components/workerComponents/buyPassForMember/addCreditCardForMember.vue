@@ -52,7 +52,6 @@ watch(
 
         <div class="flex flex-col gap-3">
             <div v-if="membersManagmentStore.paymentOptionsStatus">
-                <h2 class="font-medium">Karta płatnicza została pomyślnie dodana, przejdź do wyboru karnetu *WIP*</h2>
                 <p class="pb-9">Wybierz karnet z listy poniżej</p>
                 <WorkerComponentsOfferList :memberEmail="memberEmail"/>
             </div>

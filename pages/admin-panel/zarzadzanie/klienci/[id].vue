@@ -30,6 +30,7 @@ onMounted( async () => {
     await membersManagmentStore.getMemberGymEntriesHistoryByEmail(email.value);
     await groupClassesStore.getGroupClassesHistoricalForMember(email.value);
     await groupClassesStore.getGroupClassesUpcomingForMember(email.value);
+    paymentOptionAvailability.value = await membersManagmentStore.getMemberPaymentOptionsStatus(email.value) ?? false;
 });
 
 onBeforeRouteLeave(() => {
@@ -43,10 +44,6 @@ const buyPassForMember = async () => {
     showNewCreditCardForMemberModal.value = true;
 }
 
-const test = () => {
-    console.log('test', membersManagmentStore.getMemberPaymentOptionsStatus(email.value));
-}
-
 const toggleEnrolMemberToClassModal = async () => {
     enrolMemberToClassModal.value = true;
     if(enrolMemberToClassModal){
@@ -54,15 +51,23 @@ const toggleEnrolMemberToClassModal = async () => {
     }
 }
 
+const checkCreditCardStatus = async () => {
+    await membersManagmentStore.getMemberPaymentOptionsStatus(email.value);
+    console.log('checkCreditCardStatus', membersManagmentStore.paymentOptionsStatus);
+    return membersManagmentStore.paymentOptionsStatus
+}
+
+const test = () => {
+    console.log('test', membersManagmentStore.paymentOptionsStatus);
+}
+
 
 </script>
 
 <template>
 
-    
     <WorkerComponentsHeaderWorker />
     
-
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
       <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
         <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
@@ -173,6 +178,14 @@ const toggleEnrolMemberToClassModal = async () => {
                         label="Kup karnet klientowi"
                         @click="buyPassForMember()"
                     />
+                    <UButton 
+                        icon="i-material-symbols-id-card"
+                        size="sm"
+                        color="blue"
+                        variant="solid"
+                        label="Sprawdź status karty kredytowej"
+                        @click="checkCreditCardStatus()"
+                    />
                     <WorkerComponentsMemberDataEditModal 
                         v-model:showMemberDataEditModal="showMemberDataEditModal"
                         :typeDataToEdit="typeDataToEdit"   
@@ -215,6 +228,8 @@ const toggleEnrolMemberToClassModal = async () => {
                             :group-classes-upcoming="groupClassesStore.groupClassesUpcoming"
                             :group-classes-history="[]"
                             :memberEmail="membersManagmentStore.memberByEmail.email"
+                            :paymentOptionAvailability="paymentOptionAvailability"
+                            :memberPassStatus="passStore.activeMemberPass"
                         />
                     </div>
                     <template #footer>

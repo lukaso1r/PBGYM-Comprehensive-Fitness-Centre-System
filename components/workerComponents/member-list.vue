@@ -130,7 +130,7 @@ const filteredRows = computed(() => {
     <UModal v-model="isOpen">
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
             <template #header>
-                <h3 class="font-medium text-lg">{{selectedRow ? selectedRow.title : 'nic'}}</h3>
+                <h3 class="font-medium text-lg">{{selectedRow ? `${selectedRow.name} ${selectedRow.surname}` : 'nic'}}</h3>
             </template>
             <table class="table-auto">
                 <tbody>
@@ -141,8 +141,9 @@ const filteredRows = computed(() => {
                 </tbody>
             </table>
             <template #footer >
-                <div class="flex flex-row justify-end">
-                    <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
+                <div class="flex flex-row justify-end gap-8">
+                    <UButton label="Przejdź do profilu klienta" :to="{ name: 'admin-panel-zarzadzanie-klienci-id', params: { id: selectedRow.email } }" color="blue" icon="i-heroicons-arrow-right-20-solid"/>
+                    <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
                 </div>
             </template>
         </UCard>

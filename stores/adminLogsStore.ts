@@ -19,7 +19,6 @@ export const useAdminLogsStore = defineStore('adminLogsStore', () => {
             });
             if (response) {
                 sysLogs.value = response;
-                toast.add({title: 'Sukces', description: 'Pomyślnie pobrano logi systemowe.'});
             } else {
                 toast.add({title: 'Błąd', description: 'Nie udało się pobrać logów systemowych.'});
                 throw new Error('Nie udało się pobrać logów systemowych.');

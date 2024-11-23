@@ -56,7 +56,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 allTrainers.value = response;
                 console.log('Lista trenerów:', response);
-                toast.add({ title: 'Sukces.', description: 'Lista trenerów została pobrana.' });
             } else {
                 throw new Error('Nie udało się pobrać listy trenerów.');
 
@@ -81,7 +80,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 allTrainersWithOffers.value = response;
                 console.log('Lista trenerów z ofertami:', response);
-                toast.add({ title: 'Sukces.', description: 'Lista trenerów z ofertami została pobrana.' });
             } else {
                 throw new Error('Nie udało się pobrać listy trenerów z ofertami.');
 
@@ -107,7 +105,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 trainerEntries.value = response;
                 console.log('Lista wejść trenera:', response);
-                toast.add({ title: 'Sukces.', description: 'Lista wejść trenera została pobrana.' });
             } else {
                 throw new Error('Nie udało się pobrać listy wejść trenera.');
 
@@ -132,7 +129,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             if (response) {
                 trainerOffersByEmail.value = response;
                 console.log('Oferty trenera:', response);
-                toast.add({ title: 'Sukces.', description: 'Oferty trenera zostały pobrane.' });
             } else {
                 throw new Error('Nie udało się pobrać ofert trenera.');
 
@@ -159,7 +155,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
             });
             if (response) {
                 console.log('Zaktualizowane dane trenera:', response);
-                toast.add({ title: 'Sukces.', description: 'Dane trenera zostały zaktualizowane.' });
                 if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
                     loginStore.logOut();
                 }

@@ -135,10 +135,11 @@ const onSubmitEditClasses = async () => {
 
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Zapisani klienci</h1>
-            <p class="text-slate-500">Lista zapisanych klientów na zajęcia **WIP**</p>
+            <p class="text-slate-500">Lista zapisanych klientów na zajęcia</p>
         </div>
 
         <WorkerComponentsGroupClassesEnroledMembersList :groupClassMembers="groupClassesStore.groupClassesMembers" :groupClassObj="groupClassById" />
+        <UButton label="Usuń zajęcia" @click="groupClassesStore.deleteGroupClass(groupClassById.id)" color="red" icon="i-material-symbols-delete" variant="solid"/>
 
     </main>
 </div>

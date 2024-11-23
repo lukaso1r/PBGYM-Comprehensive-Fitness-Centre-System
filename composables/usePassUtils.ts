@@ -33,7 +33,9 @@ export const usePassUtils = () => {
         if(membersManagmentStore.paymentOptionsStatus) {
             console.log('karta płatnicza istnieje')
             await passStore.postNewPass(memberEmail, passId);
-            router.push(`/admin/members/${memberEmail}`);
+            await passStore.getActiveMemberPass(memberEmail);
+            router.push(`/admin-panel/zarzadzanie/klienci/${memberEmail}`);
+
         } else {
             console.log('brak karty płatniczej')
             toast.add({ title: 'Brak karty płatniczej' });

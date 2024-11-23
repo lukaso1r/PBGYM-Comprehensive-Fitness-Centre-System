@@ -14,7 +14,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const memberPaymentHistory = useState<MemberPaymentHistory[]>('memberPaymentHistory', () => ([] as MemberPaymentHistory[]));
     const memberGymEntriesHistory = useState<MemberGymEntriesHistory[]>('MemberGymEntriesHistory', () => ([] as MemberGymEntriesHistory[]));
     const creditCardDataToAdd = useState<CreditCardData>('creditCardDataToAdd', () => ({} as CreditCardData));
-    const paymentOptionsStatus = useState<boolean>('paymentOptionsStatus', () => false);
+    const paymentOptionsStatus = useState<CreditCardData>('paymentOptionsStatus', () => ({} as CreditCardData));
 
     const router = useRouter();
     const toast = useToast();
@@ -79,7 +79,6 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             if (response) {
                 memberPaymentHistory.value = response;
                 console.log('Historia płatności klienta:', response);
-                toast.add({ title: 'Pobrano historię płatności klienta' });
             } else {
                 toast.add({ title: 'Nie udało się pobrać historii płatności klienta' });
                 throw new Error('Nie udało się pobrać historii płatności klienta.');
@@ -103,7 +102,6 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             if (response) {
                 memberGymEntriesHistory.value = response;
                 console.log('Historia wejść do siłowni klienta:', response);
-                toast.add({ title: 'Pobrano historię wejść do siłowni klienta' });
             } else {
                 toast.add({ title: 'Nie udało się pobrać historii wejść do siłowni klienta' });
                 throw new Error('Nie udało się pobrać historii wejść do siłowni klienta.');
@@ -126,13 +124,14 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
             });
             if (response) {
                 console.log('Status opcji płatności:', response);
-                toast.add({ title: 'Sprawdzono status opcji płatności klienta' });
-                paymentOptionsStatus.value = true;
+                paymentOptionsStatus.value = response;
+                toast.add({ title: 'Sprawdzono status opcji płatności klienta', description: 'Klient posiada przypisaną kartę płatniczą' });
+                return true;
+            // biome-ignore lint/style/noUselessElse: <explanation>
             } else {
                 toast.add({ title: 'Nie udało się pobrać statusu opcji płatności', description: 'Klient nie ma przypisanej karty płatniczej.' });
-                paymentOptionsStatus.value = false;
+                paymentOptionsStatus.value = response;
                 throw new Error('Nie udało się pobrać statusu opcji płatności klienta.');
-                
             }
         } catch (error) {
             console.error('Error:', error);

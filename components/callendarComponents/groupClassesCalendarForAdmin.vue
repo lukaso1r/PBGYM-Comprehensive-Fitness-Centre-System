@@ -2,7 +2,7 @@
 import '@vuepic/vue-datepicker/dist/main.css'
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import type { GroupClassWithTrainer } from '@/types';
+import type { GroupClassWithTrainer, ActiveMemberPass } from '@/types';
 
 const prop = defineProps<{
     groupClassesUpcoming: GroupClassWithTrainer[];
@@ -10,6 +10,8 @@ const prop = defineProps<{
     singleClass?: GroupClassWithTrainer;
     trainerEmail?: string;
     memberEmail?: string;
+    paymentOptionAvailability?: boolean;
+    memberPassStatus?: ActiveMemberPass;
 }>();
 
 const router = useRouter();
@@ -87,14 +89,21 @@ const onClickedClass = (groupClass: GroupClassWithTrainer) => {
     toggleDetailClassModal();
 };
 
-const enrolMemberToGroupClasses = (email: string) =>{
+const enrolMemberToGroupClasses = async (email: string) =>{
     console.log('insine enrdol')
     if(clickedClasses.value?.id){
-        groupClassesStore.postEnrollMemberToGroupClass(clickedClasses.value?.id, email);
+        await groupClassesStore.postEnrollMemberToGroupClass(clickedClasses.value?.id, email);
+        clickedClasses.value = groupClassesStore.groupClassesUpcoming.find(groupClass => groupClass.id === clickedClasses.value?.id);
+
     }else{
         console.log('enrolMemberToGroupClasses', 'no class id');
     }
     console.log('enrolMemberToGroupClasses', email);
+}
+
+const removeMemberFromGroupClass = async (id: number, memberEmail: string) => {
+    await groupClassesStore.putRemoveMemberFromGroupClass(id, memberEmail);
+    clickedClasses.value = groupClassesStore.groupClassesUpcoming.find(groupClass => groupClass.id === clickedClasses.value?.id);
 }
 
 const test = () => {
@@ -107,7 +116,7 @@ const test = () => {
 
 <template>
 
-    <div class="w-full lg:max-w-[79vw] lg:min-w-[34vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" 
+    <div class="w-full lg:max-w-[79vw] lg:min-w-[35vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" 
     :style="{ boxShadow: memberEmail ? '' : '0px 0px 24px -8px rgba(66, 68, 90, 1)' }"   
     >
         <div class="calendar-navigation flex justify-between items-center mb-4  w-full">
@@ -202,12 +211,13 @@ const test = () => {
                         label="Zapisz klienta na zajęcia" 
                         color="blue" 
                         icon="i-material-symbols-add" 
+                        :disabled="clickedClasses.currentMemberCount >= clickedClasses.memberLimit || !paymentOptionAvailability || isObjectEmpty(memberPassStatus)"
                     />
                 </div>
                 <div v-else class="flex flex-row items-center gap-8 pt-10 px-4">
                     <p>Wybrany klient: <span class="font-medium">{{memberEmail}}</span> <br /> jest zapisany na te zajęcia</p>
                     <UButton 
-                        @click.stop="groupClassesStore.putRemoveMemberFromGroupClass(clickedClasses.id, memberEmail)" 
+                        @click.stop="removeMemberFromGroupClass(clickedClasses.id, memberEmail)" 
                         label="Usuń klienta z zajęć" 
                         color="red" 
                         icon="i-material-symbols-delete" 

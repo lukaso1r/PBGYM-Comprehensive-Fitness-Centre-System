@@ -34,8 +34,8 @@ const test = () => {
 
 onMounted(async () => {
     await paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
-    await loggedMemberStore.getMemberGymEntriesHistory()
-    await loggedMemberStore.getMemberPaymentsHistory()
+    await loggedMemberStore.getMemberGymEntriesHistory(loggedMemberData.value.email)
+    await loggedMemberStore.getMemberPaymentsHistory(loggedMemberData.value.email)
     await passStore.getActiveMemberPass(loggedMemberData.value.email)
     await passStore.getMemberPassHistory(loggedMemberData.value.email)
     paymentHistory.value = loggedMemberStore.memberPaymentHistory
