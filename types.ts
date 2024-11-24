@@ -407,3 +407,10 @@ export interface GroupClassMember {
     surname: string;
 }
     
+export interface BlogPost {
+    id?: number;
+    title: string;
+    postDate: string;
+    lastUpdateDate?: string;
+    content: string
+}
