@@ -3,13 +3,17 @@
 const blogStore = useBlogStore()
 const showSeeMoreModal = ref(false)
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const clickedPost = ref({} as any)
+const loading = ref(true)
 
 onMounted( async () => {
     console.log('onMounted')
     await blogStore.getAllBlogPosts()
+    loading.value = false
 })
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const toggleSeeMoreModal = (post?: any) => {
     console.log('toggleSeeMoreModal')
     if(post){
@@ -45,6 +49,17 @@ const toggleSeeMoreModal = (post?: any) => {
                     <UButton class="w-fit" label="Czytaj więcej" color="blue" @click="toggleSeeMoreModal(post)" />
                 </div>
 
+            </div>
+        </div>
+        <div v-if="loading" class="col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-12 items-start">
+            <div v-for="n in 5" :key="n" class="flex flex-col gap-4">
+                <USkeleton class="h-9 w-5/6"/>
+                <USkeleton class="h-4 w-3/5"/>
+                <USkeleton class="h-20 w-full"/>
+                <div class="flex flex-row justify-between items-center gap-8">
+                    <USkeleton class="h-4 w-3/5"/>
+                    <USkeleton class="h-4 w-1/5"/>
+                </div>
             </div>
         </div>
         
