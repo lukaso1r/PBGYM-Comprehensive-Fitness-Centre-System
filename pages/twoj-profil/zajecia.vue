@@ -98,6 +98,7 @@ const columns = [
         <div class="available-classes flex flex-col lg:w-full lg:max-w-[79vw] bg-white p-4 rounded-lg gap-8" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
             <h2 class="text-2xl font-bold">Wszystkie nadchodzące zajęcia grupowe widok siatki</h2>
             <div class="grid grid-cols-3 gap-8">
+                <div v-if="groupClassesStore.groupClassesUpcoming.length===0">Brak nadchodzących zajęć</div>
                 <template v-for="groupClass in groupClassesStore.groupClassesUpcoming" :key="groupClass.id">
                     <div class="border-[2px] border-gray-300 rounded py-4 pl-4 pr-4 flex flex-col shadow bg" 
                         :class="{'bg-blue-100': groupClassesStore.groupClassesUpcomingForMember.map((upcomingClass) => upcomingClass.id).includes(groupClass.id)}"

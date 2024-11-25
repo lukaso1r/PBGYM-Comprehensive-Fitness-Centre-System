@@ -69,8 +69,8 @@ const instructions = [
                 <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-outline-sports-kabaddi" variant="ghost" color="cyan">
                     Zajęcia grupowe
                 </UButton>
-                <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-baseline-emoji-people" variant="ghost" color="green">
-                    Trenerzy personalni **WIP**
+                <UButton  class="w-full py-4 " to="/twoj-profil/trenerzy" icon="i-ic-baseline-emoji-people" variant="ghost" color="green">
+                    Trenerzy personalni
                 </UButton>
                 <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-round-collections-bookmark" variant="ghost" color="red">
                     Dokumenty **WIP**
