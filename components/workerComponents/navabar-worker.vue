@@ -10,10 +10,10 @@ const items = [
         class: 'py-4 hover:bg-sky-100'        
     },
     {
-        label: 'Strony *WIP*',
+        label: 'Aktualności',
         icon: 'i-ic-round-layers',
         defaultOpen: false,
-        slot: 'kokpit',
+        slot: 'aktualnosci',
         color: 'orange',
         class: 'py-4 hover:bg-sky-100'        
     },
@@ -114,6 +114,12 @@ const settings = [
                             <p class="hover:text-blue-500 pl-9">Dodaj nową ofertę</p>
                         </NuxtLink>
                     </template>
+
+                    <template #aktualnosci >
+                        <NuxtLink to="/admin-panel/blog" >
+                            <p class="hover:text-blue-500 pl-9">Aktualności</p>
+                        </NuxtLink>
+                    </template> 
                 </UAccordion>  
                 
                 <hr/>

@@ -7,6 +7,7 @@ const blogStore = useBlogStore()
 
 const modalOption = ref('')
 const selectedRow = ref<BlogPost>({} as BlogPost)
+const posts = ref<BlogPost[]>([])
 
 const actionModal = (option: string, row?: BlogPost ) => {
     console.log('Selected Row:', row);
@@ -43,6 +44,7 @@ const deleteBlogPost = async (id: number) => {
 onMounted( async () => {
     console.log('onMounted')
     await blogStore.getAllBlogPosts()
+    posts.value = blogStore.allBlogPosts 
 })
 
 const columns = [
@@ -72,6 +74,20 @@ const columns = [
     },
 ]
 
+const q = ref('')
+
+const filteredRows = computed(() => {
+  if (!q.value) {
+    return posts.value
+  }
+
+  return posts.value.filter((post) => {
+    return Object.values(post).some((value) => {
+      return String(value).toLowerCase().includes(q.value.toLowerCase())
+    })
+  })
+})
+
 </script>
 
 
@@ -89,18 +105,32 @@ const columns = [
             <UButton class="w-fit" label="Dodaj wpis" @click="actionModal('add')" color="blue" icon="i-material-symbols-add" />
         </div>
 
-        <UTable class="w-full lg:max-w-[79vw] bg-white rounded-lg p-4" :columns="columns" :rows="blogStore.allBlogPosts" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <template #postDate-data="{ row }">
-                <p>{{ dateWithTimeString(new Date(row.postDate)) }}</p>
-            </template>
-            <template #actions-data="{ row }">
-                <div class="flex flex-row gap-2">
-                    <UButton label="Edytuj" color="blue" icon="i-material-symbols-edit" @click="actionModal('edit', row)" />
-                    <UButton label="Usuń" color="red" icon="i-material-symbols-delete" @click="actionModal('delete', row)" />
-                </div>
-            </template>
-        </UTable>
-        {{ blogStore.allBlogPosts }}
+          
+<div class="w-full lg:max-w-[79vw] bg-white rounded-lg p-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+        <UInput v-model="q" placeholder="Wyszukaj wpis..." />
+    </div>  
+    <UTable class="w-full" :columns="columns" :rows="filteredRows">
+            
+        <template #postDate-data="{ row }">
+            <p>{{ dateWithTimeString(new Date(row.postDate)) }}</p>
+        </template>
+        <template #actions-data="{ row }">
+            <div class="flex flex-row gap-2">
+                <UButton label="Edytuj" color="blue" icon="i-material-symbols-edit" @click="actionModal('edit', row)" />
+                <UButton label="Usuń" color="red" icon="i-material-symbols-delete" @click="actionModal('delete', row)" />
+            </div>
+        </template>
+        <template #title-data="{ row }">
+            <p>{{ row.title.slice(0,30)}}...</p>
+        </template>
+        <template #content-data="{ row }">
+            <p>{{ row.content.slice(0,50)}}...</p>
+        </template>
+        
+    </UTable>
+</div>
+        
     </main> 
 </div>
 

@@ -32,8 +32,9 @@ const test = () => {
     <nav class="hidden md:flex space-x-20 font-medium ">
       <NuxtLink to="/#onas" class="text-neutral-700 hover:text-gray-300">O nas</NuxtLink>
       <NuxtLink to="/#treningi" class="text-neutral-700 hover:text-gray-300">Treningi</NuxtLink>
-      <NuxtLink to="/#zajecia-grupowe" class="text-neutral-700 hover:text-gray-300">Zajęcia Grupowe</NuxtLink>
+      <NuxtLink to="/zajecia-grupowe" class="text-neutral-700 hover:text-gray-300">Zajęcia Grupowe</NuxtLink>
       <NuxtLink to="/#cennik" class="text-neutral-700 hover:text-gray-300">Cennik</NuxtLink>
+      <NuxtLink to="/wpisy" class="text-neutral-700 hover:text-gray-300">Aktualności</NuxtLink>
     </nav>
 
     <!-- Button -->
