@@ -74,7 +74,6 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
                 }
             });
             if (response) {
