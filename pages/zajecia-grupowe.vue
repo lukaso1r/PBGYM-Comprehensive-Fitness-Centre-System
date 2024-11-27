@@ -1,27 +1,5 @@
 <script lang="ts" setup>
 
-const blogStore = useBlogStore()
-const showSeeMoreModal = ref(false)
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const clickedPost = ref({} as any)
-const loading = ref(true)
-
-onMounted( async () => {
-    console.log('onMounted')
-    await blogStore.getAllBlogPosts()
-    loading.value = false
-})
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const toggleSeeMoreModal = (post?: any) => {
-    console.log('toggleSeeMoreModal')
-    if(post){
-        clickedPost.value = post
-    }
-    showSeeMoreModal.value = !showSeeMoreModal.value
-}
-
 </script>
 
 <template>
@@ -37,26 +15,18 @@ const toggleSeeMoreModal = (post?: any) => {
         <p class="text-xl text-center py-1 pb-10">Dostosuj trening do swojego rytmu dnia – zajęcia, które pasują do Twoich potrzeb!</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-8 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3 gap-8 items-start pb-14">
         <img src="/public/images/home-banner/blob1.svg" alt="" class="absolute left-0 top-0 -z-50">
-        
+        <!-- kalendarz -->
+        <div class="col-span-3 shadow-2xl rounded-xl " >
+            <CallendarComponentsGroupClassesCalendarForPublic />
+        </div>
+
     </div>
     <div class="relative ">
         <img src="/public/images/home-banner/blob4.svg" alt="" class="absolute left-0 bottom-50 -z-50">
     </div>
 </div>
-
-<UModal :model-value="showSeeMoreModal" @close="toggleSeeMoreModal()">
-    <div class="p-6">
-        <h2 class="text-xl font-bold mb-2">{{ clickedPost.title }}</h2>
-        <p class="text-gray-600 text-sm mb-4">Opublikowano dnia: {{ dateWithTimeString(new Date(clickedPost.postDate)) }}</p>
-        <p class="text-gray-800">{{ clickedPost.content }}</p>
-        <div class="flex flex-row justify-between items-center pt-6 gap-4">
-            <p v-if="clickedPost.lastUpdateDate" class="text-gray-500 text-xs">Aktualizacja: {{ dateWithTimeString(new Date(clickedPost.lastUpdateDate)) }}</p>
-            <UButton class="w-fit" label="Zamknij" color="blue" @click="toggleSeeMoreModal()" />
-        </div>
-    </div>
-</UModal>
 
 <footer-web/>
 
