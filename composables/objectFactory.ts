@@ -121,7 +121,7 @@ export const useObjectFactory = () => {
     const createEditableGroupClassObject = (): EditableGroupClassData => {
         return {
             title: '',
-            date: '',
+            dateStart: '',
             durationInMinutes: 0,
             memberLimit: 0,
             trainerEmail: ''
@@ -132,7 +132,7 @@ export const useObjectFactory = () => {
         return {
             id: 0,
             title: '',
-            date: '',
+            dateStart: '',
             durationInMinutes: 0,
             memberLimit: 0,
             trainer: {

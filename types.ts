@@ -220,19 +220,13 @@ export interface PaymentData {
     pesel: string
   }
 
-export interface StatsPaymentsByUserEmail {
-    userEmail: PaymentData[]
-}
+
 
 export interface GymEntryData {
     id: number,
     dateTimeOfEntry: string,
     dateTimeOfExit: string,
     email: string
-}
-
-export interface StatsGymEntriesByUserEmail {
-    userEmail: GymEntryData[]
 }
 
 export interface MemberPaymentHistory {
@@ -374,7 +368,7 @@ export interface TrainerWithOffers {
 export interface EditableGroupClassData {
     id?: number,
     title: string,
-    date: string,
+    dateStart: string,
     durationInMinutes: number,
     memberLimit: number,
     trainerEmail: string
@@ -383,7 +377,7 @@ export interface EditableGroupClassData {
 export interface GroupClassWithTrainer {
     id: number;
     title: string;
-    date: string;
+    dateStart: string;
     durationInMinutes: number;
     memberLimit: number;
     trainer: {
@@ -414,3 +408,4 @@ export interface BlogPost {
     lastUpdateDate?: string;
     content: string
 }
+

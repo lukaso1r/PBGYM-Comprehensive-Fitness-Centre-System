@@ -18,7 +18,7 @@ const showEditGroupClassesModal = ref(false);
 const id = ref(route.params.id);
 const groupClassById = useState<GroupClassWithTrainer>(() => createGroupClassWithTrainerObject())
 
-const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.date));
+const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.dateStart));
 const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>([ "month", "calendar", "time"]);
 const maxDate = ref(nextYearDate.value)
 const dateFormatForPicker = (date: Date) => {
@@ -33,8 +33,8 @@ const dateFormatForPicker = (date: Date) => {
 watch(date, (newValue) => {
     console.log('data przed iso', newValue);
     const offset = newValue.getTimezoneOffset() * 60000;
-    groupClassesStore.editableGroupClass.date = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
-    console.log('data po iso', groupClassesStore.editableGroupClass.date);
+    groupClassesStore.editableGroupClass.dateStart = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
+    console.log('data po iso', groupClassesStore.editableGroupClass.dateStart);
 
 });
 
@@ -62,7 +62,7 @@ const toggleEditGroupClasses = () => {
         groupClassesStore.editableGroupClass = {
             id: groupClassById.value.id,
             title: groupClassById.value.title,
-            date: groupClassById.value.date,
+            dateStart: groupClassById.value.dateStart,
             durationInMinutes: groupClassById.value.durationInMinutes,
             memberLimit: groupClassById.value.memberLimit,
             trainerEmail: groupClassById.value.trainer.email
@@ -100,7 +100,7 @@ const onSubmitEditClasses = async () => {
                     <p><strong>ID:</strong> {{ groupClassById.id }}</p>
                     <p><strong>Nazwa:</strong> {{ groupClassById.title }}</p>
                     <p><strong>Trener:</strong> {{ groupClassById.trainer.name }}</p>
-                    <p><strong>Data:</strong> {{ dateWithTimeString(new Date(groupClassById.date)) }}</p>
+                    <p><strong>Data:</strong> {{ dateWithTimeString(new Date(groupClassById.dateStart)) }}</p>
                     <p><strong>Czas trwania:</strong> {{ groupClassById.durationInMinutes }} minut</p>
                     <p><strong>Limit uczestników:</strong> {{ groupClassById.memberLimit }}</p>
                     <p><strong>Liczba uczestników:</strong> {{ groupClassById.currentMemberCount }}</p>
@@ -162,7 +162,7 @@ const onSubmitEditClasses = async () => {
                     <UInput v-model="groupClassesStore.editableGroupClass.title" type="string" placeholder="Tytuł zajęć" :value="groupClassesStore.editableGroupClass.title"  />
                 </UFormGroup>
                 <UFormGroup class="col-span-2" label="Data zajęć" name="date" required>
-                    <VueDatePicker v-model="groupClassesStore.editableGroupClass.date" 
+                    <VueDatePicker v-model="groupClassesStore.editableGroupClass.dateStart" 
                         :max-date="maxDate" 
                         :min-date="new Date()"
                         :start-date="new Date()" 

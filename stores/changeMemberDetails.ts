@@ -5,13 +5,19 @@ export const useChangeMemberDetailsStore = defineStore('changeMemberDetails', ()
     const loginStore = useLoginStore();
 
     const changeMemberDetailsData = useState<ChangeMemberDetailsData>(() => ({
-        phoneNumber: '', 
+        name: '',
+        surname: '',
+        birthdate: '',
+        gender: '',
+        pesel: '',
+        phoneNumber: '',
         address: {
-            city: '', 
-            streetName: '', 
-            buildingNumber: '', 
-            apartmentNumber: 0, 
-            postalCode: ''}
+            city: '',
+            streetName: '',
+            buildingNumber: '',
+            apartmentNumber: 0,
+            postalCode: ''
+        }
     })) 
 
     const changeMemberDetails = async () => {

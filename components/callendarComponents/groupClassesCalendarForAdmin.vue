@@ -43,14 +43,14 @@ const calendar = computed(() => {
         const classes = ref([] as GroupClassWithTrainer[]);
 
         if(prop.singleClass){
-            classes.value = [prop.singleClass].filter(groupClass => isSameDay(new Date(groupClass.date), day))
+            classes.value = [prop.singleClass].filter(groupClass => isSameDay(new Date(groupClass.dateStart), day))
         }else{
             console.log('singleClass', 'no single class');
             classes.value = prop.groupClassesUpcoming.filter(groupClass =>
-            isSameDay(new Date(groupClass.date), day)
+            isSameDay(new Date(groupClass.dateStart), day)
         ).concat(
             prop.groupClassesHistory.filter(groupClass =>
-                isSameDay(new Date(groupClass.date), day)
+                isSameDay(new Date(groupClass.dateStart), day)
             )
         );
         }
@@ -139,11 +139,11 @@ const test = () => {
                         @click="new Date(day.date) >= fullDateHourZero ? toggleAddClassModal(new Date(day.date)) : null"
                     >
                         <div class="date">{{ day.date.getDate() }}</div>
-                        <div v-for="groupClass in day.classes.sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)))" :key="groupClass.id" 
+                        <div v-for="groupClass in day.classes.sort((a, b) => Number(new Date(a.dateStart)) - Number(new Date(b.dateStart)))" :key="groupClass.id" 
                             :class="['class-item cursor-pointer  py-2 px-2 my-1 rounded', 
-                                {'bg-blue-50 hover:bg-blue-200': new Date(groupClass.date) >= fullDateHourZero}, 
-                                {'bg-yellow-50 hover:bg-yellow-200': new Date(new Date(groupClass.date).getTime() + groupClass.durationInMinutes * 60000) < new Date()},
-                                {'bg-green-300 hover:bg-green-500': (new Date(groupClass.date) < new Date() && new Date(new Date(groupClass.date).getTime() + groupClass.durationInMinutes * 60000) > new Date() )}
+                                {'bg-blue-50 hover:bg-blue-200': new Date(groupClass.dateStart) >= fullDateHourZero}, 
+                                {'bg-yellow-50 hover:bg-yellow-200': new Date(new Date(groupClass.dateStart).getTime() + groupClass.durationInMinutes * 60000) < new Date()},
+                                {'bg-green-300 hover:bg-green-500': (new Date(groupClass.dateStart) < new Date() && new Date(new Date(groupClass.dateStart).getTime() + groupClass.durationInMinutes * 60000) > new Date() )}
                             ]"
                             @click.stop="onClickedClass(groupClass)"
                         >
@@ -170,7 +170,7 @@ const test = () => {
         <template #header>
             <h3 class="font-bold text-lg">
                 {{clickedClasses?.title ?? ""}} -  
-                <span class="text-sx text-slate-500 font-normal">{{clickedClasses?.date ? dateWithTimeString(new Date(clickedClasses.date)) : ''}}</span> 
+                <span class="text-sx text-slate-500 font-normal">{{clickedClasses?.dateStart ? dateWithTimeString(new Date(clickedClasses.dateStart)) : ''}}</span> 
             </h3>
         </template>
         <div class="w-full">
@@ -233,7 +233,7 @@ const test = () => {
                         label="Przejdź do panelu zajęć" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
-                            isDateFromPast(new Date(new Date(clickedClasses.date).getTime() + clickedClasses.durationInMinutes * 60000)) 
+                            isDateFromPast(new Date(new Date(clickedClasses.dateStart).getTime() + clickedClasses.durationInMinutes * 60000)) 
                               ? 'past' 
                               : 'future' 
                           }/${clickedClasses.id}`)"

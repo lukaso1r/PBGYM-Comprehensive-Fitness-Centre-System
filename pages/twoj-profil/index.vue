@@ -35,8 +35,9 @@ const test = () => {
 
 onMounted(async () => {
     await paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
-    await loggedMemberStore.getMemberGymEntriesHistory(loggedMemberData.value.email)
+    await loggedMemberStore.getMemberMonthlyGymEntriesByEmail(loggedMemberData.value.email)
     await loggedMemberStore.getMemberPaymentsHistory(loggedMemberData.value.email)
+    await loggedMemberStore.getMemberDailyGymMinutesByEmail(loggedMemberData.value.email)
     await passStore.getActiveMemberPass(loggedMemberData.value.email)
     await passStore.getMemberPassHistory(loggedMemberData.value.email)
     paymentHistory.value = loggedMemberStore.memberPaymentHistory
@@ -263,16 +264,16 @@ const validate = (data: CreditCardData) => {
             <div class="entriesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
-                    <li v-for="(entry, entryId) in entriesHistory" :key="entry.id" class="flex flex-row w-full place-items-center">
+                    <li v-for="(minutes, date) in loggedMemberStore.memberDailyGymMinutesByEmail" :key="date" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
-                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(entry.dateTimeOfEntry))}} </h3>
-                            <h6 class="font-thin text-slate-500">{{dateToTimeString(new Date(entry.dateTimeOfEntry))}} - {{dateToTimeString(new Date(entry.dateTimeOfExit))}}</h6>
+                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(date))}} </h3>
                         </div>
                         <div class="flex flex-row gap-2 items-center pr-2">
                             <UIcon name="i-heroicons-clock" class="w-5 h-5" />
-                            <p class="w-max">{{entryDuration(entry.dateTimeOfEntry, entry.dateTimeOfExit)}} min</p>
+                            <p class="w-max">{{minutes}} min</p>
                         </div>
                     </li>
+                    
                 </ul>
             </div>
 
