@@ -17,7 +17,7 @@ const allTrainersMailList = ref<string[]>([]);
 
 const isAddClassesModalOpen = ref(false);
 
-const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.date));
+const date = ref<Date>(new Date (groupClassesStore.editableGroupClass.dateStart));
 const flow = ref<("year" | "month" | "calendar" | "time" | "minutes" | "hours" | "seconds")[]>([ "month", "calendar", "time"]);
 const maxDate = ref(nextYearDate.value)
 const dateFormatForPicker = (date: Date) => {
@@ -73,8 +73,8 @@ const changeClassTime = (operation: string, value: number) => {
 watch(date, (newValue) => {
     console.log('data przed iso', newValue);
     const offset = newValue.getTimezoneOffset() * 60000;
-    groupClassesStore.editableGroupClass.date = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
-    console.log('data po iso', groupClassesStore.editableGroupClass.date);
+    groupClassesStore.editableGroupClass.dateStart = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
+    console.log('data po iso', groupClassesStore.editableGroupClass.dateStart);
 
 });
 

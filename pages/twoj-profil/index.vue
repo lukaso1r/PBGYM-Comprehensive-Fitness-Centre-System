@@ -8,6 +8,7 @@ const paymentStore = usePaymentStore();
 const loggedMemberStore = useLoggedMemberStore();
 const passStore = usePassStore();
 const groupClassesStore = useGroupClassesStore();
+const statisticsStore = useStatisticsStore();
 
 const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
 const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
@@ -264,16 +265,26 @@ const validate = (data: CreditCardData) => {
             <div class="entriesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
+                    <template v-if="!Object.values(loggedMemberStore.memberDailyGymMinutesByEmail).some(value => Number(value) > 0)">Brak historii wejść</template>
                     <li v-for="(minutes, date) in loggedMemberStore.memberDailyGymMinutesByEmail" :key="date" class="flex flex-row w-full place-items-center">
-                        <div class="document-name w-full pr-14 flex flex-col gap-1">
-                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(date))}} </h3>
-                        </div>
-                        <div class="flex flex-row gap-2 items-center pr-2">
-                            <UIcon name="i-heroicons-clock" class="w-5 h-5" />
-                            <p class="w-max">{{minutes}} min</p>
-                        </div>
+                        <template v-if="minutes>0">
+                            <div class="document-name w-full pr-14 flex flex-col gap-1">
+                                <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(date))}} </h3>
+                            </div>
+                            <div class="flex flex-row gap-2 items-center pr-2">
+                                <UIcon name="i-heroicons-clock" class="w-5 h-5" />
+                                <p class="w-max">{{minutes}} min</p>
+                            </div>
+                        </template>
                     </li>
-                    
+                </ul>
+            </div>
+
+            <div class="groupClassesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Historia zajęć grupowych **WIP**</span>
+                <ul class="flex flex-col gap-5 w-full justify-between ">
+                    <UButton @click="statisticsStore.getGroupClassesMonthlyByEmail(loggedMemberData.email)" label="Odśwież" variant="ghost" color="blue" icon="i-material-symbols-refresh" />
+                    {{ statisticsStore.groupClassesMonthlyByEmail }}
                 </ul>
             </div>
 

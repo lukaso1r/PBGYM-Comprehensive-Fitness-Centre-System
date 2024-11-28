@@ -5,6 +5,7 @@ const route = useRoute();
 const email = ref<string>(route.params.id as string);
 
 const membersManagmentStore = useMembersManagmentStore();
+const statisticsStore = useStatisticsStore();
 const loginStore = useLoginStore();
 const passStore = usePassStore();
 const groupClassesStore = useGroupClassesStore();
@@ -26,8 +27,13 @@ onMounted( async () => {
     await membersManagmentStore.getMemberByEmail(email.value);
     await passStore.getMemberPassHistory(email.value);
     await passStore.getActiveMemberPass(email.value);
-    await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
-    await membersManagmentStore.getMemberGymEntriesHistoryByEmail(email.value);
+    await statisticsStore.getDailyGymMinutesByEmail(email.value);
+    await statisticsStore.getFullPaymentHistoryByEmail(email.value);
+    // await membersManagmentStore.getMemberPaymentHistoryByEmail(email.value);
+    // await membersManagmentStore.getMemberGymEntriesHistoryByEmail(email.value);
+    
+
+
     await groupClassesStore.getGroupClassesHistoricalForMember(email.value);
     await groupClassesStore.getGroupClassesUpcomingForMember(email.value);
     paymentOptionAvailability.value = await membersManagmentStore.getMemberPaymentOptionsStatus(email.value) ?? false;
@@ -251,10 +257,10 @@ const test = () => {
                 <span class="font-semibold text-lg">Dokumenty</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
-                    <template v-if="membersManagmentStore.memberPaymentHistory.length === 0">
+                    <template v-if="statisticsStore.fullPaymentListByEmail.length === 0">
                         <p>Brak historii płatności</p>
                     </template>
-                    <li v-for="(payment, paymentId) in membersManagmentStore.memberPaymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
+                    <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
                             <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
@@ -271,19 +277,20 @@ const test = () => {
                     <hr class="w-full"/>
                     <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
                     <ul class="flex flex-col gap-5 w-full justify-between ">
-                        <template v-if="membersManagmentStore.memberGymEntriesHistory.length === 0">
+                        <template v-if="!Object.values(statisticsStore.dailyGymMinutesByEmail).some(value => Number(value) > 0)">
                             <p>Brak historii wejść na siłownię</p>
                         </template>
                         <template v-else>
-                            <li v-for="(entry, entryId) in membersManagmentStore.memberGymEntriesHistory" :key="entry.id" class="flex flex-row w-full place-items-center">
-                                <div class="document-name w-full pr-14 flex flex-col gap-1">
-                                    <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(entry.dateTimeOfEntry))}} </h3>
-                                    <h6 class="font-thin text-slate-500">{{dateToTimeString(new Date(entry.dateTimeOfEntry))}} - {{dateToTimeString(new Date(entry.dateTimeOfExit))}}</h6>
-                                </div>
-                                <div class="flex flex-row gap-2 items-center pr-2">
-                                    <UIcon name="i-heroicons-clock" class="w-5 h-5" />
-                                    <p class="w-max">{{entryDuration(entry.dateTimeOfEntry, entry.dateTimeOfExit)}} min</p>
-                                </div>
+                            <li v-for="(minutes, date) in statisticsStore.dailyGymMinutesByEmail" :key="date" class="flex flex-row w-full place-items-center">
+                                <template v-if="minutes>0">
+                                    <div class="document-name w-full pr-14 flex flex-col gap-1">
+                                        <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(date))}} </h3>
+                                    </div>
+                                    <div class="flex flex-row gap-2 items-center pr-2">
+                                        <UIcon name="i-heroicons-clock" class="w-5 h-5" />
+                                        <p class="w-max">{{minutes}} min</p>
+                                    </div>
+                                </template>
                             </li>
                         </template>
                     </ul>

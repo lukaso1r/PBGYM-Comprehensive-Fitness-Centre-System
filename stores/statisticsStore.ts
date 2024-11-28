@@ -40,7 +40,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<PaymentData[]>(`/memberStatistics/getPaymentHistory/${email}`, {
+            response = await $fetch<PaymentData[]>(`https://pbgym.onrender.com/memberStatistics/getPaymentHistory/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

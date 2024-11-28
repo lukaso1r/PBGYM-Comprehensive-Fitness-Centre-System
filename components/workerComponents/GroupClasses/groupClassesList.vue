@@ -26,7 +26,7 @@ const columns = [{
         label: 'Tytuł'    
     },
     {
-        key: 'date',
+        key: 'dateStart',
         label: 'Data',
         sortable: true,
         direction: 'asc' as const
@@ -79,12 +79,12 @@ const currentDateTime = new Date();
         <template #trainer-data="{ row }">
             {{ row.trainer.name + " " + row.trainer.surname + " " + row.trainer.email }}
         </template> 
-        <template #date-data="{ row }">
+        <template #dateStart-data="{ row }">
             <span :class="{
-            'text-green-400': new Date(row.date) < currentDateTime,
-            'text-orange-300': new Date(row.date) >= currentDateTime && new Date(row.date) <= new Date(currentDateTime.getTime() + 30 * 60000)
+            'text-green-400': new Date(row.dateStart) < currentDateTime,
+            'text-orange-300': new Date(row.dateStart) >= currentDateTime && new Date(row.dateStart) <= new Date(currentDateTime.getTime() + 30 * 60000)
             }">
-            {{ dateWithTimeString(new Date(row.date)) }}
+            {{ dateWithTimeString(new Date(row.dateStart)) }}
             </span>
         </template>
         <template #empty-state>
@@ -102,8 +102,8 @@ const currentDateTime = new Date();
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
     </div>
     <UTable :rows="groupClassesStore.groupClassesHistorical" :columns="columns" @select="select">
-        <template #date-data="{ row }">
-            {{ dateWithTimeString(new Date(row.date)) }}
+        <template #dateStart-data="{ row }">
+            {{ dateWithTimeString(new Date(row.dateStart)) }}
         </template>
         <template #trainer-data="{ row }">
             {{ row.trainer.name + " " + row.trainer.surname + " " + row.trainer.email }}
@@ -137,7 +137,7 @@ const currentDateTime = new Date();
                 </tr>
                 <tr class="pb-2">
                     <td class="font-bold pr-8">Data</td>
-                    <td>{{dateWithTimeString(new Date(selectedRow.date))}}</td>
+                    <td>{{dateWithTimeString(new Date(selectedRow.dateStart))}}</td>
                 </tr>
                 <tr class="pb-2">
                     <td class="font-bold pr-8">Liczba zapisanych osób</td>
@@ -160,7 +160,7 @@ const currentDateTime = new Date();
                     <UButton label="Przejdź do panelu zajęć" 
                         color="blue" icon="i-material-symbols-edit"
                         @click="router.push(`/admin-panel/zarzadzanie/zajecia/${ 
-                            isDateFromPast(new Date(new Date(selectedRow.date).getTime() + selectedRow.durationInMinutes * 60000)) 
+                            isDateFromPast(new Date(new Date(selectedRow.dateStart).getTime() + selectedRow.durationInMinutes * 60000)) 
                               ? 'past' 
                               : 'future' 
                           }/${selectedRow.id}`)"
