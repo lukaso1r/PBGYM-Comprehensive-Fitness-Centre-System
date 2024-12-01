@@ -137,7 +137,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
             });
             if (response) {
                 monthlyGroupClassesByTrainerEmail.value = response;
-                console.log('Pełna lista zajęć grupowych prowadzonych przez trenera:', response);
+                console.log(`Pełna lista zajęć grupowych prowadzonych przez trenera: ${email}`, response);
             } else {
                 throw new Error('Nie udało się pobrać listy zajęć grupowych prowadzonych przez trenera.');
             }
@@ -572,27 +572,37 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
 
 
         getTrainerCount,
+
         getPaymentSumToday,
         getPaymentSumMonthly,
         getPaymentSumDaily,
+        
         getPassesRegistrationsToday,
         getPassesRegistrationsMonthly,
         getPassesRegistrationsDaily,
+        
         getMemberRegistrationsToday,
         getMemberRegistrationsMonthly,
         getMemberRegistrationsDaily,
         getMemberCount,
+        
         getGymEntriesToday,
         getGymEntriesMonthly,
         getGymEntriesDaily,
+        
         getGroupClassesToday,
         getGroupClassesMonthly,
         getGroupClassesDaily,
+        
         getActivePassCount,
+        
         getFullPaymentHistoryByEmail,
-        getGymEntriesMonthlyByEmail,
+        
         getGroupClassesMonthlyByEmail,
+        getMonthlyGroupClassesByTrainerEmail,
+
         getDailyGymMinutesByEmail,
-        getMonthlyGroupClassesByTrainerEmail
+        getGymEntriesMonthlyByEmail,
+        
     };
 });

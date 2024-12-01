@@ -1,0 +1,44 @@
+const fullPaymentListByEmail = useState<PaymentData[]>(() => []);
+const gymEntriesMonthlyByEmail = useState<GymEntryData[]>(() => []);
+const groupClassesMonthlyByEmail = ref({});
+const dailyGymMinutesByEmail = ref({});
+
+const monthlyGroupClassesByTrainerEmail = ref({});
+
+const trainerCount = ref(0);
+
+const paymentSumToday = ref('');
+const paymentSumMonthly = ref({});
+const paymentSumDaily = ref({});
+
+const passesRegistrationsToday = ref('');
+const passesRegistrationsMonthly = ref({});
+const passesRegistrationsDaily = ref({});
+
+const memberRegistrationsToday = ref('');
+const memberRegistrationsMonthly = ref({});
+const memberRegistrationsDaily = ref({});
+
+const memberCount = ref(0);
+const activePassCount = ref(0);
+
+const gymEntriesToday = ref('');
+const gymEntriesMonthly = ref({});
+const gymEntriesDaily = ref({});
+
+const groupClassesToday = ref('');
+const groupClassesMonthly = ref({});
+const groupClassesDaily = ref({});
+
+Na wykresy:
+
+//////////////////////////                admin/statystyki/zajecia-grupowe 
+
+/ slupkowy / kołowy -                         
+const groupClassesMonthly = ref({}); 
+const groupClassesDaily = ref({});
+/ liczba i procent
+const groupClassesToday = ref({});
+
+
+

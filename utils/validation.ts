@@ -222,9 +222,9 @@ export const validateNewTrainerOffer = (data: TrainerOffer) => {
 export const validateGroupClassData = (data: EditableGroupClassData) => {
     const errors: FormError<string>[] = []
     if (!data.title || data.title==='') errors.push({ path: 'title', message: 'Tytuł zajęć jest wymagany' })
-    if (!data.date || data.date==='') errors.push({ path: 'date', message: `Data zajęć jest wymagana${data.date}t` })
-    if (!data.date) errors.push({ path: 'date', message: `Data zajęć jest wymagana${data.date}t` })
-    if (data.date && new Date(data.date) < new Date()) errors.push({ path: 'date', message: 'Data zajęć nie może być z przeszłości' })
+    if (!data.dateStart || data.dateStart==='') errors.push({ path: 'date', message: `Data zajęć jest wymagana${data.dateStart}t` })
+    if (!data.dateStart) errors.push({ path: 'date', message: `Data zajęć jest wymagana${data.dateStart}t` })
+    if (data.dateStart && new Date(data.dateStart) < new Date()) errors.push({ path: 'date', message: 'Data zajęć nie może być z przeszłości' })
     if (!data.durationInMinutes || data.durationInMinutes===0) errors.push({ path: 'durationInMinutes', message: 'Czas trwania zajęć jest wymagany' })
     if (!data.memberLimit || data.memberLimit<=0) errors.push({ path: 'memberLimit', message: 'Limit uczestników jest wymagany' })
     if (!data.trainerEmail || data.trainerEmail==='') errors.push({ path: 'trainerEmail', message: 'Email trenera jest wymagany' })

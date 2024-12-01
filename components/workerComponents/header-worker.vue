@@ -1,23 +1,24 @@
-import { UIcon } from '../../.nuxt/components';
 <script setup lang="ts">
 
-    const router = useRouter()
-    const route = useRoute()
-    
-    const store = useLoginStore();
+const router = useRouter()
+const route = useRoute()
 
-    onBeforeMount(() => {
-        console.log(route.path)
-    })
+const store = useLoginStore();
+const statisticsStore = useStatisticsStore();
 
-    const logout = () => {
-        console.log('logout')
-        store.logOut()
-    }
+onMounted(async () => {
+    console.log(route.path)
+    await statisticsStore.getPaymentSumToday()
+    await statisticsStore.getPaymentSumMonthly()
+    await statisticsStore.getPassesRegistrationsToday()
+    await statisticsStore.getMemberRegistrationsToday()
+})
 
-    const powiadomienie = () => {
-        alert('powiadomienie')
-    }
+const logout = () => {
+    console.log('logout')
+    store.logOut()
+}
+
 
 </script>
 
@@ -64,61 +65,62 @@ import { UIcon } from '../../.nuxt/components';
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejszy przychód  *WIP*</h3>
-                        <span class="font-bold text-lg">2500 zł</span>                    
+                    <div v-if="statisticsStore.paymentSumToday">
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejszy przychód</h3>
+                        <span class="font-bold text-lg">{{statisticsStore.paymentSumToday.split(';')[0]}} zł</span>                    
+                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-blue-800 w-8 h-8 rounded-full py-4">
                         <UIcon name="i-material-symbols-attach-money" class="w-5 h-5 bg-white" />
                     </div>
                 </div>
-                <div class=" flex w-full gap-2 text-gray-500">
-                    <span class="text-green-500">+10%</span> niż wczoraj
+                <div class=" flex w-full gap-2 text-gray-500" v-if="statisticsStore.paymentSumToday">
+                    <span :class="statisticsStore.paymentSumToday.split(';')[1][1]!=='-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.paymentSumToday.split(';')[1]}}</span> niż wczoraj
                 </div>
             </div>
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejsza sprzedaż karnetów  *WIP*</h3>
-                        <span class="font-bold text-lg">12</span>                    
+                    <div v-if="statisticsStore.passesRegistrationsToday">
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejsza sprzedaż karnetów</h3>
+                        <span class="font-bold text-lg">{{ statisticsStore.passesRegistrationsToday.split(';')[0] }}</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-orange-700 w-8 h-8 rounded-full py-4">
                         <UIcon name="i-material-symbols-play-pass" class="w-5 h-5 bg-white" />
                     </div>
                 </div>
-                <div class=" flex w-full gap-2 text-gray-500">
-                    <span class="text-green-500">+10%</span> niż wczoraj
+                <div class=" flex w-full gap-2 text-gray-500" v-if="statisticsStore.passesRegistrationsToday">
+                    <span :class="statisticsStore.passesRegistrationsToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.passesRegistrationsToday.split(';')[1]}}</span> niż wczoraj
                 </div>
             </div>
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Ogólny przyrost klientów  *WIP*</h3>
-                        <span class="font-bold text-lg">+8</span>                    
+                    <div v-if="statisticsStore.memberRegistrationsToday">
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Ogólny przyrost klientów</h3>
+                        <span class="font-bold text-lg">{{ statisticsStore.memberRegistrationsToday.split(';')[0] }}</span>                    
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-green-500 w-8 h-8 rounded-full py-4">
                         <UIcon name="i-ic-baseline-people" class="w-5 h-5 bg-white" />
                     </div>
                 </div>
-                <div class=" flex w-full gap-2 text-gray-500">
-                    <span class="text-green-500">+10%</span> niż wczoraj
+                <div v-if="statisticsStore.memberRegistrationsToday" class=" flex w-full gap-2 text-gray-500">
+                    <span :class="statisticsStore.memberRegistrationsToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.memberRegistrationsToday.split(';')[1]}}</span> niż wczoraj
                 </div>
             </div>
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div>
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód  *WIP*</h3>
-                        <span class="font-bold text-lg">40 456 zł</span>                    
+                    <div v-if="statisticsStore.memberRegistrationsToday">
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód</h3>
+                        <span class="font-bold text-lg">{{ statisticsStore.memberRegistrationsToday.split(';')[0] }} zł</span>   
                     </div>
                     <div class="flex flex-row justify-center place-items-center bg-amber-500 w-8 h-8 rounded-full py-4">
                         <UIcon name="i-material-symbols-home-storage" class="w-5 h-5 bg-white" />
                     </div>
                 </div>
-                <div class=" flex w-full gap-2 text-gray-500">
-                    <span class="text-green-500">+10%</span> niż w poprzednim miesiącu
+                <div v-if="statisticsStore.memberRegistrationsToday" class=" flex w-full gap-2 text-gray-500">
+                    <span :class="statisticsStore.memberRegistrationsToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.memberRegistrationsToday.split(';')[1]}}</span> niż wczoraj
                 </div>
             </div>
 

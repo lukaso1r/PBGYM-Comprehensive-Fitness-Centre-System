@@ -2,7 +2,7 @@
 
 const store = useLoginStore();
 
-
+const statisticsStore = useStatisticsStore();
 
 const test = () => {
   console.log('test', store.loggedWorkerData)
@@ -20,6 +20,10 @@ const test = () => {
 
   <!-- TODO: poprawić margines -->
   <main class="basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+
+    <UButton @click="statisticsStore.getTrainerCount">test</UButton>
+    {{statisticsStore.groupClassesDaily}}
+    <div class="" v-if="statisticsStore.trainerCount>=0">{{statisticsStore.trainerCount}}</div>
 
     <div class="flex flex-row flex-nowrap gap-8">
       <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">

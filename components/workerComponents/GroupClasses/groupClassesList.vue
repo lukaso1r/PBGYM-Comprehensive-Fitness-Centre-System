@@ -9,6 +9,12 @@ const groupClassesStore = useGroupClassesStore();
 onMounted(async () => {
    await groupClassesStore.getGroupClassesUpcoming();
    await groupClassesStore.getGroupClassesHistorical();
+   
+   if(props.trainerEmail) {
+       await groupClassesStore.getGroupClassesUpcomingByTrainerEmail(props.trainerEmail);
+       await groupClassesStore.getGroupClassesHistoricalByTrainerEmail(props.trainerEmail);
+   }
+ 
 
 })
 
@@ -75,7 +81,7 @@ const currentDateTime = new Date();
         <p class="text-slate-500">Zbliżające zajęcia zarejestrowane w systemie</p>
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
     </div>
-    <UTable :rows="groupClassesStore.groupClassesUpcoming" :columns="columns" @select="select">
+    <UTable :rows="props.trainerEmail ? groupClassesStore.groupClassesUpcomingByTrainerEmail : groupClassesStore.groupClassesUpcoming " :columns="columns" @select="select">
         <template #trainer-data="{ row }">
             {{ row.trainer.name + " " + row.trainer.surname + " " + row.trainer.email }}
         </template> 
@@ -101,7 +107,7 @@ const currentDateTime = new Date();
         <p class="text-slate-500">Historia odbytych zajęć</p>
         <UButton v-if="showButton" label="szczegóły" to="/admin-panel/zarzadzanie/pracownicy" color="blue" icon="i-material-symbols-loupe-outline" />
     </div>
-    <UTable :rows="groupClassesStore.groupClassesHistorical" :columns="columns" @select="select">
+    <UTable :rows="props.trainerEmail ? groupClassesStore.groupClassesHistoricalByTrainerEmail : groupClassesStore.groupClassesHistorical" :columns="columns" @select="select">
         <template #dateStart-data="{ row }">
             {{ dateWithTimeString(new Date(row.dateStart)) }}
         </template>
