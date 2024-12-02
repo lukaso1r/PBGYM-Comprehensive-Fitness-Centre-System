@@ -5,7 +5,6 @@ import { BarChart } from '@/components/ui/chart-bar'
 const statisticStore = useStatisticsStore();
 
 onMounted(() => {
-    statisticStore.getActivePassCount();
 
     statisticStore.getTrainerCount();
 
@@ -74,84 +73,83 @@ const test = () => {
     statisticStore.getMonthlyGroupClassesByTrainerEmail('test1@trainer.com');
 }
 
-
-
-const data = ref(
-  Object.entries(statisticStore.groupClassesDaily)
-    .map(([name, total]) => ({ name: new Date(name), "Ilość zajęć": total })) // Zmiana klucza na "Ilość zajęć"
-    .sort((a, b) => Number(a.name) - Number(b.name))
-    .map(item => ({ name: item.name.toISOString().split('T')[0], "Ilość zajęć": item["Ilość zajęć"] }))
-);
-
-watch(() => statisticStore.groupClassesDaily, () => {
-  console.log('groupClassesDaily', statisticStore.groupClassesDaily);
-  data.value = Object.entries(statisticStore.groupClassesDaily)
-    .map(([name, total]) => ({ name: new Date(name), "Ilość zajęć": total })) 
-    .sort((a, b) => Number(a.name) - Number(b.name))
-    .map(item => ({ name: item.name.toISOString().split('T')[0], "Ilość zajęć": item["Ilość zajęć"] }));
-});
-
-
-
+const zero = ref(0);
 
 </script>
 
 <template>
+<workerComponents-header-worker></workerComponents-header-worker>
 
-    <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start lg:max-w-[79vw] mx-auto my-4 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-        <span class="font-semibold text-lg"> StatisticStore.groupClassesDaily</span>
-        <BarChart
-            index="name"
-            :data="data"
-            :categories="['Ilość zajęć']" 
-            :y-formatter="(tick, i) => {
-                return Number.isInteger(tick) ? tick.toString() : ''
-            }"
-            :rounded-corners="4"
-            :x-axis-options="{
-                ticks: {
-                    callback: (value: any, index: string | number) => {
-                        return data.value[index]?.name || ''
-                    }
-                }
-            }"
-            :colors="['#203983']"
-        />
-        <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-    </div>
+<div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
+    <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
+
+    <main class="basis-4/5 mt-4 grid gird-cols-2 gap-8 items-start">
+
+        <!-- <div class="buttons col-span-2 flex flex-col justify-start items-start gap-1 p-4 lg:mx-w-[79vw] bg-white rounded blockCustomShadow">
+            <UButton @click="statisticStore.getMonthlyGroupClassesByTrainerEmail('test1@trainer.com')">Pobierz getMonthlyGroupClassesByTrainerEmail</UButton>
+            <h1>Stata</h1>
+            <UButton @click="test">Pobierz</UButton>
+        </div> -->
+
+       <WorkerComponentsStatisticsGroupClassesDaily />
+
+        <div class="smallCards col-span-1 grid grid-cols-2 justify-start items-start gap-8">
+            
+            <WorkerComponentsStatisticsSmallCardsActivePassesCount />
+
+            <WorkerComponentsStatisticsSmallCardsTrainerCount />
+
+            <WorkerComponentsStatisticsSmallCardsGroupClassesToday />
+
+            <WorkerComponentsStatisticsSmallCardsPaymentSumToday />
+
+            <WorkerComponentsStatisticsSmallCardsPassesRegistrationsToday />
+
+            <WorkerComponentsStatisticsSmallCardsMemberRegistrationsToday />
+
+            <WorkerComponentsStatisticsSmallCardsGymEntriesToday />
+
+        </div>
+
+        <WorkerComponentsStatisticsGroupClassesMonthly />
+
+        <WorkerComponentsStatisticsPaymentSumMonthly />
+
+        <WorkerComponentsStatisticsPaymentSumDaily />
+        
+        
+        <div class="col-span-2 flex flex-col gap-2 bg-slate-200 border-4 border-black m-4 p-4 justify-around">
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 1 statisticStore.activePassCount: {{ statisticStore.activePassCount }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 2 statisticStore.trainerCount: {{ statisticStore.trainerCount }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 3 statisticStore.groupClassesDaily: {{ statisticStore.groupClassesDaily }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 4 statisticStore.groupClassesMonthly: {{ statisticStore.groupClassesMonthly }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 5 statisticStore.groupClassesToday: {{ statisticStore.groupClassesToday }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 6 statisticStore.paymentSumToday: {{ statisticStore.paymentSumToday }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 7 statisticStore.paymentSumMonthly: {{ statisticStore.paymentSumMonthly }}</div>
+            <div class="border-2 border-black rounded p-2">8 statisticStore.paymentSumDaily: {{ statisticStore.paymentSumDaily }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 9 statisticStore.passesRegistrationsToday: {{ statisticStore.passesRegistrationsToday }}</div>
+            <div class="border-2 border-black rounded p-2">10 statisticStore.passesRegistrationsMonthly: {{ statisticStore.passesRegistrationsMonthly }}</div>
+            <div class="border-2 border-black rounded p-2">11 statisticStore.passesRegistrationsDaily: {{ statisticStore.passesRegistrationsDaily }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 12 statisticStore.memberRegistrationsToday: {{ statisticStore.memberRegistrationsToday }}</div>
+            <div class="border-2 border-black rounded p-2">13 statisticStore.memberRegistrationsMonthly: {{ statisticStore.memberRegistrationsMonthly }}</div>
+            <div class="border-2 border-black rounded p-2">14 statisticStore.memberRegistrationsDaily: {{ statisticStore.memberRegistrationsDaily }}</div>
+            <div class="border-2 border-black rounded p-2">15 statisticStore.memberCount: {{ statisticStore.memberCount }}</div>
+            <div class="border-2 border-black rounded p-2 text-green-500">DONE 16 statisticStore.gymEntriesToday: {{ statisticStore.gymEntriesToday }}</div>
+            <div class="border-2 border-black rounded p-2">17 statisticStore.gymEntriesMonthly: {{ statisticStore.gymEntriesMonthly }}</div>
+            <div class="border-2 border-black rounded p-2">18 statisticStore.gymEntriesDaily: {{ statisticStore.gymEntriesDaily }}</div>
+            <div class="border-2 border-black rounded p-2">19 statisticStore.fullPaymentListByEmail: {{ statisticStore.fullPaymentListByEmail }}</div>
+            <div class="border-2 border-black rounded p-2">20 statisticStore.gymEntriesMonthlyByEmail: {{ statisticStore.gymEntriesMonthlyByEmail }}</div>
+            <div class="border-2 border-black rounded p-2">21 statisticStore.groupClassesMonthlyByEmail: {{ statisticStore.groupClassesMonthlyByEmail }}</div>
+            <div class="border-2 border-black rounded p-2">22 statisticStore.dailyGymMinutesByEmail: {{ statisticStore.dailyGymMinutesByEmail }}</div>
+            <div class="border-2 border-black rounded p-2">23 statisticStore.monthlyGroupClassesByTrainerEmail: {{ statisticStore.monthlyGroupClassesByTrainerEmail }}</div>
+        </div>
+
+    </main>
 
     
-    
-    <UButton @click="statisticStore.getMonthlyGroupClassesByTrainerEmail('test1@trainer.com')">Pobierz getMonthlyGroupClassesByTrainerEmail</UButton>
+</div>
 
-    <h1>Stata</h1>
-    <UButton @click="test">Pobierz</UButton>
-    <div class="flex flex-col gap-2 bg-slate-200 border-4 border-black m-4 p-4 justify-around">
-        <div class="border-2 border-black rounded p-2">1 statisticStore.activePassCount: {{ statisticStore.activePassCount }}</div>
-        <div class="border-2 border-black rounded p-2">2 statisticStore.trainerCount: {{ statisticStore.trainerCount }}</div>
-        <div class="border-2 border-black rounded p-2">3 statisticStore.groupClassesDaily: {{ statisticStore.groupClassesDaily }}</div>
-        <div class="border-2 border-black rounded p-2">4 statisticStore.groupClassesMonthly: {{ statisticStore.groupClassesMonthly }}</div>
-        <div class="border-2 border-black rounded p-2">5 statisticStore.groupClassesToday: {{ statisticStore.groupClassesToday }}</div>
-        <div class="border-2 border-black rounded p-2">6 statisticStore.paymentSumToday: {{ statisticStore.paymentSumToday }}</div>
-        <div class="border-2 border-black rounded p-2">7 statisticStore.paymentSumMonthly: {{ statisticStore.paymentSumMonthly }}</div>
-        <div class="border-2 border-black rounded p-2">8 statisticStore.paymentSumDaily: {{ statisticStore.paymentSumDaily }}</div>
-        <div class="border-2 border-black rounded p-2">9 statisticStore.passesRegistrationsToday: {{ statisticStore.passesRegistrationsToday }}</div>
-        <div class="border-2 border-black rounded p-2">10 statisticStore.passesRegistrationsMonthly: {{ statisticStore.passesRegistrationsMonthly }}</div>
-        <div class="border-2 border-black rounded p-2">11 statisticStore.passesRegistrationsDaily: {{ statisticStore.passesRegistrationsDaily }}</div>
-        <div class="border-2 border-black rounded p-2">12 statisticStore.memberRegistrationsToday: {{ statisticStore.memberRegistrationsToday }}</div>
-        <div class="border-2 border-black rounded p-2">13 statisticStore.memberRegistrationsMonthly: {{ statisticStore.memberRegistrationsMonthly }}</div>
-        <div class="border-2 border-black rounded p-2">14 statisticStore.memberRegistrationsDaily: {{ statisticStore.memberRegistrationsDaily }}</div>
-        <div class="border-2 border-black rounded p-2">15 statisticStore.memberCount: {{ statisticStore.memberCount }}</div>
-        <div class="border-2 border-black rounded p-2">16 statisticStore.gymEntriesToday: {{ statisticStore.gymEntriesToday }}</div>
-        <div class="border-2 border-black rounded p-2">17 statisticStore.gymEntriesMonthly: {{ statisticStore.gymEntriesMonthly }}</div>
-        <div class="border-2 border-black rounded p-2">18 statisticStore.gymEntriesDaily: {{ statisticStore.gymEntriesDaily }}</div>
-        <div class="border-2 border-black rounded p-2">19 statisticStore.fullPaymentListByEmail: {{ statisticStore.fullPaymentListByEmail }}</div>
-        <div class="border-2 border-black rounded p-2">20 statisticStore.gymEntriesMonthlyByEmail: {{ statisticStore.gymEntriesMonthlyByEmail }}</div>
-        <div class="border-2 border-black rounded p-2">21 statisticStore.groupClassesMonthlyByEmail: {{ statisticStore.groupClassesMonthlyByEmail }}</div>
-        <div class="border-2 border-black rounded p-2">22 statisticStore.dailyGymMinutesByEmail: {{ statisticStore.dailyGymMinutesByEmail }}</div>
-        <div class="border-2 border-black rounded p-2">23 statisticStore.monthlyGroupClassesByTrainerEmail: {{ statisticStore.monthlyGroupClassesByTrainerEmail }}</div>
-    </div>
-    
+
 
 
 </template>

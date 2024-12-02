@@ -3,3 +3,16 @@
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+.blockCustomShadow {
+  box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
+}
+
+.blockCustom{
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
+  gap: 1rem;
+  padding: 1rem;
+
+}

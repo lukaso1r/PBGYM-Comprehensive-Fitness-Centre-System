@@ -83,7 +83,7 @@ const settings = [
                         <NuxtLink to="/admin-panel" >
                             <p class="hover:text-blue-500 pl-9">Start</p>
                         </NuxtLink>
-                        <NuxtLink to="/admin-panel" >
+                        <NuxtLink to="/admin-panel/statystyki" >
                             <p class="hover:text-blue-500 pl-9">Główne statystyki  *WIP*</p>
                         </NuxtLink>
                         <NuxtLink to="/admin-panel" >
