@@ -12,7 +12,11 @@ export default defineNuxtConfig({
     transpile: ['@vuepic/vue-datepicker']
   },
 
-  modules: ["@nuxt/ui", '@nuxtjs/tailwindcss', '@pinia/nuxt'],
+  modules: ["@nuxt/ui", '@nuxtjs/tailwindcss', '@pinia/nuxt', 'shadcn-nuxt'],
+  shadcn: {
+    prefix: '',
+    componentDir: './components/ui'
+  },
 
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
