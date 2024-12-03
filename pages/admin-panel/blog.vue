@@ -178,7 +178,7 @@ const filteredRows = computed(() => {
                         <UInput v-model="blogStore.editableBlogPost.title" type="string" placeholder="Tytuł wpisu" :value="blogStore.editableBlogPost.title"  />
                     </UFormGroup>
                     <UFormGroup class="col-span-2" label="Nowa treść wpisu" name="content" required>
-                        <UTextarea v-model="blogStore.editableBlogPost.content" type="string" placeholder="Treść Wpisu" :value="blogStore.editableBlogPost.content"  />
+                        <UTextarea v-model="blogStore.editableBlogPost.content" type="string" :rows="15" placeholder="Treść Wpisu" :value="blogStore.editableBlogPost.content" resize />
                     </UFormGroup>
 
                     <UButton type="submit" label="Zapisz edycję wpisu" color="blue" class="flex flex-row justify-center w-fit" />

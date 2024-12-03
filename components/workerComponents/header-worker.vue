@@ -35,14 +35,6 @@ const logout = () => {
                 />
             </div>
             <div class="col2">
-                <!-- <UButton
-                    class="bg-[#203983] hover:bg-[#617F9B]"
-                    @click="powiadomienie"
-                    icon="i-ic-baseline-notifications"
-                >
-                    Powiadomienia  *WIP*
-                </UButton> -->
-
                 <UButton
                     class="bg-[#203983] hover:bg-[#617F9B]"
                     to="/admin-panel/ustawienia-konta"
@@ -70,8 +62,8 @@ const logout = () => {
                         <span class="font-bold text-lg">{{statisticsStore.paymentSumToday.split(';')[0]}} zł</span>                    
                     
                     </div>
-                    <div class="flex flex-row justify-center place-items-center bg-blue-800 w-8 h-8 rounded-full py-4">
-                        <UIcon name="i-material-symbols-attach-money" class="w-5 h-5 bg-white" />
+                    <div class="flex flex-row justify-center place-items-center bg-blue-800  rounded-full p-1 aspect-square ">
+                        <UIcon name="i-material-symbols-attach-money" class="w-6 h-6 bg-white" />
                     </div>
                 </div>
                 <div class=" flex w-full gap-2 text-gray-500" v-if="statisticsStore.paymentSumToday">
@@ -85,8 +77,8 @@ const logout = () => {
                         <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Dzisiejsza sprzedaż karnetów</h3>
                         <span class="font-bold text-lg">{{ statisticsStore.passesRegistrationsToday.split(';')[0] }}</span>                    
                     </div>
-                    <div class="flex flex-row justify-center place-items-center bg-orange-700 w-8 h-8 rounded-full py-4">
-                        <UIcon name="i-material-symbols-play-pass" class="w-5 h-5 bg-white" />
+                    <div class="flex flex-row justify-center place-items-center bg-red-600  rounded-full p-1 aspect-square ">
+                        <UIcon name="i-material-symbols-play-pass" class="w-6 h-6 bg-white" />
                     </div>
                 </div>
                 <div class=" flex w-full gap-2 text-gray-500" v-if="statisticsStore.passesRegistrationsToday">
@@ -100,8 +92,8 @@ const logout = () => {
                         <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Ogólny przyrost klientów</h3>
                         <span class="font-bold text-lg">{{ statisticsStore.memberRegistrationsToday.split(';')[0] }}</span>                    
                     </div>
-                    <div class="flex flex-row justify-center place-items-center bg-green-500 w-8 h-8 rounded-full py-4">
-                        <UIcon name="i-ic-baseline-people" class="w-5 h-5 bg-white" />
+                    <div class="flex flex-row justify-center place-items-center bg-green-500  rounded-full p-1 aspect-square ">
+                        <UIcon name="i-ic-baseline-people" class="w-6 h-6 bg-white" />
                     </div>
                 </div>
                 <div v-if="statisticsStore.memberRegistrationsToday" class=" flex w-full gap-2 text-gray-500">
@@ -111,29 +103,24 @@ const logout = () => {
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div v-if="statisticsStore.memberRegistrationsToday">
+                    <div v-if="statisticsStore.paymentSumToday">
                         <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód</h3>
-                        <span class="font-bold text-lg">{{ statisticsStore.memberRegistrationsToday.split(';')[0] }} zł</span>   
+                        <span class="font-bold text-lg">{{ statisticsStore.paymentSumToday.split(';')[0] }} zł</span>   
                     </div>
-                    <div class="flex flex-row justify-center place-items-center bg-amber-500 w-8 h-8 rounded-full py-4">
-                        <UIcon name="i-material-symbols-home-storage" class="w-5 h-5 bg-white" />
+                    <div class="flex flex-row justify-center place-items-center bg-orange-400  rounded-full p-1 aspect-square ">
+                        <UIcon name="i-material-symbols-home-storage" class="w-6 h-6 bg-white" />
                     </div>
                 </div>
-                <div v-if="statisticsStore.memberRegistrationsToday" class=" flex w-full gap-2 text-gray-500">
-                    <span :class="statisticsStore.memberRegistrationsToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.memberRegistrationsToday.split(';')[1]}}</span> niż wczoraj
+                <div v-if="statisticsStore.paymentSumToday" class=" flex w-full gap-2 text-gray-500">
+                    <span :class="statisticsStore.paymentSumToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.paymentSumToday.split(';')[1]}}</span> niż wczoraj
                 </div>
             </div>
-
         </div>    
-
-
     </header>
-
 </template>
 
 <style scoped>
 
-/*TODO: */
 
 .fastInfoCard {
     flex-basis: 25%;

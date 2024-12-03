@@ -27,7 +27,7 @@ const refreshSysLogs = async () => {
     <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
         
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <h1 class="text-xl font-semibold">Pandel zdarzeń</h1>
+            <h1 class="text-xl font-semibold">Dziennik zdarzeń</h1>
             <p class="text-slate-500">Możesz z tego miejsca przeglądać zdarzenia które wystąpiły w systemie</p>
         </div>
 

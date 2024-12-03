@@ -1,77 +1,5 @@
 <script setup lang="ts">
 
-import { BarChart } from '@/components/ui/chart-bar'
-
-const statisticStore = useStatisticsStore();
-
-onMounted(() => {
-
-    statisticStore.getTrainerCount();
-
-    statisticStore.getGroupClassesDaily();
-    statisticStore.getGroupClassesMonthly();
-    statisticStore.getGroupClassesToday();
-
-    statisticStore.getPaymentSumToday();
-    statisticStore.getPaymentSumMonthly();
-    statisticStore.getPaymentSumDaily();
-
-    statisticStore.getPassesRegistrationsToday();
-    statisticStore.getPassesRegistrationsMonthly();
-    statisticStore.getPassesRegistrationsDaily();
-
-    statisticStore.getMemberRegistrationsToday();
-    statisticStore.getMemberRegistrationsMonthly();
-    statisticStore.getMemberRegistrationsDaily();
-
-    statisticStore.getMemberCount();
-
-    statisticStore.getGymEntriesToday();
-    statisticStore.getGymEntriesMonthly();
-    statisticStore.getGymEntriesDaily();
-
-    statisticStore.getFullPaymentHistoryByEmail('test1@member.com');
-    statisticStore.getGymEntriesMonthlyByEmail('test1@member.com');
-    statisticStore.getGroupClassesMonthlyByEmail('test1@member.com');
-    statisticStore.getDailyGymMinutesByEmail('test1@member.com');
-    statisticStore.getMonthlyGroupClassesByTrainerEmail('mario@trainer.com');
-    
-})
-
-const test = () => {
-    console.log('pobrnie danych', statisticStore.activePassCount)
-    statisticStore.getActivePassCount();
-
-    statisticStore.getTrainerCount();
-
-    statisticStore.getGroupClassesDaily();
-    statisticStore.getGroupClassesMonthly();
-    statisticStore.getGroupClassesToday();
-
-    statisticStore.getPaymentSumToday();
-    statisticStore.getPaymentSumMonthly();
-    statisticStore.getPaymentSumDaily();
-
-    statisticStore.getPassesRegistrationsToday();
-    statisticStore.getPassesRegistrationsMonthly();
-    statisticStore.getPassesRegistrationsDaily();
-
-    statisticStore.getMemberRegistrationsToday();
-    statisticStore.getMemberRegistrationsMonthly();
-    statisticStore.getMemberRegistrationsDaily();
-
-    statisticStore.getMemberCount();
-
-    statisticStore.getGymEntriesToday();
-    statisticStore.getGymEntriesMonthly();
-    statisticStore.getGymEntriesDaily();
-
-    statisticStore.getFullPaymentHistoryByEmail('test1@member.com');
-    statisticStore.getGymEntriesMonthlyByEmail('test1@member.com');
-    statisticStore.getGroupClassesMonthlyByEmail('test1@member.com');
-    statisticStore.getDailyGymMinutesByEmail('test1@member.com');
-    statisticStore.getMonthlyGroupClassesByTrainerEmail('test1@trainer.com');
-}
 
 const zero = ref(0);
 
@@ -85,13 +13,7 @@ const zero = ref(0);
 
     <main class="basis-4/5 mt-4 grid gird-cols-2 gap-8 ">
 
-        <!-- <div class="buttons col-span-2 flex flex-col justify-start items-start gap-1 p-4 lg:mx-w-[79vw] bg-white rounded blockCustomShadow">
-            <UButton @click="statisticStore.getMonthlyGroupClassesByTrainerEmail('test1@trainer.com')">Pobierz getMonthlyGroupClassesByTrainerEmail</UButton>
-            <h1>Stata</h1>
-            <UButton @click="test">Pobierz</UButton>
-        </div> -->
-
-       
+        <p class="text-red-400 font-bold text-xl col-span-2">**WIP** - usunąć techniczne oznaczenia na szaro </p>
 
         <div class="smallCards col-span-2 grid grid-cols-3 justify-start  gap-8">
             
@@ -113,33 +35,41 @@ const zero = ref(0);
 
         </div>
 
+        <WorkerComponentsStatisticsPaymentSumDaily />
+
+        <WorkerComponentsStatisticsPaymentSumMonthly />
+
+
+
         <WorkerComponentsStatisticsGroupClassesDaily />
 
         <WorkerComponentsStatisticsGroupClassesMonthly />
 
-        <WorkerComponentsStatisticsPaymentSumMonthly />
-
-        <WorkerComponentsStatisticsPassesRegistrationsMonthly />
-
-        <WorkerComponentsStatisticsPaymentSumDaily />
-
-        <WorkerComponentsStatisticsPassesRegistrationsDaily />
-        
-        <WorkerComponentsStatisticsMemberRegistrationsMonthly />
-
-        <WorkerComponentsStatisticsMemberRegistrationsDaily />
-
-        <WorkerComponentsStatisticsGymEntriesMonthly />
-
-        <WorkerComponentsStatisticsGymEntriesDaily />
-
-        <WorkerComponentsStatisticsGymEntriesMonthlyByEmail />
+        <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail />
 
         <WorkerComponentsStatisticsGroupClassesMonthlyByEmail />
 
+
+
+        <WorkerComponentsStatisticsPassesRegistrationsDaily />
+
+        <WorkerComponentsStatisticsPassesRegistrationsMonthly />
+
+
+        <WorkerComponentsStatisticsMemberRegistrationsDaily />
+
+        <WorkerComponentsStatisticsMemberRegistrationsMonthly />
+
+
+        <WorkerComponentsStatisticsGymEntriesDaily />
+
+        <WorkerComponentsStatisticsGymEntriesMonthly />
+
+
+        <WorkerComponentsStatisticsGymEntriesMonthlyByEmail />
+
         <WorkerComponentsStatisticsDailyGymMinutesByEmail />
 
-        <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail />
         
         <!-- <div class="col-span-2 flex flex-col gap-2 bg-slate-200 border-4 border-black m-4 p-4 justify-around">
             <div class="border-2 border-black rounded p-2 text-green-500">DONE 1 statisticStore.activePassCount: {{ statisticStore.activePassCount }}</div>

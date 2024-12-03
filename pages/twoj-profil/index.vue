@@ -362,35 +362,7 @@ const validate = (data: CreditCardData) => {
 
             </div>
 
-            <div class="flex flex-col flex-nowrap place-items-start justify-start gap-8">
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[100%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-                    <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-                    <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-                </div>
-
-                <div class="settings flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[100%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">A tu ustawienia ***TODO***</span>
-                    <div class="flex flex-col">
-                        <span class="font-semibold text-sm text-slate-600">Konto</span>
-                        <div class="flex flex-row items-center gap-4 p-3">
-                            <UToggle size="md" v-model="selected" />
-                            <p>Powiadamiaj mnie o zmianach w regulaminie</p>
-                        </div>
-                        <div class="flex flex-row items-center gap-4 p-3">
-                            <UToggle size="md"  v-model="selected"/>
-                            <p>Zapisz mnie na Newsletter</p>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-sm text-slate-600">System</span>
-                        <div class="flex flex-row items-center gap-4 p-3">
-                            <UToggle size="md" v-model="selectedTrue" />
-                            <p>Zgadzam się na wykorzystanie moich statystyk w celach marketingowych</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             
         </main>
     </div>
