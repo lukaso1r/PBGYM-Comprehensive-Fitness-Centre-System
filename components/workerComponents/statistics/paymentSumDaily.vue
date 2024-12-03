@@ -113,7 +113,6 @@ watch([selectedYear, selectedMonth], () => {
         :showLegend="false"
       />
     </div>
-    <pre class="col-span-2">{{ statisticStore.paymentSumDaily }}</pre>
   </div>
 </template>
 
