@@ -4,11 +4,14 @@ import type { DefaultLoginData } from "~/types";
 
 const userType = ref<string | undefined>(undefined);
 
+const statisticsStore = useStatisticsStore();
+
 onMounted(() => {
   const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData').value;
   userType.value = defaultLoginData?.userType || ''; 
   console.log('useCookie(\'defaultLoginData\')', defaultLoginData);
   console.log('userType', userType.value);
+  statisticsStore.getLiveMemberCount();
 });
 
 const test = () => {
@@ -27,6 +30,7 @@ const test = () => {
     <div class="flex items-center space-x-2">
       <img src="/images/header/logo.svg" alt="Logo" class="w-40" />
     </div>
+    
 
     <!-- Menu -->
     <nav class="hidden md:flex space-x-20 font-medium ">
@@ -38,10 +42,12 @@ const test = () => {
     </nav>
 
     <!-- Button -->
-    <div>
-      <NuxtLink :to="userType ? userType==='Worker' ? '/admin-panel' : userType==='Trainer' ? '/trainer' : userType==='Member' ? '/twoj-profil' : '/login' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
+    <div class="flex flex-col items-center gap-2">
+      <NuxtLink :to="userType ? userType==='Worker' ? '/admin-panel' : userType==='Trainer' ? '/trainer' : userType==='Member' ? '/twoj-profil' : '/login' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded w-fit">
         {{userType ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}
       </NuxtLink>
+      <p v-if="statisticsStore.liveMemberCount!==null" class="text-sm font-light text-slate-500">Liczba osób w obiekcie: <span class="text-sky-600">{{statisticsStore.liveMemberCount}}</span> </p>
+
 <!-- 
       <NuxtLink :to="userType ? '/twoj-profil' : '/login'" class="btn-gradient text-white font-bold py-2 px-4 rounded">
         {{userType ? 'Twoje konto' : 'Zaloguj się lub zarejestruj'}}

@@ -69,15 +69,15 @@ const fakeLogin = (email: string, password: string) => {
                 <h3 class="text-xl font-medium">W celu ułatwienia logowania</h3>
                 <ul class="flex flex-col gap-4 pt-3">
                     <li class="flex flex-row gap-3 justify-between items-center border-2 p-2 border-gray-800 bg-white">
-                        <p><span class="font-medium text-lg">Klient</span> <br /> Login: test1@member.com <br /> Hasło: 12345678</p>
-                        <UButton @click="fakeLogin('test1@member.com', '12345678')" class="p-2" color="sky">Zaloguj</UButton>
+                        <p><span class="font-medium text-lg">Klient</span> <br /> Login: test1@member.com <br /> Hasło: Haslo@123</p>
+                        <UButton @click="fakeLogin('test1@member.com', 'Haslo@123')" class="p-2" color="sky">Zaloguj</UButton>
                     </li>
                     <li class="flex flex-row gap-3 justify-between items-center border-2 p-2 border-gray-800 bg-white">
                         <p><span class="font-medium text-lg">Administrator</span> <br /> Login: admin@worker.com <br /> Hasło: 12345678</p>
                         <UButton @click="fakeLogin('admin@worker.com', '12345678')" class="p-2" color="sky">Zaloguj</UButton>
                     </li>
                     <li class="flex flex-row gap-3 justify-between items-center border-2 p-2 border-gray-800 bg-white">
-                        <p><span class="font-medium text-lg">Trener **WIP**[oferty]</span> <br /> Login: mario@trainer.com <br /> Hasło: Haslo@123</p>
+                        <p><span class="font-medium text-lg">Trener</span> <br /> Login: mario@trainer.com <br /> Hasło: Haslo@123</p>
                         <UButton @click="fakeLogin('mario@trainer.com', 'Haslo@123')" class="p-2" color="sky">Zaloguj</UButton>
                     </li>
                 </ul>

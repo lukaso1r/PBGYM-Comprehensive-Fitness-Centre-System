@@ -199,8 +199,11 @@ export const useOffersStore = defineStore('offersStore', () => {
             if (error.response && error.response.status === 409) {
                 console.error('Conflict (409): Oferta o takim tytule już istnieje.');
                 toast.add({ title: 'Błąd dodania oferty', description: 'Oferta o takim tytule już istnieje.' });
-            } if(error.response && error.response.status === 400) {
+            }else if(error.response && error.response.status === 400) {
                 toast.add({ title: 'Błąd dodania oferty', description: `${error}` });
+                console.error('Error:', error);
+            }else{
+                toast.add({ title: 'Błąd dodania oferty specjalnej', description: `${error}` });
                 console.error('Error:', error);
             }
         }

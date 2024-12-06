@@ -73,6 +73,8 @@ const changeClassTime = (operation: string, value: number) => {
 watch(date, (newValue) => {
     console.log('data przed iso', newValue);
     const offset = newValue.getTimezoneOffset() * 60000;
+    console.log('offset', offset);
+    console.log('1newValue.getTime()', newValue.getTime(), '2newValue.getTime() - offset',  newValue.getTime() - offset, '3new Date(newValue.getTime() - offset).toISOString().slice(0, -1)', new Date(newValue.getTime() - offset).toISOString().slice(0, -1));
     groupClassesStore.editableGroupClass.dateStart = new Date(newValue.getTime() - offset).toISOString().slice(0, -1);
     console.log('data po iso', groupClassesStore.editableGroupClass.dateStart);
 

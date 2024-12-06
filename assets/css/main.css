@@ -16,3 +16,7 @@ body {
   padding: 1rem;
 
 }
+
+html {
+  color-scheme: light; 
+}

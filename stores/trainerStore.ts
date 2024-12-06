@@ -156,7 +156,9 @@ export const useTrainerStore = defineStore('trainerStore', () => {
                 console.log('Zaktualizowane dane trenera:', response);
                 if(useCookie<DefaultLoginData>('defaultLoginData').value.userType === 'Trainer'){
                     loginStore.logOut();
+                    
                 }
+                toast.add({ title: 'Sukces.', description: 'Dane trenera zostały zaktualizowane.' });
             } else {
                 throw new Error('Nie udało się zaktualizować danych trenera.');
             }

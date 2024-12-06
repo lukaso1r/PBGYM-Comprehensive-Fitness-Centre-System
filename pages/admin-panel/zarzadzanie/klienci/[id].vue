@@ -250,7 +250,7 @@ const test = () => {
 
             <div class="stats w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Statystyki</h1>
-                <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące pracownika</p>
+                <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące klienta</p>
             </div>
 
             <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">

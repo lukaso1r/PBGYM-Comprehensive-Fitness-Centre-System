@@ -8,7 +8,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:showNewCreditCardForMemberModal']);
 
 const toast = useToast();
-const creditCardStatus = computed(() => membersManagmentStore.getMemberPaymentOptionsStatus(props.memberEmail));
+const creditCardStatus = computed(() => membersManagmentStore.paymentOptionsStatus);
 
 const closeShowNewPassModal = () => {
     emit('update:showNewCreditCardForMemberModal', false);
@@ -27,7 +27,7 @@ watch(
     () => props.memberEmail,
     async (newEmail) => {
         if (newEmail) {
-            await membersManagmentStore.getMemberPaymentOptionsStatus(newEmail);
+            // await membersManagmentStore.getMemberPaymentOptionsStatus(newEmail);
             console.log('status', creditCardStatus.value);
         }
     },

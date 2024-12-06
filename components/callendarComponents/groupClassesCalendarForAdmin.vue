@@ -48,14 +48,12 @@ const calendar = computed(() => {
             console.log('singleClass', 'no single class');
             classes.value = prop.groupClassesUpcoming.filter(groupClass =>
             isSameDay(new Date(groupClass.dateStart), day)
-        ).concat(
-            prop.groupClassesHistory.filter(groupClass =>
-                isSameDay(new Date(groupClass.dateStart), day)
-            )
-        );
+            ).concat(
+                prop.groupClassesHistory.filter(groupClass =>
+                    isSameDay(new Date(groupClass.dateStart), day)
+                )
+            );
         }
-        
-
         week.push({ date: day, classes: classes.value });
     });
 

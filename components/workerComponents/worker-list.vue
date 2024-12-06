@@ -97,14 +97,59 @@ const items = (row: any) => [
             </template>
             <table class="table-auto">
                 <tbody>
-                    <tr v-for="(value, key) in selectedRow" :key="key">
-                        <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                        <td>{{ value }}</td>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">ID:</td>
+                        <td>{{selectedRow.id}}</td>
                     </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Email:</td>
+                        <td>{{selectedRow.email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Imię:</td>
+                        <td>{{selectedRow.name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Nazwisko:</td>
+                        <td>{{selectedRow.surname}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Data urodzenia:</td>
+                        <td>{{selectedRow.birthdate}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Pesel:</td>
+                        <td>{{selectedRow.pesel}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Numer telefonu:</td>
+                        <td>{{selectedRow.phoneNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Adres:</td>
+                        <td>{{`${selectedRow.address.streetName} ${selectedRow.address.buildingNumber}${selectedRow.address.apartmentNumber ? '/' + selectedRow.address.apartmentNumber : ''}, ${selectedRow.address.postalCode} ${selectedRow.address.city}`}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Numer dowodu:</td>
+                        <td>{{selectedRow.idCardNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Stanowisko:</td>
+                        <td>{{selectedRow.position}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Płeć:</td>
+                        <td>{{selectedRow.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Uprawnienia:</td>
+                        <td>{{selectedRow.permissions.join(", ")}}</td>
+                    </tr> 
                 </tbody>
             </table>
             <template #footer >
-                <div class="flex flex-row justify-end">
+                <div class="flex flex-row justify-end gap-8">
+                    <UButton label="Przejdź do profilu pracownika"  :to="{ name: 'admin-panel-zarzadzanie-pracownicy-id', params: { id: selectedRow.id } }" color="blue" icon="i-heroicons-arrow-right-20-solid"/>
                     <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
                 </div>
             </template>

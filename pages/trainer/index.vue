@@ -68,7 +68,7 @@ onMounted( async () => {
                     <hr class="mt-3 mb-3"/>
                     <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{loggedTrainerData?.email}}</p>
                     <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{loggedTrainerData?.phoneNumber}}</p>
-                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Aktywność: </span>{{loggedTrainerData?.visible ? 'Aktywny' : 'Nieaktywny'}}</p>
+                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Aktywność: </span>{{loggedTrainerData?.visible ? 'Widoczny' : 'Niewidoczny'}}</p>
                 </div>
                 
             </div>

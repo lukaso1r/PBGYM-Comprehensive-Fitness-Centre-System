@@ -1,3 +1,13 @@
+<script setup lang="ts"> 
+
+useHead({
+  htmlAttrs: {
+    'data-theme': 'light' // Dodaj niestandardowy atrybut, aby wskazać tryb jasny
+  }
+});
+
+</script>
+
 <template>
     <div>
         <NuxtPage />

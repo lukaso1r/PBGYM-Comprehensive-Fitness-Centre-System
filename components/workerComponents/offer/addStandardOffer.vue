@@ -82,13 +82,15 @@ const addNewStandardOffer = async (event: FormSubmitEvent<any>) => {
                         v-model="propertiesInput" 
                         placeholder="Cechy oferty oddzielone enterem lub średnikiem ';' np. siłownia; basen; sauna" 
                         @update:model-value="handlePropertiesInput"
+                        resize
+                        :rows="10"
                     >
                     </UTextarea>
                 </UFormGroup>
                 <UFormGroup label="Aktywność" name="active">
                     <UCheckbox v-model="newOfferData.active" :label="newOfferData.active ? 'Aktywny' : 'Nieaktywny'" />
                 </UFormGroup>
-                <UButton type="submit">Dodaj ofertę</UButton>
+                <UButton type="submit" color="blue">Dodaj ofertę</UButton>
             </UForm>
         </div>
 

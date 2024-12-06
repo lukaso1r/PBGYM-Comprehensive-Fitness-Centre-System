@@ -127,6 +127,11 @@ const filteredRows = computed(() => {
         <template #content-data="{ row }">
             <p>{{ row.content.slice(0,50)}}...</p>
         </template>
+        <template #empty-state>
+            <div class="flex flex-col items-center justify-center py-6 gap-3">
+                <span class="italic text-sm">Brak wpisów</span>
+            </div>
+        </template>
         
     </UTable>
 </div>

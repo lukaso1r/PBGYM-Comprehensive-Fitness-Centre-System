@@ -55,7 +55,7 @@ const buyPass = (passId: number, passType: string, passTitle: string) => {
                                 <h6 class=" pt-2 text-white text-lg">{{offer.subtitle}}</h6>
                             </template>
                             <p class="text-white"><span class="text-6xl font-bold text-white">{{offer.monthlyPrice}}</span> zł / miesiąc</p>
-                            <p class="w-4/6 text-zinc-300 text-sm pt-2">{{ offer.previousPriceInfo }} </p>
+                            <p class="w-6/6 text-zinc-300 text-sm pt-2">Poprzednia cena: {{ offer.previousPriceInfo }} zł / miesiąc</p>
                             <p class="pt-3 text-white">Opłata aktywacyjna: {{offer.entryFee}} zł</p>
                             <div class="list-pass mx-auto mt-7 pl-7 text-white" >
                                 <ul class="list-disc text-white font-medium text-lg" >
@@ -81,7 +81,7 @@ const buyPass = (passId: number, passType: string, passTitle: string) => {
                             <template #header>
                                 <h4 class="text-xl font-bold">{{offer.title}}</h4>
                             </template>
-                            <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> /miesiąc</p>
+                            <p><span class="text-6xl font-bold">{{offer.monthlyPrice}}</span> zł / miesiąc</p>
                             <div class="list-pass mx-auto mt-7 pl-7" >
                                 <ul class="list-disc" >
                                     <li v-for="(property, index) in offer.properties" :key="index">

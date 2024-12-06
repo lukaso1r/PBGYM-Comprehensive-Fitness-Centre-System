@@ -23,6 +23,11 @@ export default defineNuxtConfig({
     configPath: 'tailwind.config.js',
   },
 
+  colorMode: {
+    preference: 'light'
+  },
+
+  
   css: ['@/assets/css/main.css'],
 
   ui: {

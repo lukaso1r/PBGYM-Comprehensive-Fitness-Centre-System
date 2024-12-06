@@ -33,6 +33,8 @@ const zero = ref(0);
 
             <WorkerComponentsStatisticsSmallCardsMemberCount />
 
+            <WorkerComponentsStatisticsSmallCardsLiveMemberCount />
+
         </div>
 
         <WorkerComponentsStatisticsPaymentSumDaily />

@@ -25,7 +25,9 @@ const columns = [{
 ]
 
 const isOpen = ref(false)
+const isOpenSpecial = ref(false)
 const rowW = ref()
+const router = useRouter();
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const itemsStandard = (row: any) => [
@@ -62,12 +64,6 @@ const itemsSpecial = (row: any) => [
             icon: 'i-heroicons-pencil-square-20-solid',
             to: { name: 'admin-panel-sprzedaz-oferta-special-id', params: { id: row.id } }
         }
-    ], 
-    [
-        {
-            label: 'Deaktywuj',
-            icon: 'i-ic-baseline-cancel'
-        }
     ]
 ]
 
@@ -86,6 +82,14 @@ const { data: offersSpecialAll} = await useAsyncData('offersSpecial', async () =
 const select = (row: any) => {
     console.log('Selected', row)
     isOpen.value = true
+    rowW.value = row
+    console.log('roww', rowW.value)
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const selectSpecial = (row: any) => {
+    console.log('Selected', row)
+    isOpenSpecial.value = true
     rowW.value = row
     console.log('roww', rowW.value)
 }
@@ -131,15 +135,53 @@ const test = () => {
 
                     <table class="table-auto">
                         <tbody>
-                            <tr v-for="(value, key) in rowW" :key="key">
-                                <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                                <td>{{ value }}</td>
-                            </tr>
+                         <tr>
+                            <td class="font-bold pr-8 pb-2">ID:</td>
+                            <td>{{ rowW.id }}</td>
+                        </tr>   
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Typ:</td>
+                            <td>{{ rowW.type }}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tytuł:</td>
+                            <td>{{ rowW.title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Podtytuł:</td>
+                            <td>{{ rowW.subtitle }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Cena/miesiąc:</td>
+                            <td>{{ rowW.monthlyPrice }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Opłata wstępna:</td>
+                            <td>{{ rowW.entryFee }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Czas trwania w miesiącach:</td>
+                            <td>{{ rowW.durationInMonths }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Właściwości:</td>
+                            <td>
+                                <ul>
+                                    <li v-for="(property, index) in rowW.properties" :key="index">{{ property }}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Aktywność</td>
+                            <td>{{ rowW.active ? "Aktywny" : "Nieaktywny" }}</td>
+                        </tr>
                         </tbody>
                     </table>
 
                     <template #footer >
-                        <div class="flex flex-row justify-end">
+                        <div class="flex flex-row justify-end gap-8">
+                            <UButton label="Przejdź do panelu oferty" @click="router.push({ name: 'admin-panel-sprzedaz-oferta-standard-id', params: { id: rowW.id } })" color="blue" icon="i-heroicons-pencil-square-20-solid"/>
                             <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
                         </div>
                     </template>
@@ -151,7 +193,7 @@ const test = () => {
         <div class="active-pass w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <p class="text-slate-500">Specjalne karnety dostępne w systemie dla klientów.</p>
 
-            <UTable :rows="offersSpecialAll" :columns="columns" @select="select">
+            <UTable :rows="offersSpecialAll" :columns="columns" @select="selectSpecial">
                 <template #actions-data="{ row }" @click.stop>
                   <UDropdown :items="itemsSpecial(row)" @click.stop>
                     <UButton  color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
@@ -159,7 +201,7 @@ const test = () => {
                 </template>
             </UTable>
 
-            <UModal v-model="isOpen">
+            <UModal v-model="isOpenSpecial">
                 <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                     <template #header>
                         <h3 class="font-medium text-lg">{{rowW ? rowW.title : 'nic'}}</h3>
@@ -167,16 +209,66 @@ const test = () => {
 
                     <table class="table-auto">
                         <tbody>
-                            <tr v-for="(value, key) in rowW" :key="key">
-                                <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                                <td>{{ value }}</td>
-                            </tr>
+                            
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Typ</td>
+                            <td>{{ rowW.type }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">ID</td>
+                            <td>{{ rowW.id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tytuł</td>
+                            <td>{{ rowW.title }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Podtytuł</td>
+                            <td>{{ rowW.subtitle }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Cena/miesiąc</td>
+                            <td>{{ rowW.monthlyPrice }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Opłata wstępna</td>
+                            <td>{{ rowW.entryFee }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Okres trwania (miesiące)</td>
+                            <td>{{ rowW.durationInMonths }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Właściwości</td>
+                            <td>
+                                <ul>
+                                    <li v-for="(property, index) in rowW.properties" :key="index">{{ property }}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tekst oferty specjalnej</td>
+                            <td>{{ rowW.specialOfferText }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tekst na obramowaniu</td>
+                            <td>{{ rowW.borderText }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Poprzednia cena</td>
+                            <td>{{ rowW.previousPriceInfo }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Aktywność</td>
+                            <td>{{ rowW.active ? "Aktywny" : "Nieaktywny" }}</td>
+                        </tr>
                         </tbody>
                     </table>
 
                     <template #footer >
-                        <div class="flex flex-row justify-end">
-                            <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
+                        <div class="flex flex-row justify-end gap-8">
+                            <UButton label="Przejdź do panelu oferty" @click="router.push({ name: 'admin-panel-sprzedaz-oferta-special-id', params: { id: rowW.id } })" color="blue" icon="i-heroicons-pencil-square-20-solid"/>
+                            <UButton label="Zamknij" @click="isOpenSpecial=false" color="blue" icon="i-material-symbols-cancel"/>
                         </div>
                     </template>
                 </UCard>

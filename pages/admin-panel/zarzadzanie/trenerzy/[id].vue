@@ -156,7 +156,7 @@ const toggleAddClassesModal = () => {
                     <hr class="mt-3 mb-3"/>
                     <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{trainerStore.trainerData?.email}}</p>
                     <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{trainerStore.trainerData?.phoneNumber}}</p>
-                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Widoczność: </span>{{trainerStore.trainerData?.visible ? 'Aktywny' : 'Nieaktywny'}}</p>
+                    <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Widoczność: </span>{{trainerStore.trainerData?.visible ? 'Widoczny' : 'Niewidoczny'}}</p>
                     <UButton
                         class="lg:mt-6"
                         icon="i-material-symbols-key"
@@ -264,7 +264,7 @@ const toggleAddClassesModal = () => {
                 >
                 <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                     <template #header>
-                        <h3 class="font-bold text-lg">Formularz dodania nowego trenera</h3>
+                        <h3 class="font-bold text-lg">Formularz edycji oferty trenera</h3>
                     </template>
                     <div class="w-full">
                         <div class="changeMemberDetailsContainer flex flex-col rounded-lg px-4 bg-white w-full">

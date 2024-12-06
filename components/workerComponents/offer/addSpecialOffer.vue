@@ -88,6 +88,8 @@ const addNewSpecialdOffer = async (event: FormSubmitEvent<any>) => {
                         v-model="propertiesInput" 
                         placeholder="Cechy oferty oddzielone enterem lub średnikiem ';' np. siłownia; basen; sauna" 
                         @update:model-value="handlePropertiesInput"
+                        resize
+                        :rows="10"
                     >
                     </UTextarea>
                 </UFormGroup>

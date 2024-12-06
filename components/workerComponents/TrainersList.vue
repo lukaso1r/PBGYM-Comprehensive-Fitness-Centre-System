@@ -25,7 +25,7 @@ const columns = [{
     },
     {
         key: 'visible',
-        label: 'Aktywny'
+        label: 'Widoczność'
     },
     {
         key: 'phoneNumber',
@@ -167,6 +167,11 @@ const selectOffer = (row: any) => {
         <template #trainerTags-data="{ row }">
             {{ row.trainerTags.length === 0 ? 'Brak' : row.trainerTags.slice(0, 3).join(', ') + (row.trainerTags.length > 3 ? '...' : '') }}
         </template> 
+        <template #empty-state>
+            <div class="flex flex-col items-center justify-center py-6 gap-3">
+                <span class="italic text-sm">Brak trenerów</span>
+            </div>
+        </template>
     </UTable>
     <UModal v-model="isOpen">
         <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -178,9 +183,58 @@ const selectOffer = (row: any) => {
             <table class="table-auto">
                 <tbody>
                     <template v-if="selectedRow.name">
-                        <tr v-for="(value, key) in selectedRow" :key="key">
-                            <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                            <td>{{ value }}</td>
+                        
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Id</td>
+                            <td>{{ selectedRow.id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Email</td>
+                            <td>{{ selectedRow.email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Imię</td>
+                            <td>{{ selectedRow.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Nazwisko</td>
+                            <td>{{ selectedRow.surname }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Data urodzenia</td>
+                            <td>{{ selectedRow.birthdate }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">PESEL</td>
+                            <td>{{ selectedRow.pesel }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Telefon</td>
+                            <td>{{ selectedRow.phoneNumber }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Adres</td>
+                            <td>{{ selectedRow.address.city }}, {{ selectedRow.address.streetName }} {{ selectedRow.address.buildingNumber }}/{{ selectedRow.address.apartmentNumber }}, {{ selectedRow.address.postalCode }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Opis</td>
+                            <td>{{ selectedRow.description }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Zdjęcie</td>
+                            <td>{{ selectedRow.photo }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Płeć</td>
+                            <td>{{ selectedRow.gender }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Widoczny</td>
+                            <td>{{ selectedRow.visible ? 'Tak ✅' : 'Nie ❌' }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold pr-8 pb-2">Tagi</td>
+                            <td>{{ selectedRow.trainerTags.length === 0 ? 'Brak' : selectedRow.trainerTags.join(', ') }}</td>
                         </tr>
                     </template>
                     <template v-else-if="selectedRow.title">

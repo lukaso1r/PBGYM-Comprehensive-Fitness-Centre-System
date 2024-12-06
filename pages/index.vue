@@ -64,11 +64,7 @@
                 <p>Dołącz do naszej społeczności i poczuj motywację, która pobudzi Cię do działania każdego dnia. Niech nasza siłownia stanie się Twoim drugim domem, gdzie nie tylko budujesz ciało, ale również rozwijasz umysł i duch. Razem osiągniemy więcej niż kiedykolwiek moglibyśmy osiągnąć sami. </p>
             </div>
             <div class="col2 align-middle flex flex-col justify-center">
-                <div id="speach-bubble" class="mx-auto -mb-5 z-99">
-                    <!-- TODO: fix emoji -->
-                    <UIcon name="i-twemoji-sports-medal" class="mx-auto -mb-9 ml-6" />
-                    <img class="mx-auto " src="/public/images/home-community/bubble.svg" alt="" srcset="">
-                </div>  
+                 
                 <img class="-z-40" src="/public/images/home-community/graph.png" alt="" srcset="">
             </div>
             <img class="absolute top-0 right-0 -z-50" src="/public/images/home-community/community-bubble.svg" alt="" srcset="">
@@ -159,7 +155,7 @@
                                 <h6 class="pt-2 text-white text-lg">{{ offer.subtitle }}</h6>
                             </template>
                             <p class="text-white"><span class="text-6xl font-bold text-white">{{ offer.monthlyPrice }}</span> zł / miesiąc</p>
-                            <p class="w-4/6 text-zinc-300 text-sm pt-2">{{ offer.previousPriceInfo }}</p>
+                            <p class="w-6/6 text-zinc-300 text-sm pt-2">Poprzednia cena: {{ offer.previousPriceInfo }} zł / miesiąc</p>
                             <p class="pt-3 text-white">Opłata aktywacyjna: {{ offer.entryFee }} zł</p>
                             <div class="list-pass mx-auto mt-7 pl-7 text-white">
                                 <ul class="list-disc text-white font-medium text-lg">
@@ -186,7 +182,7 @@
                         <template #header>
                             <h4 class="text-xl font-bold">{{ offer.title }}</h4>
                         </template>
-                        <p><span class="text-6xl font-bold">{{ offer.monthlyPrice }}</span> /miesiąc</p>
+                        <p><span class="text-6xl font-bold">{{ offer.monthlyPrice }}</span> zł / miesiąc</p>
                         <div class="list-pass mx-auto mt-7 pl-7">
                             <ul class="list-disc">
                                 <li v-for="(property, index) in offer.properties" :key="index">{{ property }}</li>

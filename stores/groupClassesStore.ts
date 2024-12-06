@@ -199,6 +199,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
             });
             if(response === 'Group class created successfully'){
                 await getGroupClassesUpcoming();
+                await getGroupClassesUpcomingByTrainerEmail(editableGroupClass.value.trainerEmail);
                 toast.add({title: 'Sukces', description: `Pomyślnie utworzono zajęcia grupowe: ${editableGroupClass.value.title}`});
                 editableGroupClass.value = createEditableGroupClassObject();
                 return true;

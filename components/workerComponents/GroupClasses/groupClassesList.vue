@@ -29,7 +29,8 @@ const columns = [{
     },
     {
         key: 'title',
-        label: 'Tytuł'    
+        label: 'Tytuł',
+        sortable: true,    
     },
     {
         key: 'dateStart',
@@ -130,7 +131,7 @@ const currentDateTime = new Date();
         <table class="table-auto">
             <tbody>
                 <tr class="pb-2">
-                    <td class="font-bold pr-8 ">id</td>
+                    <td class="font-bold pr-8 ">Id</td>
                     <td>{{selectedRow.id}}</td>
                 </tr>
                 <tr class="pb-2">
@@ -157,7 +158,6 @@ const currentDateTime = new Date();
                     <td class="font-bold pr-8">Czas trwania w minutach</td>
                     <td>{{selectedRow.durationInMinutes}}</td>
                 </tr>
-
             </tbody>
         </table>
         <template #footer >

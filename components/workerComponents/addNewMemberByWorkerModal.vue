@@ -130,8 +130,6 @@ const onSubmitRegisterMemberByWorker = async () => {
             <UButton type="submit" color="blue" class="bg-[#203983] hover:bg-[#617F9B] text-center grid">
                 Zapisz nowe dane
             </UButton>
-            
-            {{ membersManagmentStore.memberToRegister }}
         </UForm>
 
 

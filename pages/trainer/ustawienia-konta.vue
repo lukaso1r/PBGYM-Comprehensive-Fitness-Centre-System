@@ -149,8 +149,8 @@ const test = () => {
                     <UFormGroup label="Status aktywności" name="visible" required>
                         <USelect v-model="isTrainerVisible" 
                         :options="[
-                            { label: 'Aktywny', value: true },
-                            { label: 'Nieaktywny', value: false }
+                            { label: 'Widoczny', value: true },
+                            { label: 'Niewidoczny', value: false }
                         ]" 
                         :required="true"
                         >

@@ -34,7 +34,30 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
     const groupClassesMonthly = ref({});
     const groupClassesDaily = ref({});
 
+    const liveMemberCount = ref(0);
+
     const toast = useToast();
+
+    const getLiveMemberCount = async () => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<number>('https://pbgym.onrender.com/gym/count', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (response) {
+                liveMemberCount.value = response;
+                console.log('Liczba członków online:', response);
+            } else {
+                throw new Error('Nie udało się pobrać liczby członków online.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     const getFullPaymentHistoryByEmail = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -546,6 +569,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
 
 
     return {
+        liveMemberCount,
         fullPaymentListByEmail, 
         gymEntriesMonthlyByEmail,
         groupClassesMonthlyByEmail,
@@ -570,6 +594,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         groupClassesDaily,
         activePassCount,
 
+        getLiveMemberCount,
 
         getTrainerCount,
 

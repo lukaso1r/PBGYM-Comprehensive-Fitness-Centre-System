@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useAdminLogsStore } from '@/stores/adminLogsStore';
 
 const adminLogsStore = useAdminLogsStore();
 const interval = ref<number>(60000);
+const logsToShow = ref<number>(30);
 
 onMounted(async () => {
     await adminLogsStore.getSystemLogs();
@@ -16,7 +19,13 @@ const refreshSysLogs = async () => {
     interval.value = 120000;
 }
 
+const showMoreLogs = (count: number) => {
+    logsToShow.value += count;
+};
 
+const showAllLogs = () => {
+    logsToShow.value = adminLogsStore.sysLogs.split('\n').length;
+};
 </script>
 
 <template>
@@ -37,13 +46,17 @@ const refreshSysLogs = async () => {
                 <UButton @click="refreshSysLogs()" color="gray" icon="i-material-symbols-rotate-left-rounded" size="sm">Odśwież</UButton>
             </div>
             <ul>                
-                <template v-for="(log, index) in adminLogsStore.sysLogs.split('\n').reverse()" :key="index"> 
+                <template v-for="(log, index) in adminLogsStore.sysLogs.split('\n').reverse().slice(0, logsToShow)" :key="index"> 
                     <li :class="{'bg-gray-50': index % 2 === 0, 'bg-blue-50': index % 2 !== 0}" class="my-[8px] px-2 break-words">
                         {{ log }}
                     </li>
                 </template>
-            
             </ul>
+            <div class="flex gap-4 mt-4">
+                <UButton @click="showMoreLogs(30)" color="blue" size="sm">Pokaż kolejne 30</UButton>
+                <UButton @click="showMoreLogs(100)" color="blue" size="sm">Pokaż kolejne 100</UButton>
+                <UButton @click="showAllLogs()" color="blue" size="sm">Pokaż wszystkie</UButton>
+            </div>
         </div>
 
     </main> 

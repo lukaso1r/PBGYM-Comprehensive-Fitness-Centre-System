@@ -60,7 +60,7 @@ const columns = [
         label: 'Zajęcia'
     },
     {
-        key: 'date',
+        key: 'dateStart',
         label: 'Data'
     },
     {
@@ -139,6 +139,9 @@ const columns = [
                     </template>
                     <template #durationInMinutes-data="{ row }">
                         <span>{{row.durationInMinutes}} minut</span>
+                    </template>
+                    <template #dateStart-data="{ row }">
+                        <span>{{dateWithTimeString(new Date(row.dateStart))}}</span>
                     </template>
                     <template #empty-state="{ row }">
                         <span>Nie brano udziału w zajęciach</span>

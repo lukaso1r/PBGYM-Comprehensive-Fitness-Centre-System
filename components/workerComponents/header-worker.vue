@@ -12,6 +12,7 @@ onMounted(async () => {
     await statisticsStore.getPaymentSumMonthly()
     await statisticsStore.getPassesRegistrationsToday()
     await statisticsStore.getMemberRegistrationsToday()
+    await statisticsStore.getGymEntriesToday()
 })
 
 const logout = () => {
@@ -31,7 +32,7 @@ const logout = () => {
                 <!-- TODO: Display Breadcrumbs dynamicly  -->
                 <UBreadcrumb
                     divider="/"
-                    :links="[{ label: 'PBGYM  *WIP*', to: '/' }, { label: 'Panel pracownika', to: '/admin-panel'}]"
+                    :links="[{ label: 'PBGYM', to: '/' }, { label: 'Panel pracownika', to: '/admin-panel'}]"
                 />
             </div>
             <div class="col2">
@@ -103,16 +104,26 @@ const logout = () => {
 
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
-                    <div v-if="statisticsStore.paymentSumToday">
-                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Miesięczny przychód</h3>
-                        <span class="font-bold text-lg">{{ statisticsStore.paymentSumToday.split(';')[0] }} zł</span>   
+                    <div v-if="statisticsStore.gymEntriesToday">
+                        <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Liczba wejść na siłownię dzisiaj</h3>
+                        <span class="font-bold text-lg">{{statisticsStore.gymEntriesToday.split(';')[0]}}</span>                    
                     </div>
-                    <div class="flex flex-row justify-center place-items-center bg-orange-400  rounded-full p-1 aspect-square ">
-                        <UIcon name="i-material-symbols-home-storage" class="w-6 h-6 bg-white" />
+                    <div class="flex flex-row justify-center place-items-center bg-blue-800  rounded-full p-1 aspect-square ">
+                        <UIcon name="i-material-symbols-directions-run" class="w-6 h-6 bg-white" />
                     </div>
                 </div>
-                <div v-if="statisticsStore.paymentSumToday" class=" flex w-full gap-2 text-gray-500">
-                    <span :class="statisticsStore.paymentSumToday.split(';')[1][1] !== '-' ? 'text-green-500' : 'text-red-500'">{{statisticsStore.paymentSumToday.split(';')[1]}}</span> niż wczoraj
+                <div class=" flex w-full gap-2 text-gray-500" v-if="statisticsStore.gymEntriesToday">
+                    <span 
+                        :class="{
+                            'text-green-500': statisticsStore.gymEntriesToday.split(';')[1][1]!=='-',
+                            'text-red-500': statisticsStore.gymEntriesToday.split(';')[1][1]==='-',
+                            'text-slate-500': statisticsStore.gymEntriesToday.split(';')[1][2]==='0'
+                        }"
+                    >
+                        {{statisticsStore.gymEntriesToday.split(';')[1]}}
+                    </span> 
+                    niż wczoraj
+                    
                 </div>
             </div>
         </div>    

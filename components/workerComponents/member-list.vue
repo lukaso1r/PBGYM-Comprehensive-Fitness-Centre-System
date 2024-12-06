@@ -125,6 +125,11 @@ const filteredRows = computed(() => {
         <template #passActive-data="{ row }" @click.stop>
             <span>{{row.passActive ? 'Tak' : 'Nie'}}</span>
         </template>
+        <template #empty-state>
+            <div class="flex flex-col items-center justify-center py-6 gap-3">
+                <span class="italic text-sm">Brak zarejestrowanych klientów</span>
+            </div>
+        </template>
         
     </UTable>
     <UModal v-model="isOpen">
@@ -134,9 +139,49 @@ const filteredRows = computed(() => {
             </template>
             <table class="table-auto">
                 <tbody>
-                    <tr v-for="(value, key) in selectedRow" :key="key">
-                        <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                        <td>{{ value }}</td>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Id:</td>
+                        <td>{{selectedRow.id}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Email:</td>
+                        <td>{{selectedRow.email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Imię:</td>
+                        <td>{{selectedRow.name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Nazwisko:</td>
+                        <td>{{selectedRow.surname}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Data urodzenia:</td>
+                        <td>{{selectedRow.birthdate}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Pesel:</td>
+                        <td>{{selectedRow.pesel}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Numer telefonu:</td>
+                        <td>{{selectedRow.phoneNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Płeć:</td>
+                        <td>{{selectedRow.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Adres:</td>
+                        <td>{{selectedRow.address ? `${selectedRow.address.streetName} ${selectedRow.address.buildingNumber}${selectedRow.address.apartmentNumber ? '/' + selectedRow.address.apartmentNumber : ''}, ${selectedRow.address.postalCode} ${selectedRow.address.city}` : ''}}</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold pr-8 pb-2">Aktywny karnet:</td>
+                        <td>{{selectedRow.passActive ? "Tak" : "Nie"}}</td>
+                    </tr>
+                    <tr v-if="selectedRow.passDateEnd">
+                        <td class="font-bold pr-8 pb-2">Koniec karnetu:</td>
+                        <td>{{selectedRow.passDateEnd}}</td>
                     </tr>
                 </tbody>
             </table>
