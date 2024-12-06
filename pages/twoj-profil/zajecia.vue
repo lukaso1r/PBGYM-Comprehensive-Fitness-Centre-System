@@ -174,7 +174,6 @@ const columns = [
                                 <p class="font-medium text-slate-500 text-2xl pb-3">Trener: <span class="font-normal text-3xl text-black">{{ clickedClasses?.trainer.name }} {{ clickedClasses?.trainer.surname }}</span></p>
                                 <p class="font-medium text-slate-500 text-xl">Telefon: <span class="font-normal text-base text-black">{{ clickedClasses?.trainer.phoneNumber }}</span></p>
                                 <p class="font-medium text-slate-500 text-xl">Email: <span class="font-normal text-base text-black">{{ clickedClasses?.trainer.email }}</span></p>
-                                <UButton :to="'/twoj-profil/trener/' + clickedClasses?.trainer.id" label="Zobacz profil trenera" color="blue" variant="soft" class="w-fit mt-5"></UButton>
                             </div>
                         </div>
                     </div>

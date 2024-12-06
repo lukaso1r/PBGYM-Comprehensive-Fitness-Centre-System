@@ -7,7 +7,8 @@ onMounted(() => {
   statisticStore.getPaymentSumMonthly(); 
 });
 
-const selectedYear = ref(2024);
+const currentYear = new Date().getFullYear();
+const selectedYear = ref(currentYear);
 
 const allMonths = [
   "styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
@@ -26,25 +27,46 @@ const paymentSumMonthly = computed(() => {
   });
 });
 
-watch(selectedYear, () => {
+// Pobierz dane przy zmianie roku
+watch(selectedYear, async () => {
   console.log(`Wybrano rok: ${selectedYear.value}`);
-  statisticStore.getPaymentSumMonthly(); // Pobierz dane dla nowego roku
+  await statisticStore.getPaymentSumMonthly();
 });
+
+// Funkcja zmiany roku
+const changeYear = (direction: 'prev' | 'next') => {
+  if (direction === 'prev') {
+    selectedYear.value--;
+  } else if (direction === 'next') {
+    selectedYear.value++;
+  }
+};
 </script>
 
 <template>
   <div class="paymentSumMonthly col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Suma płatności miesięcznie - <span class="font-normal text-slate-500">StatisticStore.paymentSumMonthly</span>
+      Suma płatności miesięcznie
     </p>
-    <!-- Dodaj przełącznik roku -->
-    <div class="year-selector col-span-2 flex gap-4 p-4">
-      <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
-      <select id="yearSelect" v-model="selectedYear">
-        <option v-for="year in [2024, 2025]" :key="year" :value="year">{{ year }}</option>
-      </select>
+
+    <!-- Nawigacja między latami -->
+    <div class="year-navigation flex items-center gap-4">
+      
+      <div class="flex flex-row w-fit items-center">
+        <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
+        <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">
+          <option v-for="year in [2024, 2025, 2026]" :key="year" :value="year">{{ year }}</option>
+        </select>
+      </div>
+      <button @click="changeYear('prev')" class="bg-gray-200 px-2 py-1 rounded">
+        &larr; Poprzedni rok
+      </button>
+      <button @click="changeYear('next')" class="bg-gray-200 px-2 py-1 rounded">
+        Następny rok &rarr;
+      </button>
     </div>
 
+    <!-- Wykres -->
     <div class="total-payment-amount col-span-1 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
       <BarChart
         index="name"
@@ -56,7 +78,7 @@ watch(selectedYear, () => {
           ticks: {
             autoSkip: false,
             maxTicksLimit: 12,
-            callback: (value, index) => paymentSumMonthly[index]?.name || '',
+            callback: (value, index) => paymentSumMonthly.value[index]?.name || '',
           }
         }"
         :colors="['#203983']"
@@ -68,5 +90,4 @@ watch(selectedYear, () => {
 </template>
 
 <style scoped>
-
 </style>

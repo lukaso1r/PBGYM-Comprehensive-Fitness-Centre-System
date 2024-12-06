@@ -4,6 +4,8 @@ const { createTrainerOfferObject } = useObjectFactory();
 const trainerStore = useTrainerStore();
 const loginStore = useLoginStore();
 
+const router = useRouter();
+
 onMounted(() => {
     trainerStore.getTrainerOfferByEmail(loginStore.loggedTrainerData.email);
 })
@@ -116,21 +118,41 @@ const submitAddNewOffer = async () => {
                     </template>
                     <table class="table-auto">
                         <tbody>
-                            <tr v-for="(value, key) in selectedRow" :key="key">
-                                <td class="font-bold pr-8 pb-2">{{ key }}</td>
-                                <td>{{ value }}</td>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Id</td>
+                                <td>{{ selectedRow.id }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Tytuł</td>
+                                <td>{{ selectedRow.title }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Cena</td>
+                                <td>{{ selectedRow.price }} zł</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Ilość sesji</td>
+                                <td>{{ selectedRow.trainingSessionCount }}</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Czas trwania sesji</td>
+                                <td>{{ selectedRow.trainingSessionDurationInMinutes }} minut</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold pr-8 pb-2">Widoczność</td>
+                                <td>{{ selectedRow.visible ? 'Tak' : 'Nie' }}</td>
                             </tr>
                         </tbody>
                     </table>
                     <template #footer >
-                        <div class="flex flex-row justify-end">
-                            <UButton label="Zamknij" @click="isOpen=false" color="blue" icon="i-material-symbols-cancel"/>
+                        <div class="flex flex-row justify-end gap-8">
+                            <UButton label="Przejdź do oferty" @click="router.push({name: 'trainer-oferty-id', params: {id: selectedRow.id}})" color="blue" icon="i-heroicons-arrow-right-20-solid"/>
+                            <UButton label="Zamknij" @click="isOpen=false" color="gray" icon="i-material-symbols-cancel"/>
                         </div>
                     </template>
                 </UCard>
             </UModal>
         </div>
-
         <UButton class="addNewOffer" @click="toggleShowAddNewOfferModal()" icon="i-heroicons-plus-circle-20-solid" color="blue" variant="solid" label="Dodaj nową ofertę" />
 
         

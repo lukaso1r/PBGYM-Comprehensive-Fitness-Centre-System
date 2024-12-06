@@ -37,24 +37,8 @@ const toggleShowDeleteOfferModal = () => {
     <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
         <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold"><span class="font-medium pr-2">Oferta:</span> {{offerDataById.title}} </h1>
-            <p class="text-slate-500">Możesz z tego miejsca przeglądać szczegóły i zarządzać wykonywaną usługą.</p>
         </div>
-
-        <div class="flex flex-row flex-wrap gap-8" >
-            <div class="flex flex-row flex-nowrap gap-8 items-start">
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-                <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-                <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-                </div>
         
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                    <img src="/images/worker/diagram.jpg" alt="" srcset="">
-                </div>  
-            </div>
-        </div>
-
         <div class="changeOfferDataContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <span class="font-semibold text-lg">Zmiana danych oferty</span>
             <p class="text-slate-500">Użyj poniższego formularza aby zmienić dane swojej oferty</p>

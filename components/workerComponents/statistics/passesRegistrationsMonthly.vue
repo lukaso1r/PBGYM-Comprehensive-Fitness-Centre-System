@@ -24,7 +24,11 @@ const allMonths = [
   { name: "grudzień", value: 12 },
 ];
 
-const selectedYear = ref(2024);
+const currentYear = new Date().getFullYear();
+const selectedYear = ref(currentYear);
+
+// Lista lat (np. 5 lat wstecz i 2 lata do przodu)
+const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
 
 // Obliczenia rejestracji karnetów miesięcznych dla wybranego roku
 const passesRegistrationsMonthly = computed(() => {
@@ -40,24 +44,41 @@ const passesRegistrationsMonthly = computed(() => {
 });
 
 // Obserwowanie zmiany roku
-watch(selectedYear, () => {
+watch(selectedYear, async () => {
   console.log(`Wybrano rok: ${selectedYear.value}`);
-  statisticStore.getPassesRegistrationsMonthly(); // Pobierz dane dla nowego roku
+  await statisticStore.getPassesRegistrationsMonthly(); // Pobierz dane dla nowego roku
 });
+
+// Funkcja zmiany roku
+const changeYear = (direction: 'prev' | 'next') => {
+  if (direction === 'prev') {
+    selectedYear.value--;
+  } else if (direction === 'next') {
+    selectedYear.value++;
+  }
+};
 </script>
 
 <template>
   <div class="passesRegistrationsMonthly col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Kupno karnetów miesięcznie - <span class="font-normal text-slate-500">StatisticStore.passesRegistrationsMonthly</span>
+      Kupno karnetów miesięcznie
     </p>
-    
-    <!-- Wybór roku -->
-    <div class="year-selector col-span-2 flex items-center gap-4 p-4">
-      <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
-      <select id="yearSelect" v-model="selectedYear">
-        <option v-for="year in [2024, 2025]" :key="year" :value="year">{{ year }}</option>
-      </select>
+
+    <!-- Nawigacja między latami -->
+    <div class="year-navigation flex items-center gap-4">
+      <div class="flex flex-row w-fit items-center">
+        <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
+        <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">
+          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+        </select>
+      </div>
+      <button @click="changeYear('prev')" class="bg-gray-200 px-2 py-1 rounded">
+        &larr; Poprzedni rok
+      </button>
+      <button @click="changeYear('next')" class="bg-gray-200 px-2 py-1 rounded">
+        Następny rok &rarr;
+      </button>
     </div>
 
     <!-- Wykres rejestracji karnetów miesięcznie -->
@@ -72,7 +93,7 @@ watch(selectedYear, () => {
           ticks: {
             autoSkip: false,
             maxTicksLimit: 12,
-            callback: (value, index) => passesRegistrationsMonthly[index]?.name || '',
+            callback: (value, index) => passesRegistrationsMonthly.value[index]?.name || '',
           }
         }"
         :colors="['#203983']"

@@ -5,6 +5,7 @@ import type { DefaultLoginData, TrainerData } from '~/types';
 const loginStore = useLoginStore();
 const trainerStore = useTrainerStore();
 const groupClassesStore = useGroupClassesStore();
+const statisticsStore = useStatisticsStore();
 
 const selectedTrue = ref(false)
 const selected = ref(true)
@@ -19,6 +20,8 @@ onMounted( async () => {
     trainerStore.getTrainerOfferByEmail(loggedTrainerData.value.email);
     await groupClassesStore.getGroupClassesUpcomingByTrainerEmail(loggedTrainerData.value.email);
     await groupClassesStore.getGroupClassesHistoricalByTrainerEmail(loggedTrainerData.value.email);
+    await statisticsStore.getMonthlyGroupClassesByTrainerEmail(loginStore.loggedTrainerData.email);
+    
     
 })
 
@@ -32,6 +35,12 @@ onMounted( async () => {
     <Trainer-navbar class="basis-1/5 max-w-[350px]  px-6" />
     <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
         
+        <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <h1 class="text-xl font-semibold">Twój panel trenera</h1>
+            <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wykonywanymi usługami.</p>
+        </div>
+
+
         <div class="trainer-card-info">
             <div class="trainer-card flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <img src="/images/worker/komar.jpg" class="rounded-full w-48" alt=""/>
@@ -74,11 +83,7 @@ onMounted( async () => {
             </div>
         </div> 
 
-        <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <h1 class="text-xl font-semibold">Twój panel trenera</h1>
-            <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wykonywanymi usługami.</p>
-        </div>
-
+      
         <div class="calendarView flex flex-col w-full lg:max-w-[79vw] bg-white p-4 rounded-lg gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
             <h2 class="font-semibold text-lg">Twoje nadchodzące zajęcia grupowe</h2>
             <CallendarComponentsGroupClassesCalendarForTrainer 
@@ -95,20 +100,8 @@ onMounted( async () => {
             />
         </div>
 
-        <div class="flex flex-row flex-wrap gap-8" >
-            <div class="flex flex-row flex-nowrap gap-8 items-start">
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-                <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-                <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-                </div>
-        
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                    <img src="/images/worker/diagram.jpg" alt="" srcset="">
-                </div>  
-            </div>
-        </div>
+        statisticsStore.getMonthlyGroupClassesByTrainerEmail {{ statisticsStore.monthlyGroupClassesByTrainerEmail }}
+
         
         <div class="information-section flex flex-row gap-8 w-full">    
             <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">

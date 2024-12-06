@@ -77,7 +77,7 @@ onMounted( async () => {
                                     <div class="flex flex-row flex-wrap  gap-5 align-middle justify-start items-center">
                                         Oferta:
                                         <template v-if="trainer.trainerInfo.id!==clickedTrainer?.trainerInfo?.id">
-                                            <div v-for="(offer, index)  in trainer.trainerOffers.slice(0, 3)" @click="showTrainerOfferModal(offer, trainer)" :key="index" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow">
+                                            <div v-for="(offer, index)  in trainer.trainerOffers.slice(0, 3)" @click="showTrainerOfferModal(offer, trainer)" :key="index" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow cursor-pointer">
                                                 {{offer.title}}
                                             </div>
                                         </template>
