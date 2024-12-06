@@ -16,6 +16,7 @@ const loggedMemberData = useCookie<LoggedMemberData>('loggedMemberData');
 const selectedTrue = ref(false)
 const selected = ref(true)
 const showEditPaymentModal = ref(false)
+const showPassDetailsModalStatus = ref(false)
 
 const cardData = ref(<CreditCardData> {} as CreditCardData)
 const entriesHistory = ref(<MemberGymEntriesHistory[]>[] as MemberGymEntriesHistory[])
@@ -34,6 +35,10 @@ const test = () => {
     console.log('test4Karta', cardData.value )
 }
 
+const toggleShowPassDetailsModalStatus = () => {
+    showPassDetailsModalStatus.value = !showPassDetailsModalStatus.value
+}
+
 onMounted(async () => {
     await paymentStore.getHiddenCreditCardInfo(loggedMemberData.value.email)
     await loggedMemberStore.getMemberMonthlyGymEntriesByEmail(loggedMemberData.value.email)
@@ -41,6 +46,8 @@ onMounted(async () => {
     await loggedMemberStore.getMemberDailyGymMinutesByEmail(loggedMemberData.value.email)
     await passStore.getActiveMemberPass(loggedMemberData.value.email)
     await passStore.getMemberPassHistory(loggedMemberData.value.email)
+    await statisticsStore.getGroupClassesMonthlyByEmail(loggedMemberData.value.email)
+    await groupClassesStore.getGroupClassesUpcomingForMember(loggedMemberData.value.email)
     paymentHistory.value = loggedMemberStore.memberPaymentHistory
     entriesHistory.value = loggedMemberStore.memberGymEntriesHistory
     activeMemberPass.value = passStore.activeMemberPass
@@ -83,8 +90,8 @@ const validate = (data: CreditCardData) => {
 
     <div class="flex bg-[#F5F7F8]">
         <user-profile-navbar class="basis-1/5 max-w-[350px]"></user-profile-navbar>
-        <main class=" min-h-svh basis-4/5 -mt-4 grid grid-cols-2 justify-start gap-8 pb-10 items-start">
-            <div class="flex flex-row gap-8 col-span-2">
+        <main class=" min-h-svh basis-4/5 -mt-4 grid grid-cols-2 justify-start gap-8 pb-10 ">
+            <div class="flex flex-row gap-8 col-span-2 items-start">
                 <!-- TODO: fix shadow and hand written css to tailwind -->
                 <div v-if="!isObjectEmpty(paymentStore.cardData) && cardData.cardNumber!==''" class="credit-card aspect-[5/3] bg-[url('/images/twoj-profil/creditcardhappy.jpg')] bg-cover w-fit p-4 flex flex-col rounded-lg bg-no-repeat gap-9 bg-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
                     <UIcon name="i-ic-baseline-wifi" class="text-white text-xl size-7"/>
@@ -114,15 +121,57 @@ const validate = (data: CreditCardData) => {
                         </div>
                     </div>
                 </div>
-
-                <div class="active-pass flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px]" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <div v-if="!isObjectEmpty(activeMemberPass)" class="flex flex-col flex-nowrap items-center place-content-evenly h-full">
+                <div class="active-pass flex flex-col rounded-lg py-4 px-8 max-w-[216px] bg-white lg:min-h-full h-full" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                    <div v-if="!isObjectEmpty(activeMemberPass)" @click="toggleShowPassDetailsModalStatus()" class="flex flex-col flex-nowrap items-center h-full gap-2">
                         <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
                         <h3 class="text-center font-medium">
+                            Karnet: <br />
                             {{activeMemberPass.title}}
                         </h3>
                         <UDivider />
                         <p class="text-center font-bold">do {{dateToString(new Date (activeMemberPass.dateEnd))}}</p>
+                        <UButton label="Szczegóły" color="blue" variant="ghost" icon="material-symbols-manage-search-rounded" class="text-xs"/>
+                        <UModal 
+                                v-model="showPassDetailsModalStatus"
+                                :closable="true"
+                                @close="toggleShowPassDetailsModalStatus()"
+                                :ui="{}"
+                            >
+                                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                                    <template #header>
+                                    <h3 class="font-bold text-lg">Szczegóły aktywnego karnetu</h3>
+                                    </template>
+                                    <div class="flex flex-col gap-8 justify-center w-96">
+                                        <table>
+                                            <tr>
+                                                <td class="font-medium">Karnet:</td>
+                                                <td>{{activeMemberPass.title}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-medium">Data zakupu:</td>
+                                                <td>{{dateToString(new Date (activeMemberPass.dateStart))}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-medium">Data ważności:</td>
+                                                <td>{{dateToString(new Date (activeMemberPass.dateEnd))}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-medium">Cena:</td>
+                                                <td>{{activeMemberPass.monthlyPrice}} zł / miesiąc</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-medium">Data następnej płatności</td>
+                                                <td>{{dateToString(new Date (activeMemberPass.dateOfNextPayment))}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <template #footer>
+                                        <div class="flex flex-row justify-end gap-5">
+                                            <UButton label="Zamknij" @click="toggleShowPassDetailsModalStatus()" color="gray" icon="i-material-symbols-cancel" />
+                                        </div>
+                                    </template>
+                                </UCard>
+                            </UModal>
                     </div>
                     <div v-else class="flex flex-col place-content-evenly items-center h-full">
                         <img src="/images/twoj-profil/pass.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
@@ -134,18 +183,10 @@ const validate = (data: CreditCardData) => {
                     </div>
                     
                 </div>
-                <!-- <div class="active-subscription flex flex-col rounded-lg p-4 max-w-[216px] bg-white max-h-[216px] flex-nowrap items-center  place-content-evenly " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <img src="/images/twoj-profil/gatorade.svg" alt="" class="bg-[#203983] max-w-[25%] p-1 rounded">
-                    <h3 class="text-center font-medium">
-                        GATORADE
-                    </h3>
-                    <h6 class="text-center text-xs text-slate-500" >Roczna subskrypcja GATORADE</h6>
-                    <UDivider />
-                    <p class="text-center font-bold">do 20.12.2024</p>
-                </div> -->
+                
 
-                <div class="payment-methods flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-max gap-4 min-w-[30%]" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Metody płatności</span>
+                <div class="payment-methods flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-max gap-4 min-w-[30%] items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                    <span class="font-semibold text-lg">Metoda płatności</span>
                     <div class="methods-container flex flex-row flex-wrap w-full">
                         <ul class="flex flex-row flex-nowrap place-items-center gap-2 justify-between w-full">
                             <li v-if="!isObjectEmpty(cardData)" class="flex flex-row flex-nowrap place-items-center gap-5 border-solid border-2 border-gray-400 py-1 px-3 rounded-xl" >
@@ -280,30 +321,16 @@ const validate = (data: CreditCardData) => {
                 </ul>
             </div>
 
-            <div class="groupClassesHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Historia zajęć grupowych **WIP**</span>
-                <ul class="flex flex-col gap-5 w-full justify-between ">
-                    <UButton @click="statisticsStore.getGroupClassesMonthlyByEmail(loggedMemberData.email)" label="Odśwież" variant="ghost" color="blue" icon="i-material-symbols-refresh" />
-                    {{ statisticsStore.groupClassesMonthlyByEmail }}
-                </ul>
-            </div>
-
-            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Dokumenty ***WIP***</span>
+            <div class="paymentHistory flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <span class="font-semibold text-lg">Historia płatności</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <li v-for="(payment, paymentId) in paymentHistory" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
-                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
                             <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
+                            <h3 class="[word-spacing:5px] font-medium">
+                                <span class="text-slate-500">Data:</span> {{dateWithTimeString(new Date(payment.dateTime))}} 
+                                <span class="text-slate-500 pl-5">Kwota:</span> {{payment.amount}} zł</h3>
                         </div>
-                        <UButton
-                            icon="i-ic-baseline-insert-drive-file"
-                            size="sm"
-                            color="blue"
-                            variant="ghost"
-                            label="PDF"
-                            :trailing="false"
-                        />
                     </li>
                 </ul>
             </div>

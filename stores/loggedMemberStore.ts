@@ -1,4 +1,4 @@
-import type { MemberPaymentHistory, MemberGymEntriesHistory,  DefaultLoginData, ActiveMemberPass, LoggedMemberData } from "~/types";
+import type { MemberPaymentHistory, MemberGymEntriesHistory,  DefaultLoginData, ActiveMemberPass, LoggedMemberData, GymEntryData } from "~/types";
 
 export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
     
@@ -7,6 +7,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
 
     const memberMonthlyGymEntriesByEmail = ref({})
     const memberDailyGymMinutesByEmail = ref({})
+    const groupClassesMonthlyByEmail = ref({})
 
     const getMemberPaymentsHistory = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -96,6 +97,28 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         }
     }
 
+    const getGroupClassesMonthlyByEmail = async (email: string) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let response: any;
+        try {
+            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/memberStatistics/getMonthlyGroupClasses/${email}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
+                }
+            });
+            if (response) {
+                groupClassesMonthlyByEmail.value = response;
+                console.log('Pełna lista zajęć grupowych:', response);
+            } else {
+                throw new Error('Nie udało się pobrać listy zajęć grupowych.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
 
 
     
@@ -109,11 +132,13 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         memberGymEntriesHistory,
         memberMonthlyGymEntriesByEmail,
         memberDailyGymMinutesByEmail,
+        groupClassesMonthlyByEmail,
 
         getMemberPaymentsHistory,
         getMemberGymEntriesHistory,
         getMemberMonthlyGymEntriesByEmail,
-        getMemberDailyGymMinutesByEmail
+        getMemberDailyGymMinutesByEmail,
+        getGroupClassesMonthlyByEmail
 
     }
 

@@ -27,10 +27,10 @@ const items = [
         to: '/twoj-profil/zajecia'
     },
     {
-        label: 'Dokumenty *WIP*',
+        label: 'Twoje statystyki',
         icon: 'i-ic-round-collections-bookmark',
         defaultOpen: false,
-        slot: 'checkoffer',
+        slot: 'yourStats',
         color: 'red',
         variant: 'soft',
         class: 'py-4 hover:bg-red-100'
@@ -72,8 +72,8 @@ const instructions = [
                 <UButton  class="w-full py-4 " to="/twoj-profil/trenerzy" icon="i-ic-baseline-emoji-people" variant="ghost" color="green">
                     Trenerzy personalni
                 </UButton>
-                <UButton  class="w-full py-4 " to="/twoj-profil/zajecia" icon="i-ic-round-collections-bookmark" variant="ghost" color="red">
-                    Dokumenty **WIP**
+                <UButton  class="w-full py-4 " to="/twoj-profil/statystyki" icon="i-material-symbols-query-stats" variant="ghost" color="red">
+                    Twoje statystyki
                 </UButton>
                
                 <hr/>
