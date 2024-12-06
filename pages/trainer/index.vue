@@ -33,15 +33,15 @@ onMounted( async () => {
 
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
     <Trainer-navbar class="basis-1/5 max-w-[350px]  px-6" />
-    <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
+    <main class="basis-4/5 mt-4 grid grid-cols-2 items-start justify-start gap-8">
         
-        <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="members-panel-title col-span-2 flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Twój panel trenera</h1>
             <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wykonywanymi usługami.</p>
         </div>
 
 
-        <div class="trainer-card-info">
+        <div class="trainer-card-info col-span-2">
             <div class="trainer-card flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <img src="/images/worker/komar.jpg" class="rounded-full w-48" alt=""/>
                 <div>
@@ -84,7 +84,7 @@ onMounted( async () => {
         </div> 
 
       
-        <div class="calendarView flex flex-col w-full lg:max-w-[79vw] bg-white p-4 rounded-lg gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
+        <div class="calendarView  flex flex-col w-full  bg-white p-4 rounded-lg gap-2 col-span-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1); ">
             <h2 class="font-semibold text-lg">Twoje nadchodzące zajęcia grupowe</h2>
             <CallendarComponentsGroupClassesCalendarForTrainer 
                 :groupClassesUpcoming="groupClassesStore.groupClassesUpcomingByTrainerEmail" 
@@ -99,11 +99,11 @@ onMounted( async () => {
                 class="w-fit"
             />
         </div>
-
-        statisticsStore.getMonthlyGroupClassesByTrainerEmail {{ statisticsStore.monthlyGroupClassesByTrainerEmail }}
+        
+        <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail :trainerMail="loggedTrainerData?.email" />
 
         
-        <div class="information-section flex flex-row gap-8 w-full">    
+        <div class="information-section col-span-1 grid gap-8">    
             <div class="user-information flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Informacje</span>
                 <div class="information-container w-full bg-slate-50 py-3 px-5 flex flex-col rounded-xl">

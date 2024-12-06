@@ -34,12 +34,13 @@ const items = [
         class: 'py-4 hover:bg-sky-100'        
     },
     {
-        label: 'Dokumenty *WIP*',
-        icon: 'i-ic-round-collections-bookmark',
+        label: 'Statystyki',
+        icon: 'i-material-symbols-query-stats',
         defaultOpen: false,
-        slot: 'kokpit',
+        slot: 'stats',
         color: 'rose',
-        class: 'py-4 hover:bg-sky-100'        
+        class: 'py-4 hover:bg-sky-100', 
+        to: '/admin-panel/statystyki'     
     }
 ]
 
@@ -83,9 +84,6 @@ const settings = [
                         <NuxtLink to="/admin-panel" >
                             <p class="hover:text-blue-500 pl-9">Start</p>
                         </NuxtLink>
-                        <NuxtLink to="/admin-panel/statystyki" >
-                            <p class="hover:text-blue-500 pl-9">Główne statystyki  *WIP*</p>
-                        </NuxtLink>
                     </template>
                     
                     <template #zarzadzanie >
@@ -100,6 +98,12 @@ const settings = [
                         </NuxtLink>
                         <NuxtLink to="/admin-panel/zarzadzanie/zajecia" >
                             <p class="hover:text-blue-500 pl-9">Zajęcia</p>
+                        </NuxtLink>
+                    </template>
+
+                    <template #stats >
+                        <NuxtLink to="/admin-panel/statystyki" >
+                            <p class="hover:text-blue-500 pl-9">Statystyki</p>
                         </NuxtLink>
                     </template>
 

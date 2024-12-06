@@ -1,22 +1,41 @@
 <script setup lang="ts">
 import { BarChart } from '@/components/ui/chart-bar';
+import { ref, computed, watch, onMounted } from 'vue';
+
+const props = defineProps<{
+  memberMail?: string;
+}>();
 
 const statisticStore = useStatisticsStore();
 const membersManagmentStore = useMembersManagmentStore();
 
-// Pobierz wszystkie emaile członków
-const { data: allMembers } = await useAsyncData('members', async () => {
-  await membersManagmentStore.getAllMembers();
-  return membersManagmentStore.allMembers || [];
-}, { default: () => [] });
-
-const selectedEmail = ref('');
-const allEmails = computed(() => allMembers.value.map(member => member.email));
 const currentYear = new Date().getFullYear();
-const selectedYear = ref(currentYear); // Domyślnie bieżący rok
+const selectedYear = ref(currentYear);
+const selectedEmail = ref(props.memberMail || ''); // Ustaw `selectedEmail` na `memberMail` lub pusty string
+
+// Pobierz listę członków, jeśli `memberMail` nie jest przekazany
+const allMembers = ref([]);
+if (!props.memberMail) {
+  const { data } = await useAsyncData('members', async () => {
+    await membersManagmentStore.getAllMembers();
+    return membersManagmentStore.allMembers || [];
+  });
+  allMembers.value = data.value || [];
+}
+
+const allEmails = computed(() => allMembers.value.map(member => member.email));
 
 // Lista lat (np. 5 lat wstecz i 2 lata do przodu)
 const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
+
+// Pobierz dane dla wybranego emaila i roku
+const fetchData = async () => {
+  if (selectedEmail.value) {
+    await statisticStore.getGymEntriesMonthlyByEmail(selectedEmail.value, selectedYear.value);
+  }
+};
+
+watch([selectedEmail, selectedYear], fetchData, { immediate: true });
 
 // Przekształcenie danych na format wykresu
 const gymEntriesMonthlyByEmail = computed(() => {
@@ -38,32 +57,17 @@ const totalGymEntries = computed(() => {
     .reduce((sum, [, value]) => sum + value, 0);
 });
 
-// Obserwacja zmiany danych w statisticStore
-watch(() => statisticStore.gymEntriesMonthlyByEmail, () => {
-  console.log('gymEntriesMonthlyByEmail', statisticStore.gymEntriesMonthlyByEmail);
-});
-
-// Pobierz dane dla wybranego emaila i roku
-watch([selectedEmail, selectedYear], async () => {
-  if (selectedEmail.value) {
-    await statisticStore.getGymEntriesMonthlyByEmail(selectedEmail.value, selectedYear.value);
-  }
-}, { immediate: true });
-
 // Zmiana roku
 const changeYear = (direction: 'prev' | 'next') => {
-  if (direction === 'prev') {
-    selectedYear.value--;
-  } else if (direction === 'next') {
-    selectedYear.value++;
-  }
+  if (direction === 'prev') selectedYear.value--;
+  else if (direction === 'next') selectedYear.value++;
 };
 </script>
 
 <template>
   <div class="gymEntriesMonthlyByEmail col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg col-span-2">Wejścia na siłownię miesięcznie</p>
-    
+
     <!-- Nawigacja między latami -->
     <div class="year-navigation flex items-center gap-4">
       <div class="flex flex-row w-fit items-center">
@@ -80,14 +84,20 @@ const changeYear = (direction: 'prev' | 'next') => {
       </button>
     </div>
 
-    <!-- Wybór emaila -->
-    <div class="email-selector col-span-2 flex gap-4 p-4 pl-0">
+    <!-- Informacja o użytkowniku, jeśli przekazano `memberMail` -->
+    <p v-if="props.memberMail" class="font-semibold col-span-2">
+      Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
+    </p>
+
+    <!-- Wybór emaila tylko jeśli `memberMail` nie został przekazany -->
+    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
       <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>
       </select>
-      <p class="font-semibold">Suma wejść: <span class="text-blue-600">{{ totalGymEntries }}</span></p>
     </div>
+
+    <p class="font-semibold col-span-1">Suma wejść: <span class="text-blue-600">{{ totalGymEntries }}</span></p>
 
     <!-- Wykres -->
     <div class="total-gym-entries-monthly col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
@@ -95,14 +105,13 @@ const changeYear = (direction: 'prev' | 'next') => {
         index="name"
         :data="gymEntriesMonthlyByEmail"
         :categories="['Wejścia']"
-        :y-formatter="(tick) => (Number.isInteger(tick) ? tick.toString() : '')"
+        :y-formatter="tick => (Number.isInteger(tick) ? tick.toString() : '')"
         :x-axis-options="{
           type: 'category',
           ticks: {
             autoSkip: false,
             maxTicksLimit: 12,
-            callback: (value, index) => gymEntriesMonthlyByEmail.value[index]?.name || '',
-          }
+          },
         }"
         :colors="['#203983']"
         :rounded-corners="4"

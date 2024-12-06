@@ -260,7 +260,7 @@ const test = () => {
                     <template v-if="statisticsStore.fullPaymentListByEmail.length === 0">
                         <p>Brak historii płatności</p>
                     </template>
-                    <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
+                    <!-- <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
                             <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
@@ -273,6 +273,14 @@ const test = () => {
                             label="PDF"
                             :trailing="false"
                         />
+                    </li> -->
+                    <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
+                        <div class="document-name w-full pr-14 flex flex-col gap-1">
+                            <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
+                            <h3 class="[word-spacing:5px] font-medium">
+                                <span class="text-slate-500">Data:</span> {{dateWithTimeString(new Date(payment.dateTime))}} 
+                                <span class="text-slate-500 pl-5">Kwota:</span> {{payment.amount}} zł</h3>
+                        </div>
                     </li>
                     <hr class="w-full"/>
                     <h2 class="font-medium text-xl">Historia wejść na siłownię</h2>
@@ -302,33 +310,16 @@ const test = () => {
                             <h3 class="[word-spacing:5px] font-medium">{{pass.title}} - {{pass.monthlyPrice}} zł</h3>
                             <h6 class="font-thin text-slate-500">#ID-{{pass.id}}</h6>
                         </div>
-                        <UButton
-                            icon="i-ic-baseline-insert-drive-file"
-                            size="sm"
-                            color="blue"
-                            variant="ghost"
-                            label="PDF"
-                            :trailing="false"
-                        />
                     </li>
-
                 </ul>
             </div>
     
-            <div class="flex flex-row flex-nowrap gap-8 items-start">
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" 
-                    style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-                    <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-                    <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-                </div>
-            
-                <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " 
-                    style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                    <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                    <img src="/images/worker/diagram.jpg" alt="" srcset="">
-                </div>  
-            </div>
+            <WorkerComponentsStatisticsGymEntriesMonthlyByEmail :memberMail="membersManagmentStore.memberByEmail.email" />
+            membersManagmentStore.memberByEmail.email{{membersManagmentStore.memberByEmail.email}}
+            <WorkerComponentsStatisticsGroupClassesMonthlyByEmail />
+            <WorkerComponentsStatisticsDailyGymMinutesByEmail />
+
+
         </main>
     </div>
 </template>

@@ -361,31 +361,21 @@ const toggleAddClassesModal = () => {
             :trainerEmail="trainerStore.trainerData.email"
         />
 
-        <div class="statsContainer grid grid-cols-2 gap-8 ">
-            
-            <div class="stats-title col-span-2 w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <h1 class="text-xl font-semibold">Statystyki</h1>
-                <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
-            </div> 
+        <div class="stats-title col-span-2 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <h1 class="text-xl font-semibold">Statystyki</h1>
+            <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące trenera</p>
+        </div> 
 
-            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div class="statsContainer flex flex-row w-full gap-8 ">
+            <div class="flex flex-col basis-1/3 rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Historia wejść na siłownię</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <pre class="">{{trainerStore.trainerEntries?.length ? trainerStore.trainerEntries :'Brak historii wejść' }}</pre>
                 </ul>
             </div>
-            
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-                <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-                <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
+            <div class="basis-2/3">
+                <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail :trainerMail="trainerStore.trainerData.email" />
             </div>
-    
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                <img src="/images/worker/diagram.jpg" alt="" srcset="">
-            </div>  
-        
         </div>
         
 

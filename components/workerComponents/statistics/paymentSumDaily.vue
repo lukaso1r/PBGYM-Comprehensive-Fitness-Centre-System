@@ -24,8 +24,9 @@ const allMonths = [
   { name: "grudzień", value: 12 },
 ];
 
-const selectedYear = ref(2024);
-const selectedMonth = ref(11); // Domyślnie listopad
+const currentDate = new Date();
+const selectedYear = ref(currentDate.getFullYear());
+const selectedMonth = ref(currentDate.getMonth() + 1); // Miesiące w JavaScript są indeksowane od 0
 
 // Obliczenia sumy płatności dziennych dla wybranego miesiąca
 const paymentSumDaily = computed(() => {
