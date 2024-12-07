@@ -13,7 +13,10 @@ const showDeleteOfferModal = ref(false)
 
 const toast = useToast()
 
-
+onMounted(async () => {
+    await store.getOfferStandardAll()
+    offer.value = store.offerStandardAll.find(offer => offer.id == route.params.id as unknown as number) || null;
+});
 
 //TODO: naprawić odświeżanie danych
 watchEffect(() => {
@@ -231,24 +234,6 @@ const closeModal = () => {
                 <li :class="['text-lg', {'text-green-600': offer?.active, 'text-red-600': !offer?.active}]"><span class="text-slate-500 text-base pr-2">Aktywność: </span>{{offer?.active === true ? 'Aktywna' : 'Nieaktywna'}}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-2">Typ oferty: </span>{{offer?.type}}</li>
             </ul>
-        </div>
-
-        <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-            <h1 class="text-xl font-semibold">Statystyki</h1>
-            <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące oferty, ilość wykupionych dostępów, wpływ i inne.</p>
-        </div>
-
-        <div class="flex flex-row flex-nowrap gap-8">
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start basis-3/5 gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-              <span class="font-semibold text-lg">Tu będą wykresy ***TODO***</span>
-              <img src="/images/twoj-profil/chart.jpg" alt="" srcset="">
-              <p>Chyba stąd: <a href="ui.shadcn.com/charts" class="text-blue-800">ui.shadcn.com/charts</a></p>
-            </div>
-      
-            <div class="total-entrance-amount flex flex-col rounded-lg p-4 gap-4 basis-2/5 bg-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <span class="font-semibold text-lg">Tu będą diagramy ***TODO***</span>
-                <img src="/images/worker/diagram.jpg" alt="" srcset="">
-            </div>  
         </div>
 
     </main> 

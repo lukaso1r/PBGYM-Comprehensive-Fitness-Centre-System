@@ -3,6 +3,8 @@ import type { Offer, EditableStandardOfferData, DefaultLoginData, SpecialOffer, 
 export const useOffersStore = defineStore('offersStore', () => {
 
     const toast = useToast()
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     // GETY
     const offersPublicActive = useState<Offer[]>(() => ([] as Offer[]));

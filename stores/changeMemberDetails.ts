@@ -3,6 +3,9 @@ import type { UserToLoginCredentials, DefaultLoginData, LoggedMemberData, Change
 export const useChangeMemberDetailsStore = defineStore('changeMemberDetails', () => {
 
     const loginStore = useLoginStore();
+    const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     const changeMemberDetailsData = useState<ChangeMemberDetailsData>(() => ({
         name: '',
@@ -34,10 +37,12 @@ export const useChangeMemberDetailsStore = defineStore('changeMemberDetails', ()
                 });
                 console.log('response change member details:', response);
                 loginStore.logOut();
+                toast.add({title: 'Sukces', description: 'Pomyślnie zmieniono dane'});
                 console.log('Wylogowano po zmianie danych');
             }
             catch (error) {
                 console.error('Error:', error);
+                toast.add({title: 'Błąd', description: 'Nie udało się zmienić danych'});
                 alert('Błąd zmiany danych');
             }
         };

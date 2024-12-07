@@ -76,15 +76,15 @@ const test = () => {
     
     <div class="flex flex-row bg-[#F5F7F8] items-start pb-10 min-h-screen">
       <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
-        <main class="basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
+        <main class="basis-4/5 mt-4 grid grid-cols-4 items-start justify-start gap-8">
 
-            <div class="members-panel-title w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="members-panel-title col-span-4 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Panel zarządzania klientem</h1>
                 <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wybranym klientem.</p>
             </div>
 
-            <div class="flex flex-row flex-wrap gap-8">
-                <div class="active-pass w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="col-span-4 w-full grid grid-cols-3 gap-8">
+                <div class="active-pass col-span-1 w-full flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <div>
                         <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">
                             Klient: </span>
@@ -98,7 +98,7 @@ const test = () => {
                     <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
                 </div>
         
-                <div class="active-pass w-max flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <div class="active-pass col-span-1 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <ul>
                         <li class="text-lg"><span class="text-slate-500 text-base pr-3">Data urodzenia: </span>{{membersManagmentStore.memberByEmail?.birthdate}}</li>
                         <li class="text-lg"><span class="text-slate-500 text-base pr-3">Pesel: </span>{{membersManagmentStore.memberByEmail?.pesel}}</li>
@@ -158,7 +158,7 @@ const test = () => {
                     </ul>
                 </div>
         
-                <div class="options w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+                <div class="options col-span-1 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                     <UButton
                         icon="i-material-symbols-account-box"
                         size="sm"
@@ -205,7 +205,7 @@ const test = () => {
                 </div>
             </div>
 
-            <div class="memberClasses w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="memberClasses col-span-4 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Zapisy na zajęcia klienta</h1>
                 <p class="text-slate-500 lg:mb-5">Możesz zobaczyć tutaj zobaczyć na jakie zajęcia zapisał się użytkownik i modyfikować zapisy.</p>
 
@@ -248,32 +248,18 @@ const test = () => {
 
             </div>
 
-            <div class="stats w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="stats col-span-4 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2 " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <h1 class="text-xl font-semibold">Statystyki</h1>
                 <p class="text-slate-500">Możesz zobaczyć tutaj statystyki dotyczące klienta</p>
             </div>
 
-            <div class="documents flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start w-[47%] gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="documents col-span-2 flex flex-col rounded-lg p-4 bg-white flex-nowrap place-items-start justify-start gap-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
                 <span class="font-semibold text-lg">Dokumenty</span>
                 <ul class="flex flex-col gap-5 w-full justify-between ">
                     <h2 class="font-medium text-xl">Historia płatności</h2>
                     <template v-if="statisticsStore.fullPaymentListByEmail.length === 0">
                         <p>Brak historii płatności</p>
                     </template>
-                    <!-- <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
-                        <div class="document-name w-full pr-14 flex flex-col gap-1">
-                            <h3 class="[word-spacing:5px] font-medium">{{dateToString(new Date(payment.dateTime))}} - {{payment.amount}} zł tu title</h3>
-                            <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
-                        </div>
-                        <UButton
-                            icon="i-ic-baseline-insert-drive-file"
-                            size="sm"
-                            color="blue"
-                            variant="ghost"
-                            label="PDF"
-                            :trailing="false"
-                        />
-                    </li> -->
                     <li v-for="(payment, paymentId) in statisticsStore.fullPaymentListByEmail" :key="payment.id" class="flex flex-row w-full place-items-center">
                         <div class="document-name w-full pr-14 flex flex-col gap-1">
                             <h6 class="font-thin text-slate-500">#ID-{{payment.id}}</h6>
@@ -313,15 +299,27 @@ const test = () => {
                     </li>
                 </ul>
             </div>
-    
-            <WorkerComponentsStatisticsGymEntriesMonthlyByEmail :memberMail="membersManagmentStore.memberByEmail.email" />
-            membersManagmentStore.memberByEmail.email{{membersManagmentStore.memberByEmail.email}}
-            <WorkerComponentsStatisticsGroupClassesMonthlyByEmail />
-            <WorkerComponentsStatisticsDailyGymMinutesByEmail />
+
+            <div class="w-full col-span-2 blankColSpan2">
+            </div>
+
+            <div class="w-full col-span-2">
+                <WorkerComponentsStatisticsGymEntriesMonthlyByEmail :memberMail="membersManagmentStore.memberByEmail.email" />
+            </div>
+            <div class="w-full col-span-2">
+                <WorkerComponentsStatisticsGroupClassesMonthlyByEmail :memberEmail="membersManagmentStore.memberByEmail.email"/>
+            </div>
+            <div class="w-full col-span-4">
+                <WorkerComponentsStatisticsDailyGymMinutesByEmail :memberEmail="membersManagmentStore.memberByEmail.email"/>
+            </div>
 
 
         </main>
+        
+
     </div>
+    membersManagmentStore.memberByEmail.email{{membersManagmentStore.memberByEmail.email}}
+
 </template>
 
 <style scoped>

@@ -18,6 +18,8 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
     const router = useRouter();
     const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     // GET _______________________________________________________________
 

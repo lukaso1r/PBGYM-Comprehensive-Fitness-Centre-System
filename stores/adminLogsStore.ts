@@ -3,6 +3,8 @@ import type { DefaultLoginData } from '~/types';
 export const useAdminLogsStore = defineStore('adminLogsStore', () => {
 
     const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     const sysLogs = ref<string>('');
 

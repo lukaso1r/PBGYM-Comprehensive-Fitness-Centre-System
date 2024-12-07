@@ -9,6 +9,9 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
     const memberDailyGymMinutesByEmail = ref({})
     const groupClassesMonthlyByEmail = ref({})
 
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
+
     const getMemberPaymentsHistory = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;

@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
 import { BarChart } from '@/components/ui/chart-bar';
+
+const props = defineProps<{ memberEmail?: string }>();
 
 const statisticStore = useStatisticsStore();
 const membersManagmentStore = useMembersManagmentStore();
 
-// Pobierz wszystkie emaile członków
-const { data: allMembers } = await useAsyncData('members', async () => {
-  await membersManagmentStore.getAllMembers();
-  return membersManagmentStore.allMembers || [];
-}, { default: () => [] });
-
-const selectedEmail = ref('');
-const allEmails = computed(() => allMembers.value.map(member => member.email));
-
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
-const selectedMonth = ref(new Date().getMonth() + 1); // Bieżący miesiąc
+const selectedMonth = ref(new Date().getMonth() + 1);
+const selectedEmail = ref(props.memberEmail || '');
+const isLoading = ref(false);
 
 // Lista miesięcy
 const months = [
@@ -34,8 +28,49 @@ const months = [
   { name: 'Grudzień', value: 12 },
 ];
 
-// Lista lat (np. 5 lat wstecz i 2 do przodu)
+// Lista lat
 const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
+
+// Pobierz listę członków, jeśli `memberMail` nie jest przekazany
+const allMembers = ref([]);
+if (!props.memberEmail) {
+  const { data } = await useAsyncData('members', async () => {
+    await membersManagmentStore.getAllMembers();
+    return membersManagmentStore.allMembers || [];
+  });
+  allMembers.value = data.value || [];
+}
+
+const allEmails = computed(() => allMembers.value.map(member => member.email));
+
+// Funkcja pobierająca dane dla wybranego e-maila i okresu
+const fetchData = async () => {
+  if (selectedEmail.value) {
+    isLoading.value = true;
+    await statisticStore.getDailyGymMinutesByEmail(selectedEmail.value);
+    isLoading.value = false;
+  }
+};
+
+// Obserwowanie zmiany `props.memberMail` i pobieranie danych
+watch(
+  () => props.memberEmail,
+  (newMail) => {
+    if (newMail) {
+      selectedEmail.value = newMail;
+      fetchData();
+    }
+  },
+  { immediate: true }
+);
+
+// Obserwacja zmian `selectedEmail`, `selectedYear` i `selectedMonth`
+watch([selectedEmail, selectedYear, selectedMonth], fetchData, { immediate: true });
+
+// Pobieranie danych po zamontowaniu komponentu
+onMounted(() =>{
+  fetchData
+});
 
 // Przekształcenie danych na format wykresu
 const dailyGymMinutesByEmail = computed(() => {
@@ -46,7 +81,7 @@ const dailyGymMinutesByEmail = computed(() => {
     const minutes = statisticStore.dailyGymMinutesByEmail[formattedDate] || 0;
 
     return {
-      name: day.toString(), // Nazwa to numer dnia
+      name: day.toString(),
       "Czas na siłowni (minuty)": minutes,
     };
   });
@@ -77,13 +112,6 @@ const changeMonth = (direction: 'prev' | 'next') => {
     }
   }
 };
-
-// Pobierz dane dla wybranego emaila i okresu
-watch([selectedEmail, selectedYear, selectedMonth], async () => {
-  if (selectedEmail.value) {
-    await statisticStore.getDailyGymMinutesByEmail(selectedEmail.value, selectedYear.value, selectedMonth.value);
-  }
-}, { immediate: true });
 </script>
 
 <template>
@@ -94,16 +122,15 @@ watch([selectedEmail, selectedYear, selectedMonth], async () => {
 
     <!-- Nawigacja między miesiącami i wybór miesiąca oraz roku -->
     <div class="date-selector flex flex-wrap items-center gap-4">
-      
       <div>
         <label for="monthSelect" class="font-semibold">Wybierz miesiąc:</label>
-        <select id="monthSelect" v-model="selectedMonth" class=" rounded px-2 py-1">
+        <select id="monthSelect" v-model="selectedMonth" class="rounded px-2 py-1">
           <option v-for="month in months" :key="month.value" :value="month.value">{{ month.name }}</option>
         </select>
       </div>
       <div>
         <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
-        <select id="yearSelect" v-model="selectedYear" class=" rounded px-2 py-1">
+        <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">
           <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
         </select>
       </div>
@@ -115,28 +142,34 @@ watch([selectedEmail, selectedYear, selectedMonth], async () => {
       </button>
     </div>
 
-    <!-- Wybierz email -->
-    <div class="email-selector col-span-2 flex gap-4 p-4">
+    <!-- Informacja o użytkowniku, jeśli przekazano `memberMail` -->
+    <p v-if="memberEmail!=''" class="font-semibold col-span-2">
+      Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
+    </p>
+
+    <!-- Wybór emaila tylko jeśli `memberMail` nie został przekazany -->
+    <div v-else class="email-selector col-span-2 flex gap-4 p-4">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
-      <select id="emailSelect" v-model="selectedEmail">
+      <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>
       </select>
-      <p class="font-semibold">Suma minut: <span class="text-blue-600">{{ totalGymMinutes }}</span></p>
     </div>
 
+    <p class="font-semibold col-span-1">Suma minut: <span class="text-blue-600">{{ totalGymMinutes }}</span></p>
+
+   
     <div class="total-gym-minutes-daily col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
       <BarChart
         index="name"
         :data="dailyGymMinutesByEmail"
         :categories="['Czas na siłowni (minuty)']"
-        :y-formatter="(tick) => (Number.isInteger(tick) ? tick.toString() : '')"
+        :y-formatter="tick => (Number.isInteger(tick) ? tick.toString() : '')"
         :x-axis-options="{
           type: 'category',
           ticks: {
             autoSkip: false,
             maxTicksLimit: 31,
-            callback: (value, index) => dailyGymMinutesByEmail.value[index]?.name || '',
-          }
+          },
         }"
         :colors="['#203983']"
         :rounded-corners="4"

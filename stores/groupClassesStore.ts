@@ -19,6 +19,8 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
 
     const toast = useToast();
     const router = useRouter();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     // GET
 

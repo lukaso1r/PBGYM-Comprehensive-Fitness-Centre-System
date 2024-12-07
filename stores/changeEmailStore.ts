@@ -5,6 +5,10 @@ export const useChangeEmailStore = defineStore('changeEmailStore', () => {
     const changeEmailData = useState<ChangeEmailData>(() => ({newEmail: ''}))
     const loginStore = useLoginStore();
 
+    const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
+
     const changeEmail = async () => {
         async function changeEmailApiCall() {
             try {
@@ -18,12 +22,15 @@ export const useChangeEmailStore = defineStore('changeEmailStore', () => {
                     body: JSON.stringify(changeEmailData.value)
                 });
                 console.log('response change email:', response);
+                toast.add({title: 'Sukces', description: 'Pomyślnie zmieniono email'});
                 loginStore.logOut();
                 console.log('Wylogowano po zmianie emaila');
             }
             catch (error) {
                 console.error('Error:', error);
+                toast.add({title: 'Błąd', description: 'Nie udało się zmienić emaila'});
                 alert('Błąd zmiany emaila');
+
             }
         };
         await changeEmailApiCall();

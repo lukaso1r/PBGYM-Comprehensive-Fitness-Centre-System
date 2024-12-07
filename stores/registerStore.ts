@@ -13,6 +13,8 @@ export const useRegisterStore = defineStore('register', () => {
 
     const toast = useToast();
     const status = ref("idle");
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     // TODO: zrobić to w try catch
     const register = async () => {

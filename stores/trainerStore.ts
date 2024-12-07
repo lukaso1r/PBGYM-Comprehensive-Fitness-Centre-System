@@ -19,6 +19,8 @@ export const useTrainerStore = defineStore('trainerStore', () => {
 
     const toast = useToast();
     const router = useRouter();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     const getTrainerByEmail = async (email: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

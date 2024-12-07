@@ -5,6 +5,8 @@ export const usePaymentStore = defineStore('paymentStore', () => {
     const cardData = useState<CreditCardData>(() => ({} as CreditCardData))
     const newCardData = useState<CreditCardData>(() => ({} as CreditCardData))
     const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     const getHiddenCreditCardInfo = async (memberEmail: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

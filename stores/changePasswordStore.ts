@@ -2,6 +2,10 @@ import type { ChangePasswordData, LoggedMemberData, DefaultLoginData } from "~/t
 
 export const useChangePasswordStore = defineStore('changePasswordStore', () => {
 
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
+    const toast = useToast();
+
     const changePasswordData = useState<ChangePasswordData>(() => ({oldPassword: '', newPassword: ''}))
 
     const changePassword = async () => {
@@ -17,9 +21,11 @@ export const useChangePasswordStore = defineStore('changePasswordStore', () => {
                     body: JSON.stringify(changePasswordData.value)
                 });
                 console.log('response change password:', response);
+                toast.add({title: 'Sukces', description: 'Pomyślnie zmieniono hasło'});
             }
             catch (error) {
                 console.error('Error:', error);
+                toast.add({title: 'Błąd', description: 'Nie udało się zmienić hasła'});
                 alert('Błąd zmiany hasła');
             }
         };

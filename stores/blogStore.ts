@@ -7,6 +7,8 @@ export const useBlogStore = defineStore('blogStore', () => {
     const editableBlogPost = ref<BlogPost>({} as BlogPost)
 
     const toast = useToast()
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
     
     const getAllBlogPosts = async () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

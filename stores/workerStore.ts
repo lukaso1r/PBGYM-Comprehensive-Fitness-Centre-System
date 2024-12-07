@@ -6,6 +6,8 @@ export const useWorkerStore = defineStore('workerStore', () => {
     const loginStore = useLoginStore();
 
     const toast = useToast()
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
 
     const getAllWorkers = async () => {

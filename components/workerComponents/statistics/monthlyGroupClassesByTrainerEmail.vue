@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { BarChart } from '@/components/ui/chart-bar';
 
 const props = defineProps<{ trainerMail?: string }>();
@@ -8,13 +8,14 @@ const statisticStore = useStatisticsStore();
 const trainerStore = useTrainerStore();
 
 const currentYear = new Date().getFullYear();
-const selectedYear = ref(currentYear); // Domyślnie bieżący rok
-const selectedEmail = ref(props.trainerMail || ''); // Ustaw email z props lub pusty
+const selectedYear = ref(currentYear);
+const selectedEmail = ref(props.trainerMail || '');
+const isLoading = ref(false);
 
 // Lista lat (np. 5 lat wstecz i 2 lata do przodu)
 const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
 
-// Jeśli nie przekazano trainerMail, pobierz listę trenerów
+// Pobierz listę trenerów, jeśli `trainerMail` nie jest przekazany
 const allTrainers = ref([]);
 if (!props.trainerMail) {
   const { data } = await useAsyncData('trainers', async () => {
@@ -24,8 +25,35 @@ if (!props.trainerMail) {
   allTrainers.value = data.value || [];
 }
 
-// Generowanie listy emaili trenerów (jeśli nie ma props.trainerMail)
+// Generowanie listy emaili trenerów
 const allEmails = computed(() => allTrainers.value.map(trainer => trainer.email));
+
+// Funkcja pobierająca dane dla wybranego e-maila i roku
+const fetchData = async () => {
+  if (selectedEmail.value) {
+    isLoading.value = true;
+    await statisticStore.getMonthlyGroupClassesByTrainerEmail(selectedEmail.value, selectedYear.value);
+    isLoading.value = false;
+  }
+};
+
+// Obserwacja zmian `props.trainerMail` i aktualizacja `selectedEmail`
+watch(
+  () => props.trainerMail,
+  (newMail) => {
+    if (newMail) {
+      selectedEmail.value = newMail;
+      fetchData();
+    }
+  },
+  { immediate: true }
+);
+
+// Obserwacja zmian `selectedEmail` i `selectedYear`
+watch([selectedEmail, selectedYear], fetchData);
+
+// Pobranie danych po zamontowaniu komponentu
+onMounted(fetchData);
 
 // Przekształcenie danych na format wykresu
 const monthlyGroupClassesByTrainerEmail = computed(() => {
@@ -46,13 +74,6 @@ const totalGroupClasses = computed(() => {
     .filter(([key]) => key.startsWith(`${selectedYear.value}`))
     .reduce((sum, [, value]) => sum + value, 0);
 });
-
-// Pobierz dane dla wybranego emaila
-watch([selectedEmail, selectedYear], async () => {
-  if (selectedEmail.value) {
-    await statisticStore.getMonthlyGroupClassesByTrainerEmail(selectedEmail.value, selectedYear.value);
-  }
-}, { immediate: true });
 
 // Zmiana roku
 const changeYear = (direction: 'prev' | 'next') => {
@@ -84,22 +105,28 @@ const changeYear = (direction: 'prev' | 'next') => {
       </button>
     </div>
 
-    <!-- Wybór emaila (jeśli trainerMail nie został przekazany) -->
-    <div v-if="!props.trainerMail" class="email-selector col-span-2 flex gap-4 p-4 pl-0">
+    <!-- Informacja o użytkowniku, jeśli przekazano `trainerMail` -->
+    <p v-if="props.trainerMail" class="font-semibold col-span-2">
+      Dane dla trenera: <span class="text-blue-600">{{ selectedEmail }}</span>
+    </p>
+
+    <!-- Wybór emaila tylko jeśli `trainerMail` nie został przekazany -->
+    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
-      <select id="emailSelect" v-model="selectedEmail">
+      <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>
       </select>
     </div>
 
     <p class="font-semibold col-span-1">Suma zajęć: <span class="text-blue-600">{{ totalGroupClasses }}</span></p>
 
+    
     <div class="total-group-classes-monthly col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
       <BarChart
         index="name"
         :data="monthlyGroupClassesByTrainerEmail"
         :categories="['Ilość zajęć']"
-        :y-formatter="(tick) => (Number.isInteger(tick) ? tick.toString() : '')"
+        :y-formatter="tick => (Number.isInteger(tick) ? tick.toString() : '')"
         :x-axis-options="{
           type: 'category',
           ticks: {

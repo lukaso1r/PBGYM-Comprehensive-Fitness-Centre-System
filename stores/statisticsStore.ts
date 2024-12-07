@@ -37,6 +37,8 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
     const liveMemberCount = ref(0);
 
     const toast = useToast();
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
 
     const getLiveMemberCount = async () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>

@@ -2,6 +2,11 @@ import type {  UserToLoginCredentials,  DefaultLoginData,  LoggedMemberData,  Lo
 
 export const useLoginStore = defineStore('login', () => {
 
+    const config = useRuntimeConfig()
+    const backendUrl = config.public.backendUrl
+
+    const toast = useToast();
+
     const userToLoginCredentials = useState<UserToLoginCredentials>('userToLoginCredentials', () => ({
         email: "",
         password: ""
@@ -42,6 +47,7 @@ export const useLoginStore = defineStore('login', () => {
 
                 if (error.value) {
                     console.error('Error:', error.value);
+                    toast.add({title: 'Błąd', description: 'Błąd logowania'});
                     alert('Błąd logowania');
                     throw new Error('Błąd logowania');
                 // biome-ignore lint/style/noUselessElse: <explanation>
@@ -67,8 +73,10 @@ export const useLoginStore = defineStore('login', () => {
                         });
                         if (error.value) {
                             console.error('Error:', error.value);
+                            toast.add({title: 'Błąd', description: 'Błąd pobierania danych użytkownika'});
                             alert('Błąd pobierania danych użytkownika');
                         } else if (data.value) {
+                            toast.add({title: 'Sukces', description: 'Zalogowano pomyślnie'});
                             loggedMemberData.value = data.value;
                             console.log('Dane z serwera loggedMemberData:', toRaw(loggedMemberData.value));
                             navigateTo('/twoj-profil');
@@ -89,10 +97,12 @@ export const useLoginStore = defineStore('login', () => {
                             method: 'GET'
                         });
                         if (error.value) {
+                            toast.add({title: 'Błąd', description: 'Błąd pobierania danych trenera'});
                             console.error('Error:', error.value);
                             alert('Błąd pobierania danych trenera');
                         } else if (data.value) {
                             loggedTrainerData.value = data.value;
+                            toast.add({title: 'Sukces', description: 'Zalogowano pomyślnie'});
                             console.log('Dane z serwera loogedTrainerData:', toRaw(loggedTrainerData.value));
                             navigateTo('/trainer');
                         } else {
@@ -111,10 +121,12 @@ export const useLoginStore = defineStore('login', () => {
                             method: 'GET'
                         });
                         if (error.value) {
+                            toast.add({title: 'Błąd', description: 'Błąd pobierania danych workera lub admina'});
                             console.error('Error:', error.value);
                             alert('Błąd pobierania danych workera lub admina');
                         } else if (data.value) {
                             loggedWorkerData.value = data.value;
+                            toast.add({title: 'Sukces', description: 'Zalogowano pomyślnie'});  
                             console.log('Dane z serwera loggedWorkerData:', toRaw(loggedWorkerData.value));
                             navigateTo('/admin-panel');
                         } else {
@@ -145,6 +157,7 @@ export const useLoginStore = defineStore('login', () => {
         loggedMemberData.value = {} as LoggedMemberData
         loggedWorkerData.value = {} as LoggedWorkerData
         loggedTrainerData.value = {} as TrainerData
+        toast.add({title: 'Sukces', description: 'Wylogowano pomyślnie'});
         navigateTo('/');
     };
 

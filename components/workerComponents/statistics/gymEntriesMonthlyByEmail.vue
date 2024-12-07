@@ -2,40 +2,44 @@
 import { BarChart } from '@/components/ui/chart-bar';
 import { ref, computed, watch, onMounted } from 'vue';
 
-const props = defineProps<{
-  memberMail?: string;
-}>();
+const props = defineProps<{ memberMail?: string }>();
 
 const statisticStore = useStatisticsStore();
 const membersManagmentStore = useMembersManagmentStore();
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
-const selectedEmail = ref(props.memberMail || ''); // Ustaw `selectedEmail` na `memberMail` lub pusty string
+const selectedEmail = ref(props.memberMail || '');
+const isLoading = ref(false);
 
-// Pobierz listę członków, jeśli `memberMail` nie jest przekazany
-const allMembers = ref([]);
-if (!props.memberMail) {
-  const { data } = await useAsyncData('members', async () => {
-    await membersManagmentStore.getAllMembers();
-    return membersManagmentStore.allMembers || [];
-  });
-  allMembers.value = data.value || [];
-}
-
-const allEmails = computed(() => allMembers.value.map(member => member.email));
-
-// Lista lat (np. 5 lat wstecz i 2 lata do przodu)
-const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
-
-// Pobierz dane dla wybranego emaila i roku
+// Funkcja pobierająca dane dla wybranego emaila i roku
 const fetchData = async () => {
   if (selectedEmail.value) {
-    await statisticStore.getGymEntriesMonthlyByEmail(selectedEmail.value, selectedYear.value);
+    isLoading.value = true;
+    await statisticStore.getGymEntriesMonthlyByEmail(selectedEmail.value);
+    isLoading.value = false;
   }
 };
 
-watch([selectedEmail, selectedYear], fetchData, { immediate: true });
+// Obserwowanie zmiany `props.memberMail` i pobieranie danych
+watch(
+  () => props.memberMail,
+  (newMail) => {
+    if (newMail) {
+      selectedEmail.value = newMail;
+      fetchData();
+    }
+  },
+  { immediate: true }
+);
+
+// Pobieranie danych po zmianie roku
+watch(selectedYear, fetchData);
+
+// Pobieranie danych po zamontowaniu komponentu
+onMounted(() => {
+  fetchData
+});
 
 // Przekształcenie danych na format wykresu
 const gymEntriesMonthlyByEmail = computed(() => {
@@ -44,7 +48,7 @@ const gymEntriesMonthlyByEmail = computed(() => {
     const total = statisticStore.gymEntriesMonthlyByEmail[formattedMonth] || 0;
 
     return {
-      name: `${new Date(`${formattedMonth}-01`).toLocaleString('pl-PL', { month: 'long' })}`,
+      name: new Date(`${formattedMonth}-01`).toLocaleString('pl-PL', { month: 'long' }),
       "Wejścia": total,
     };
   });
@@ -73,7 +77,7 @@ const changeYear = (direction: 'prev' | 'next') => {
       <div class="flex flex-row w-fit items-center">
         <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
         <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">
-          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+          <option v-for="year in Array.from({ length: 7 }, (_, i) => currentYear - 5 + i)" :key="year" :value="year">{{ year }}</option>
         </select>
       </div>
       <button @click="changeYear('prev')" class="bg-gray-200 px-2 py-1 rounded">
@@ -89,18 +93,9 @@ const changeYear = (direction: 'prev' | 'next') => {
       Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
     </p>
 
-    <!-- Wybór emaila tylko jeśli `memberMail` nie został przekazany -->
-    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0">
-      <label for="emailSelect" class="font-semibold">Wybierz email:</label>
-      <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
-        <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>
-      </select>
-    </div>
-
     <p class="font-semibold col-span-1">Suma wejść: <span class="text-blue-600">{{ totalGymEntries }}</span></p>
 
-    <!-- Wykres -->
-    <div class="total-gym-entries-monthly col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
+    <div  class="total-gym-entries-monthly col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
       <BarChart
         index="name"
         :data="gymEntriesMonthlyByEmail"

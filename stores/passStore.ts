@@ -3,6 +3,8 @@ import type { DefaultLoginData, ActiveMemberPass, LoggedMemberData, PassHistory 
 export const usePassStore = defineStore('passStore', () => {
 
   const toast = useToast();
+  const config = useRuntimeConfig()
+  const backendUrl = config.public.backendUrl
 
   const activeMemberPass = useState<ActiveMemberPass>(() => ({} as ActiveMemberPass));
   const memberPassHistory = useState<PassHistory[]>(() => []);

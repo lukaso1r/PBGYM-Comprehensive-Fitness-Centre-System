@@ -1,22 +1,58 @@
 <script setup lang="ts">
 import { BarChart } from '@/components/ui/chart-bar';
 
+const props = defineProps<{ memberEmail?: string }>();
+
 const statisticStore = useStatisticsStore();
 const membersManagmentStore = useMembersManagmentStore();
 
-// Pobierz wszystkie emaile członków
-const { data: allMembers } = await useAsyncData('members', async () => {
-  await membersManagmentStore.getAllMembers();
-  return membersManagmentStore.allMembers || [];
-}, { default: () => [] });
-
-const selectedEmail = ref('');
-const allEmails = computed(() => allMembers.value.map(member => member.email));
 const currentYear = new Date().getFullYear();
-const selectedYear = ref(currentYear); // Domyślnie bieżący rok
+const selectedYear = ref(currentYear);
+const selectedEmail = ref(props.memberEmail || '');
+const isLoading = ref(false);
 
-// Lista lat (np. 5 lat wstecz i 2 do przodu)
+// Pobranie listy członków, jeśli `memberEmail` nie jest przekazany
+const allMembers = ref([]);
+if (!props.memberEmail) {
+  const { data } = await useAsyncData('members', async () => {
+    await membersManagmentStore.getAllMembers();
+    return membersManagmentStore.allMembers || [];
+  });
+  allMembers.value = data.value || [];
+}
+
+const allEmails = computed(() => allMembers.value.map(member => member.email));
+
+// Lista lat (np. 5 lat wstecz i 2 lata do przodu)
 const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
+
+// Funkcja pobierająca dane
+const fetchData = async () => {
+  if (selectedEmail.value) {
+    isLoading.value = true;
+    await statisticStore.getGroupClassesMonthlyByEmail(selectedEmail.value);
+    isLoading.value = false;
+  }
+};
+
+// Obserwowanie zmiany `props.memberEmail` i pobieranie danych
+watch(
+  () => props.memberEmail,
+  (newEmail) => {
+    if (newEmail) {
+      selectedEmail.value = newEmail;
+      fetchData();
+    }
+  },
+  { immediate: true }
+);
+
+// Pobieranie danych po zmianie roku
+watch(selectedYear, fetchData);
+
+onMounted(() => {
+  fetchData
+});
 
 // Przekształcenie danych na format wykresu
 const groupClassesMonthlyByEmail = computed(() => {
@@ -25,7 +61,7 @@ const groupClassesMonthlyByEmail = computed(() => {
     const total = statisticStore.groupClassesMonthlyByEmail[formattedMonth] || 0;
 
     return {
-      name: `${new Date(`${formattedMonth}-01`).toLocaleString('pl-PL', { month: 'long' })}`,
+      name: new Date(`${formattedMonth}-01`).toLocaleString('pl-PL', { month: 'long' }),
       "Zajęcia grupowe": total,
     };
   });
@@ -38,35 +74,19 @@ const totalGroupClasses = computed(() => {
     .reduce((sum, [, value]) => sum + value, 0);
 });
 
-// Obserwacja zmiany danych w statisticStore
-watch(() => statisticStore.groupClassesMonthlyByEmail, () => {
-  console.log('groupClassesMonthlyByEmail', statisticStore.groupClassesMonthlyByEmail);
-});
-
-// Pobierz dane dla wybranego emaila i roku
-watch([selectedEmail, selectedYear], async () => {
-  if (selectedEmail.value) {
-    await statisticStore.getGroupClassesMonthlyByEmail(selectedEmail.value, selectedYear.value);
-  }
-}, { immediate: true });
-
 // Zmiana roku
 const changeYear = (direction: 'prev' | 'next') => {
-  if (direction === 'prev') {
-    selectedYear.value--;
-  } else if (direction === 'next') {
-    selectedYear.value++;
-  }
+  if (direction === 'prev') selectedYear.value--;
+  else if (direction === 'next') selectedYear.value++;
 };
 </script>
 
 <template>
   <div class="groupClassesMonthlyByEmail col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg col-span-2">Zajęcia grupowe miesięcznie na klienta</p>
-    
+
     <!-- Nawigacja między latami -->
     <div class="year-navigation flex items-center gap-4">
-      
       <div class="flex flex-row w-fit items-center">
         <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
         <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">
@@ -81,16 +101,21 @@ const changeYear = (direction: 'prev' | 'next') => {
       </button>
     </div>
 
-    <!-- Wybór emaila -->
-    <div class="email-selector col-span-2 flex gap-4 p-4 pl-0">
+    <!-- Wyświetl e-mail klienta, jeśli został przekazany w props -->
+    <p v-if="memberEmail" class="font-semibold col-span-2">
+      Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
+    </p>
+
+    <!-- Wybór emaila, jeśli `memberEmail` nie został przekazany -->
+    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
-      <select id="emailSelect" v-model="selectedEmail">
+      <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>
       </select>
-      <p class="font-semibold">Suma zajęć: <span class="text-blue-600">{{ totalGroupClasses }}</span></p>
     </div>
 
-    <!-- Wykres -->
+    <p class="font-semibold col-span-1">Suma zajęć: <span class="text-blue-600">{{ totalGroupClasses }}</span></p>
+
     <div class="total-group-classes-monthly col-span-2 grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
       <BarChart
         index="name"
@@ -102,8 +127,7 @@ const changeYear = (direction: 'prev' | 'next') => {
           ticks: {
             autoSkip: false,
             maxTicksLimit: 12,
-            callback: (value, index) => groupClassesMonthlyByEmail.value[index]?.name || '',
-          }
+          },
         }"
         :colors="['#203983']"
         :rounded-corners="4"
