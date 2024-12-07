@@ -26,7 +26,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerData>(`https://pbgym.onrender.com/trainers/${email}`, {
+            response = await $fetch<TrainerData>(`${backendUrl}/trainers/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerData[]>('https://pbgym.onrender.com/trainers/all', {
+            response = await $fetch<TrainerData[]>(`${backendUrl}/trainers/all`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerWithOffers[]>('https://pbgym.onrender.com/trainerOffers/allTrainersWithOffers', {
+            response = await $fetch<TrainerWithOffers[]>(`${backendUrl}/trainerOffers/allTrainersWithOffers`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerEntries[]>(`https://pbgym.onrender.com/trainers/getGymEntries/${email}`, {
+            response = await $fetch<TrainerEntries[]>(`${backendUrl}/trainers/getGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerOffer[]>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
+            response = await $fetch<TrainerOffer[]>(`${backendUrl}/trainerOffers/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerData>(`https://pbgym.onrender.com/trainers/${email}`, {
+            response = await $fetch<TrainerData>(`${backendUrl}/trainers/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/style/useConst: <explanation>
         let oldPasswordString = oldPassword ? oldPassword : '';
         try {
-            response = await $fetch<TrainerData>(`https://pbgym.onrender.com/trainers/changePassword/${email}`, {
+            response = await $fetch<TrainerData>(`${backendUrl}/trainers/changePassword/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerData>(`https://pbgym.onrender.com/trainers/changeEmail/${email}`, {
+            response = await $fetch<TrainerData>(`${backendUrl}/trainers/changeEmail/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         let response: any;
         console.log('Oferta trenera:', trainerOffer, email);
         try {
-            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
+            response = await $fetch<TrainerOffer>(`${backendUrl}/trainerOffers/${email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
+            response = await $fetch<TrainerOffer>(`${backendUrl}/trainerOffers/${email}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ export const useTrainerStore = defineStore('trainerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<TrainerOffer>(`https://pbgym.onrender.com/trainerOffers/${email}`, {
+            response = await $fetch<TrainerOffer>(`${backendUrl}/trainerOffers/${email}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

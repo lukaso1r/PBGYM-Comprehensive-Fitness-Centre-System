@@ -12,7 +12,7 @@ export const usePaymentStore = defineStore('paymentStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<CreditCardData>(`https://pbgym.onrender.com/creditCardInfo/${useCookie<LoggedMemberData>('loggedMemberData').value.email}/hidden`, {
+            response = await $fetch<CreditCardData>(`${backendUrl}/creditCardInfo/${useCookie<LoggedMemberData>('loggedMemberData').value.email}/hidden`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const usePaymentStore = defineStore('paymentStore', () => {
 
     const deletePaymentMethod = async (memberEmail: string) => {
         try {
-            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
+            await $fetch(`${backendUrl}/creditCardInfo/${memberEmail}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export const usePaymentStore = defineStore('paymentStore', () => {
     const postPaymentMethod = async (memberEmail: string) => {
         console.log('newCardData.value:', newCardData.value);
         try {
-            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
+            await $fetch(`${backendUrl}/creditCardInfo/${memberEmail}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export const useChangeEmailStore = defineStore('changeEmailStore', () => {
         async function changeEmailApiCall() {
             try {
                 console.log("Z trycatcha", useCookie<DefaultLoginData>('defaultLoginData').value.jwt, useCookie<LoggedMemberData>('loggedMemberData').value.email, JSON.stringify(changeEmailData.value)  )
-                const response = await useFetch(`https://pbgym.onrender.com/members/changeEmail/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
+                const response = await useFetch(`${backendUrl}/members/changeEmail/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`

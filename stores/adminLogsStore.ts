@@ -12,7 +12,7 @@ export const useAdminLogsStore = defineStore('adminLogsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/logs', {
+            response = await $fetch(`${backendUrl}/logs`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

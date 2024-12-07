@@ -13,7 +13,7 @@ export const usePassStore = defineStore('passStore', () => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     let response: any;
     try {
-      response = await $fetch<ActiveMemberPass>(`https://pbgym.onrender.com/passes/${email}`, {
+      response = await $fetch<ActiveMemberPass>(`${backendUrl}/passes/${email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const usePassStore = defineStore('passStore', () => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     let response: any;
     try {
-      response = await $fetch<PassHistory[]>(`https://pbgym.onrender.com/passes/passHistory/${email}`, {
+      response = await $fetch<PassHistory[]>(`${backendUrl}/passes/passHistory/${email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export const usePassStore = defineStore('passStore', () => {
     let response: any;
     console.log('email:', email, 'offerId:', offerId, 'jwt:', useCookie<DefaultLoginData>('defaultLoginData').value.jwt);
     try {
-      response = await $fetch<ActiveMemberPass>(`https://pbgym.onrender.com/passes/${email}`, {
+      response = await $fetch<ActiveMemberPass>(`${backendUrl}/passes/${email}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

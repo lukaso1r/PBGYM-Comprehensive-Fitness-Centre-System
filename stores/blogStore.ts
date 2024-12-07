@@ -14,7 +14,7 @@ export const useBlogStore = defineStore('blogStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any
         try {
-            response = await $fetch<BlogPost[]>('https://pbgym.onrender.com/blog/all',{
+            response = await $fetch<BlogPost[]>(`${backendUrl}/blog/all`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const useBlogStore = defineStore('blogStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any
         try {
-            response = await $fetch<BlogPost>('https://pbgym.onrender.com/blog',{
+            response = await $fetch<BlogPost>(`${backendUrl}/blog`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export const useBlogStore = defineStore('blogStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any
         try {
-            response = await $fetch<BlogPost>('https://pbgym.onrender.com/blog',{
+            response = await $fetch<BlogPost>(`${backendUrl}/blog`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const useBlogStore = defineStore('blogStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any
         try {
-            response = await $fetch<BlogPost>(`https://pbgym.onrender.com/blog/${blogPostId}`,{
+            response = await $fetch<BlogPost>(`${backendUrl}/blog/${blogPostId}`,{
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

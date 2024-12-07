@@ -16,7 +16,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberPaymentHistory[]>(`https://pbgym.onrender.com/memberStatistics/getPaymentHistory/${email}`, {
+            response = await $fetch<MemberPaymentHistory[]>(`${backendUrl}/memberStatistics/getPaymentHistory/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberGymEntriesHistory>(`https://pbgym.onrender.com/members/getGymEntries/${email}`, {
+            response = await $fetch<MemberGymEntriesHistory>(`${backendUrl}/members/getGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberGymEntriesHistory>(`https://pbgym.onrender.com/memberStatistics/getMonthlyGymEntries/${email}`, {
+            response = await $fetch<MemberGymEntriesHistory>(`${backendUrl}/memberStatistics/getMonthlyGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/memberStatistics/getDailyGymMinutes/${email}`, {
+            response = await $fetch(`${backendUrl}/memberStatistics/getDailyGymMinutes/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export const useLoggedMemberStore = defineStore('loggedMemberStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/memberStatistics/getMonthlyGroupClasses/${email}`, {
+            response = await $fetch<GymEntryData[]>(`${backendUrl}/memberStatistics/getMonthlyGroupClasses/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

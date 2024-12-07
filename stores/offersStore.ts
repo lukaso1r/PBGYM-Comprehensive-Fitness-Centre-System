@@ -20,7 +20,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<Offer[]>('https://pbgym.onrender.com/offers/public/active', {
+            response = await $fetch<Offer[]>(`${backendUrl}/offers/public/active`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<Offer>(`https://pbgym.onrender.com/offers/standard/${title}`, {
+            response = await $fetch<Offer>(`${backendUrl}/offers/standard/${title}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<SpecialOffer>(`https://pbgym.onrender.com/offers/special/${title}`, {
+            response = await $fetch<SpecialOffer>(`${backendUrl}/offers/special/${title}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<Offer[]>('https://pbgym.onrender.com/offers/standard', {
+            response = await $fetch<Offer[]>(`${backendUrl}/offers/standard`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<SpecialOffer[]>('https://pbgym.onrender.com/offers/special', {
+            response = await $fetch<SpecialOffer[]>(`${backendUrl}/offers/special`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<Offer[]>('https://pbgym.onrender.com/offers/', {
+            response = await $fetch<Offer[]>(`${backendUrl}/offers/`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -154,7 +154,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         let response: any;
         try {
 
-            response = await $fetch<EditableStandardOfferData>('https://pbgym.onrender.com/offers/standard', {
+            response = await $fetch<EditableStandardOfferData>(`${backendUrl}/offers/standard`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -183,7 +183,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<EditableSpecialOfferData>('https://pbgym.onrender.com/offers/special', {
+            response = await $fetch<EditableSpecialOfferData>(`${backendUrl}/offers/special`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<EditableStandardOfferData>(`https://pbgym.onrender.com/offers/standard/${previousTitle}`, {
+            response = await $fetch<EditableStandardOfferData>(`${backendUrl}/offers/standard/${previousTitle}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -246,7 +246,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<EditableSpecialOfferData>(`https://pbgym.onrender.com/offers/special/${previousTitle}`, {
+            response = await $fetch<EditableSpecialOfferData>(`${backendUrl}/offers/special/${previousTitle}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -277,7 +277,7 @@ export const useOffersStore = defineStore('offersStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/offers/${title}`, {
+            response = await $fetch(`${backendUrl}/offers/${title}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<LoggedMemberData>(`https://pbgym.onrender.com/members/${memberEmail}`, {
+            response = await $fetch<LoggedMemberData>(`${backendUrl}/members/${memberEmail}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<LoggedMemberData[]>('https://pbgym.onrender.com/members/all', {
+            response = await $fetch<LoggedMemberData[]>(`${backendUrl}/members/all`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberPaymentHistory[]>(`https://pbgym.onrender.com/members/getPaymentHistory/${memberEmail}`, {
+            response = await $fetch<MemberPaymentHistory[]>(`${backendUrl}/members/getPaymentHistory/${memberEmail}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<MemberGymEntriesHistory[]>(`https://pbgym.onrender.com/members/getGymEntries/${memberEmail}`, {
+            response = await $fetch<MemberGymEntriesHistory[]>(`${backendUrl}/members/getGymEntries/${memberEmail}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<CreditCardData[]>(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}/hidden`, {
+            response = await $fetch<CreditCardData[]>(`${backendUrl}/creditCardInfo/${memberEmail}/hidden`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const postRegisterNewMember = async () => {
         console.log('memberToRegister.value:', memberToRegister.value);
         try {
-            await $fetch('https://pbgym.onrender.com/auth/registerMember', {
+            await $fetch(`${backendUrl}/auth/registerMember`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const postNewCreditCardForMember = async (memberEmail: string) => {
         console.log('creditCardDataToAdd.value:', creditCardDataToAdd.value);
         try {
-            await $fetch(`https://pbgym.onrender.com/creditCardInfo/${memberEmail}`, {
+            await $fetch(`${backendUrl}/creditCardInfo/${memberEmail}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
     const putMemberDetails = async (memberEmail: string) => {
         console.log('memberDataToChange.value:', memberDataToChange.value);
         try {
-            await $fetch(`https://pbgym.onrender.com/members/${memberEmail}`, {
+            await $fetch(`${backendUrl}/members/${memberEmail}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -212,7 +212,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
     const putMemberPassword = async (memberEmail: string, newPassword: string) => {
         try {
-            await $fetch(`https://pbgym.onrender.com/members/changePassword/${memberEmail}`, {
+            await $fetch(`${backendUrl}/members/changePassword/${memberEmail}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ export const useMembersManagmentStore = defineStore('membersManagment', () => {
 
     const putMemberEmail = async (memberEmail: string, newEmail: string) => {
         try {
-            await $fetch(`https://pbgym.onrender.com/members/changeEmail/${memberEmail}`, {
+            await $fetch(`${backendUrl}/members/changeEmail/${memberEmail}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

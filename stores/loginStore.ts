@@ -37,7 +37,7 @@ export const useLoginStore = defineStore('login', () => {
             try {
                 // TODO: consider adding useLazyFetch etc.
                 console.log('Próba logowania:', userToLoginCredentials.value);
-                const { data, error } = await useFetch<DefaultLoginData>('https://pbgym.onrender.com/auth/authenticate', {
+                const { data, error } = await useFetch<DefaultLoginData>(`${backendUrl}/auth/authenticate`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export const useLoginStore = defineStore('login', () => {
                 switch (defaultLoginData.value.userType) {
                     case 'Member': {
                         console.log('Member');
-                        const { data, error } = await useFetch<LoggedMemberData>(`https://pbgym.onrender.com/members/${userToLoginCredentials.value.email}`, {
+                        const { data, error } = await useFetch<LoggedMemberData>(`${backendUrl}/members/${userToLoginCredentials.value.email}`, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${defaultLoginData.value.jwt}`
@@ -89,7 +89,7 @@ export const useLoginStore = defineStore('login', () => {
                     case 'Trainer': {
                         // TODO: fetch trainer data
                         console.log('/trainer');
-                        const { data, error } = await useFetch<TrainerData>(`https://pbgym.onrender.com/trainers/${userToLoginCredentials.value.email}`, {
+                        const { data, error } = await useFetch<TrainerData>(`${backendUrl}/trainers/${userToLoginCredentials.value.email}`, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${defaultLoginData.value.jwt}`
@@ -113,7 +113,7 @@ export const useLoginStore = defineStore('login', () => {
                     }
                     case 'Worker': {
                         console.log('Worker or Admin');
-                        const { data, error } = await useFetch<LoggedWorkerData>(`https://pbgym.onrender.com/workers/${userToLoginCredentials.value.email}`, {
+                        const { data, error } = await useFetch<LoggedWorkerData>(`${backendUrl}/workers/${userToLoginCredentials.value.email}`, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${defaultLoginData.value.jwt}`

@@ -12,7 +12,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
 
     const getAllWorkers = async () => {
         try {
-            const { data, error } = await useFetch<Worker[]>('https://pbgym.onrender.com/workers/all', {
+            const { data, error } = await useFetch<Worker[]>(`${backendUrl}/workers/all`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
         async function changeWorkerDataApiCall() {
             console.log(' changeWorkerDataApiCall Worker:', worker);
             try {
-                const response = await useFetch(`https://pbgym.onrender.com/workers/${worker.email}`, {
+                const response = await useFetch(`${backendUrl}/workers/${worker.email}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
@@ -83,7 +83,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
         async function changePasswordApiCall() {
             try {
                 console.log("Z trycatcha", useCookie<DefaultLoginData>('defaultLoginData').value.jwt, JSON.stringify(changePasswordState)  )
-                const response = await useFetch(`https://pbgym.onrender.com/workers/changePassword/${changePasswordState.email}`, {
+                const response = await useFetch(`${backendUrl}/workers/changePassword/${changePasswordState.email}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
@@ -108,7 +108,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
     const changeWorkerPermissions = async (position: string, permissions: string[], email: string) => {
         async function changePermissionsApiCall() {
             try {
-                const response = await useFetch(`https://pbgym.onrender.com/workers/authority/${email}`, {
+                const response = await useFetch(`${backendUrl}/workers/authority/${email}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
@@ -133,7 +133,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
     const changeWorkerEmail = async (oldEmail: string, newEmail: string) => {
         async function changeEmailApiCall() {
             try {
-                const response = await useFetch(`https://pbgym.onrender.com/workers/changeEmail/${oldEmail}`, {
+                const response = await useFetch(`${backendUrl}/workers/changeEmail/${oldEmail}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
@@ -159,7 +159,7 @@ export const useWorkerStore = defineStore('workerStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/auth/registerWorker', {
+            response = await $fetch(`${backendUrl}/auth/registerWorker`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`,

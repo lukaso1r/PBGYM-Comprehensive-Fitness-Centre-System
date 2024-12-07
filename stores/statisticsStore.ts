@@ -44,7 +44,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<number>('https://pbgym.onrender.com/gym/count', {
+            response = await $fetch<number>(`${backendUrl}/gym/count`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<PaymentData[]>(`https://pbgym.onrender.com/memberStatistics/getPaymentHistory/${email}`, {
+            response = await $fetch<PaymentData[]>(`${backendUrl}/memberStatistics/getPaymentHistory/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/memberStatistics/getMonthlyGymEntries/${email}`, {
+            response = await $fetch<GymEntryData[]>(`${backendUrl}/memberStatistics/getMonthlyGymEntries/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/memberStatistics/getMonthlyGroupClasses/${email}`, {
+            response = await $fetch<GymEntryData[]>(`${backendUrl}/memberStatistics/getMonthlyGroupClasses/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/memberStatistics/getDailyGymMinutes/${email}`, {
+            response = await $fetch<GymEntryData[]>(`${backendUrl}/memberStatistics/getDailyGymMinutes/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GymEntryData[]>(`https://pbgym.onrender.com/trainerStatistics/getMonthlyGroupClasses/${email}`, {
+            response = await $fetch<GymEntryData[]>(`${backendUrl}/trainerStatistics/getMonthlyGroupClasses/${email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<number>('https://pbgym.onrender.com/statistics/trainerCount', {
+            response = await $fetch<number>(`${backendUrl}/statistics/trainerCount`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,7 +197,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<string>('https://pbgym.onrender.com/statistics/paymentSums/today', {
+            response = await $fetch<string>(`${backendUrl}/statistics/paymentSums/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -219,7 +219,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/paymentSums/monthly', {
+            response = await $fetch(`${backendUrl}/statistics/paymentSums/monthly`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/paymentSums/daily', {
+            response = await $fetch(`${backendUrl}/statistics/paymentSums/daily`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<string>('https://pbgym.onrender.com/statistics/passesRegistrations/today', {
+            response = await $fetch<string>(`${backendUrl}/statistics/passesRegistrations/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/passesRegistrations/monthly', {
+            response = await $fetch(`${backendUrl}/statistics/passesRegistrations/monthly`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -307,7 +307,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/passesRegistrations/daily', {
+            response = await $fetch(`${backendUrl}/statistics/passesRegistrations/daily`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -329,7 +329,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<string>('https://pbgym.onrender.com/statistics/memberRegistrations/today', {
+            response = await $fetch<string>(`${backendUrl}/statistics/memberRegistrations/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -351,7 +351,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/memberRegistrations/monthly', {
+            response = await $fetch(`${backendUrl}/statistics/memberRegistrations/monthly`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -373,7 +373,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/memberRegistrations/daily', {
+            response = await $fetch(`${backendUrl}/statistics/memberRegistrations/daily`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -395,7 +395,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<number>('https://pbgym.onrender.com/statistics/memberCount', {
+            response = await $fetch<number>(`${backendUrl}/statistics/memberCount`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -417,7 +417,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<string>('https://pbgym.onrender.com/statistics/gymEntries/today', {
+            response = await $fetch<string>(`${backendUrl}/statistics/gymEntries/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -439,7 +439,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/gymEntries/monthly', {
+            response = await $fetch(`${backendUrl}/statistics/gymEntries/monthly`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -461,7 +461,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/gymEntries/daily', {
+            response = await $fetch(`${backendUrl}/statistics/gymEntries/daily`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -483,7 +483,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<string>('https://pbgym.onrender.com/statistics/groupClasses/today', {
+            response = await $fetch<string>(`${backendUrl}/statistics/groupClasses/today`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -505,7 +505,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/groupClasses/monthly', {
+            response = await $fetch(`${backendUrl}/statistics/groupClasses/monthly`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -527,7 +527,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/statistics/groupClasses/daily', {
+            response = await $fetch(`${backendUrl}/statistics/groupClasses/daily`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -549,7 +549,7 @@ export const useStatisticsStore = defineStore('statisticsStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<number>('https://pbgym.onrender.com/statistics/activePassCount', {
+            response = await $fetch<number>(`${backendUrl}/statistics/activePassCount`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

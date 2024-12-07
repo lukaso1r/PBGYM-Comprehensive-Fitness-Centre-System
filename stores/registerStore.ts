@@ -19,7 +19,7 @@ export const useRegisterStore = defineStore('register', () => {
     // TODO: zrobić to w try catch
     const register = async () => {
         async function registerMember() {
-            const response = await fetch('https://pbgym.onrender.com/auth/registerMember', {
+            const response = await fetch(`${backendUrl}/auth/registerMember`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -45,7 +45,7 @@ export const useRegisterStore = defineStore('register', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/auth/registerTrainer', {
+            response = await $fetch(`${backendUrl}/auth/registerTrainer`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

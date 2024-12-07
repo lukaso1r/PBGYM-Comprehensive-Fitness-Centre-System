@@ -28,7 +28,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>('https://pbgym.onrender.com/groupClasses/upcoming', {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/upcoming`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassMember[]>(`https://pbgym.onrender.com/groupClasses/${groupClassId}/members`, {
+            response = await $fetch<GroupClassMember[]>(`${backendUrl}/groupClasses/${groupClassId}/members`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>('https://pbgym.onrender.com/groupClasses/historical', {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/historical`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>(`https://pbgym.onrender.com/groupClasses/trainer/${trainerEmail}/upcoming`, {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/trainer/${trainerEmail}/upcoming`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>(`https://pbgym.onrender.com/groupClasses/trainer/${trainerEmail}/historical`, {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/trainer/${trainerEmail}/historical`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/upcoming`, {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/member/${memberEmail}/upcoming`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch<GroupClassWithTrainer[]>(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/historical`, {
+            response = await $fetch<GroupClassWithTrainer[]>(`${backendUrl}/groupClasses/member/${memberEmail}/historical`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch('https://pbgym.onrender.com/groupClasses', {
+            response = await $fetch(`${backendUrl}/groupClasses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/enroll`, {
+            response = await $fetch(`${backendUrl}/groupClasses/member/${memberEmail}/enroll`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -287,7 +287,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         let response: any;
         console.log('editableGroupClass.value:', editableGroupClass.value);
         try {
-            response = await $fetch('https://pbgym.onrender.com/groupClasses', {
+            response = await $fetch(`${backendUrl}/groupClasses`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -318,7 +318,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/groupClasses/member/${memberEmail}/signOut`, {
+            response = await $fetch(`${backendUrl}/groupClasses/member/${memberEmail}/signOut`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;
         try {
-            response = await $fetch(`https://pbgym.onrender.com/groupClasses/${groupClassId}`, {
+            response = await $fetch(`${backendUrl}/groupClasses/${groupClassId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

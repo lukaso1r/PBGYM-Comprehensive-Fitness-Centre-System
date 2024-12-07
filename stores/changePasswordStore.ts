@@ -12,7 +12,7 @@ export const useChangePasswordStore = defineStore('changePasswordStore', () => {
         async function changePasswordApiCall() {
             try {
                 console.log("Z trycatcha", useCookie<DefaultLoginData>('defaultLoginData').value.jwt, useCookie<LoggedMemberData>('loggedMemberData').value.email, JSON.stringify(changePasswordData.value)  )
-                const response = await useFetch(`https://pbgym.onrender.com/members/changePassword/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
+                const response = await useFetch(`${backendUrl}/members/changePassword/${useCookie<LoggedMemberData>('loggedMemberData').value.email}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${useCookie<DefaultLoginData>('defaultLoginData').value.jwt}`
