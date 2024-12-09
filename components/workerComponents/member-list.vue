@@ -181,7 +181,7 @@ const filteredRows = computed(() => {
                     </tr>
                     <tr v-if="selectedRow.passDateEnd">
                         <td class="font-bold pr-8 pb-2">Koniec karnetu:</td>
-                        <td>{{selectedRow.passDateEnd}}</td>
+                        <td>{{dateToString(new Date(selectedRow.passDateEnd))}}</td>
                     </tr>
                 </tbody>
             </table>

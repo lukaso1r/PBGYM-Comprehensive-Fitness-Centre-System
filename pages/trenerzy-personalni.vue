@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 
-import type { TrainerWithOffers } from '~/types'
+import type { TrainerWithOffers, TrainerOffer } from '~/types'
 
 const trainerStore = useTrainerStore()
 
 const showMoreTrainerOffers = ref(false)
 const clickedTrainer = ref({} as TrainerWithOffers)
+
+const showTrainerOfferModalStatus = ref(false)
+const clickedOffer = ref({} as TrainerOffer)
+const clicledTrainerForOffer = ref({} as TrainerWithOffers)
 
 const showAllOffers = (trainer?: TrainerWithOffers) => {
     showMoreTrainerOffers.value = !showMoreTrainerOffers.value
@@ -19,6 +23,18 @@ const showAllOffers = (trainer?: TrainerWithOffers) => {
 const closeAllTrainerOffers = () =>{
     showMoreTrainerOffers.value = false
     clickedTrainer.value = {} as TrainerWithOffers
+}
+
+const showTrainerOfferModal = (offer: TrainerOffer, trainer: TrainerWithOffers ) => {
+    showTrainerOfferModalStatus.value = true
+    clickedOffer.value = offer
+    clicledTrainerForOffer.value = trainer
+}
+
+const closeShowTrainerOfferModal = () => {
+    showTrainerOfferModalStatus.value = false
+    clickedOffer.value = {} as TrainerOffer
+    clicledTrainerForOffer.value = {} as TrainerWithOffers
 }
 
 onMounted( async () => {
@@ -45,8 +61,7 @@ onMounted( async () => {
         <div class="col-span-3 rounded-xl " >
             <div class="trainersListGrid grid grid-cols-1 gap-8">
                 <div v-for="trainer in trainerStore.allTrainersWithOffers" :key="trainer.trainerInfo.id" :trainer="trainer">
-                    <!-- TODO: DODAĆ FILTROWANIE PO VISIBLE ITP -->
-                    <div class="trainer-card-info border-2 border-slate-300 rounded-lg shadow-lg">
+                    <div v-if="trainer.trainerInfo.visible" class="trainer-card-info border-2 border-slate-300 rounded-lg shadow-lg">
                         <div class="trainer-card flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center ">
                             <img v-if="trainer.trainerInfo?.photo" :src="trainer.trainerInfo?.photo" alt="Podgląd zdjęcia" class="mt-2 lg:max-w-48 object-cover rounded" />
                                 <span v-else>Brak zdjęcia</span>
@@ -65,7 +80,7 @@ onMounted( async () => {
                                 <div class="flex flex-row flex-wrap  gap-5 align-middle justify-start items-center">
                                     Oferty trenera:
                                     <template v-if="trainer.trainerInfo.id!==clickedTrainer?.trainerInfo?.id">
-                                        <div  v-for="(offer, index) in trainer.trainerOffers.slice(0, 3)" :key="index" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow">
+                                        <div  v-for="(offer, index) in trainer.trainerOffers.slice(0, 3)" :key="index" @click="showTrainerOfferModal(offer, trainer)" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow cursor-pointer">
                                             {{offer.title}}
                                         </div>
                                     </template>
@@ -112,6 +127,55 @@ onMounted( async () => {
     <div class="relative ">
         <img src="/public/images/home-banner/blob4.svg" alt="" class="absolute left-0 bottom-50 -z-50">
     </div>
+
+    <UModal 
+                :model-value="showTrainerOfferModalStatus"
+                :closable="true"
+                @close="closeShowTrainerOfferModal"
+                :ui="{}"
+            >
+                <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                    <template #header>
+                        <h3 class="font-bold text-lg">Wybrana oferta trenera</h3>
+                    </template>
+
+                    <template #default>
+                        <div class="flex flex-col gap-5 px-5 ">
+                            <h1 class="text-xl font-medium">{{clickedOffer.title}}</h1>
+                            <div class="flex flex-row gap-5 align-middle justify-start items-center">
+                                <div class="text-lg py-1 pr-2">
+                                    <span class="text-slate-600">Cena:</span> {{clickedOffer.price}} zł
+                                </div>
+                                <div class="text-lg py-1 px-2">
+                                    <span class="text-slate-600">Ilość sesji:</span> {{clickedOffer.trainingSessionCount}} 
+                                </div>
+                                <div class="text-lg py-1 px-2">
+                                    <span class="text-slate-600">Czas trwania sesji:</span> {{clickedOffer.trainingSessionDurationInMinutes}} min
+                                </div> 
+                            </div>
+
+                            <div class="flex flex-col gap-5" v-if="clicledTrainerForOffer?.trainerInfo?.email">
+                                <h2 class="text-lg font-semibold">Skontaktuj się z trenerem, aby umówić się na zajęcia</h2>
+                                <div class="flex flex-row gap-5 align-middle justify-start items-center">
+                                    <div class="text-lg py-1 pr-2">
+                                        <span class="text-slate-600">Email:</span> {{clicledTrainerForOffer.trainerInfo.email}}
+                                    </div>
+                                    <div class="text-lg py-1 px-2">
+                                        <span class="text-slate-600">Telefon:</span> {{clicledTrainerForOffer.trainerInfo.phoneNumber}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    
+
+                    <template #footer>
+                        <div class="flex flex-row justify-end gap-5">
+                            <UButton label="Zamknij" @click="closeShowTrainerOfferModal" color="gray" icon="i-material-symbols-cancel" />
+                        </div>
+                    </template>
+                </UCard>
+            </UModal>
 </div>
 
 <footer-web/>

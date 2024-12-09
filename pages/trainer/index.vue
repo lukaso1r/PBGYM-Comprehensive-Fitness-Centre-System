@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import type { DefaultLoginData, TrainerData } from '~/types';
+import type { DefaultLoginData, TrainerData, TrainerOffer, TrainerWithOffers } from '~/types';
 
 const loginStore = useLoginStore();
 const trainerStore = useTrainerStore();
@@ -10,7 +10,10 @@ const statisticsStore = useStatisticsStore();
 const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
 const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData');
 
+const showTrainerOfferModalStatus = ref(false)
+
 const polishTrainerTags = ref<string[]>([]);
+    const clickedOffer = ref({} as TrainerOffer)
 
 onMounted( async () => {
     polishTrainerTags.value = loggedTrainerData.value.trainerTags.map(tag => trainerTagTranslations[tag]);
@@ -21,6 +24,16 @@ onMounted( async () => {
     await trainerStore.getTrainerByEmail(loggedTrainerData.value.email);
     
 })
+
+const showTrainerOfferModal = (offer: TrainerOffer, ) => {
+    showTrainerOfferModalStatus.value = true
+    clickedOffer.value = offer
+}
+
+const closeShowTrainerOfferModal = () => {
+    showTrainerOfferModalStatus.value = false
+    clickedOffer.value = {} as TrainerOffer
+}
 
 </script>
 
@@ -54,8 +67,8 @@ onMounted( async () => {
                     </div>
                     <p class="py-4">{{loggedTrainerData?.description}}</p>
                     <div class="flex flex-row gap-5 align-middle justify-start items-center">
-                        Zajęcia:
-                        <div v-for="(offer, index) in trainerStore.trainerOffersByEmail.slice(0, 3)" :key="index" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow">
+                        Oferty:
+                        <div v-for="(offer, index) in trainerStore.trainerOffersByEmail.slice(0, 3)" :key="index" @click="showTrainerOfferModal(offer)" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow cursor-pointer">
                             {{offer.title}}
                         </div>
                         <div v-if="trainerStore.trainerOffersByEmail?.length > 3" class="w-fit bg-gray-50 rounded-lg px-3 py-2 flex items-center text-sm font-semibold text-blue-500 shadow">
@@ -152,7 +165,42 @@ onMounted( async () => {
         </div> 
 
         
-        
+        <UModal 
+        :model-value="showTrainerOfferModalStatus"
+        :closable="true"
+        @close="closeShowTrainerOfferModal"
+        :ui="{}"
+    >
+        <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+                <h3 class="font-bold text-lg">Wybrana oferta trenera</h3>
+            </template>
+
+            <template #default>
+                <div class="flex flex-col gap-5 px-5 ">
+                    <h1 class="text-xl font-medium">{{clickedOffer.title}}</h1>
+                    <div class="flex flex-row gap-5 align-middle justify-start items-center">
+                        <div class="text-lg py-1 pr-2">
+                            <span class="text-slate-600">Cena:</span> {{clickedOffer.price}} zł
+                        </div>
+                        <div class="text-lg py-1 px-2">
+                            <span class="text-slate-600">Ilość sesji:</span> {{clickedOffer.trainingSessionCount}} 
+                        </div>
+                        <div class="text-lg py-1 px-2">
+                            <span class="text-slate-600">Czas trwania sesji:</span> {{clickedOffer.trainingSessionDurationInMinutes}} min
+                        </div> 
+                    </div>
+                </div>
+            </template>
+            
+
+            <template #footer>
+                <div class="flex flex-row justify-end gap-5">
+                    <UButton label="Zamknij" @click="closeShowTrainerOfferModal" color="gray" icon="i-material-symbols-cancel" />
+                </div>
+            </template>
+        </UCard>
+    </UModal>
 
 
 

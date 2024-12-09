@@ -354,6 +354,7 @@ export interface TrainerWithOffers {
         photo?: string;
         gender: string;
         trainerTags: string[];
+        visible?: boolean;
     };
     trainerOffers: {
         id: number;

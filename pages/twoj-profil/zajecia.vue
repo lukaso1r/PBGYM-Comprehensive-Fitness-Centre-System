@@ -106,7 +106,8 @@ const columns = [
                         >
                         <div class="trainerImage w-full pb-3 m-0 grid grid-cols-3 gap-4 relative">
                             <p class="absolute -top-2 -right-1 text-blue-600 font-semibold" v-if="groupClassesStore.groupClassesUpcomingForMember.map((upcomingClass) => upcomingClass.id).includes(groupClass.id)">Zapisano!</p>
-                            <img class="rounded-[10%] col-span-1" src="/public/images/trainer.jpg" />
+                            <img v-if="groupClass.trainer?.photo" :src="groupClass.trainer?.photo" alt="Podgląd zdjęcia" class="rounded-[10%] col-span-1" />
+                            <span v-else>Brak zdjęcia</span>
                             <div class="w-full col-span-2 flex flex-col justify-center">
                                 <p class="font-medium text-slate-500">Trener: <span class="font-normal text-base text-black">{{ groupClass.trainer.name }} {{ groupClass.trainer.surname }}</span></p>
                                 <p class="font-medium text-slate-500">Data: <span class="font-normal text-base text-black">{{ dateToString(new Date(groupClass.dateStart)) }}</span></p>
@@ -169,7 +170,8 @@ const columns = [
                     <h5 class="font-medium text-xl pb-5">{{dateWithTimeString(new Date(clickedClasses.dateStart))}}</h5>
                     <div class="trainerInfo flex justify-start flex-col w-fit items-center shadow px-5 py-4 border-2 border-slate-400 rounded-lg mb-4">
                         <div class="trainerImage w-fit lg:max-w-[40vw] m-0 flex flex-row gap-12">
-                            <img class="rounded-[10%] lg:max-w-[230px] w-full" src="/public/images/trainer.jpg" />
+                            <img v-if="clickedClasses.trainer?.photo" :src="clickedClasses.trainer?.photo" alt="Podgląd zdjęcia" class="rounded-[10%] lg:max-w-[230px] w-full" />
+                            <span v-else>Brak zdjęcia</span>
                             <div class="w-fit flex flex-col justify-center">
                                 <p class="font-medium text-slate-500 text-2xl pb-3">Trener: <span class="font-normal text-3xl text-black">{{ clickedClasses?.trainer.name }} {{ clickedClasses?.trainer.surname }}</span></p>
                                 <p class="font-medium text-slate-500 text-xl">Telefon: <span class="font-normal text-base text-black">{{ clickedClasses?.trainer.phoneNumber }}</span></p>

@@ -27,8 +27,10 @@ const test = () => {
     
     <!-- <UButton @click="test">test</UButton> -->
     <!-- Logo -->
-    <div class="flex items-center space-x-2">
+    <div class="flex flex-col gap-3 items-center space-x-2">
       <img src="/images/header/logo.svg" alt="Logo" class="w-40" />
+      <!-- <p v-if="statisticsStore.liveMemberCount!==null" class="text-sm font-light text-slate-500">Liczba osób w obiekcie: <span class="text-sky-600">{{statisticsStore.liveMemberCount}}</span> </p> -->
+
     </div>
     
 
