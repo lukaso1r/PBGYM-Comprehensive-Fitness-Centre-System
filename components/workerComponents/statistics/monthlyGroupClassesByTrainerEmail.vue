@@ -87,7 +87,7 @@ const changeYear = (direction: 'prev' | 'next') => {
 
 <template>
   <div class="monthlyGroupClassesByTrainerEmail col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
-    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe zrealizowane miesięcznie</p>
+    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe zrealizowane miesięcznie - <span class="font-normal text-slate-500">Z możliwością wyboru trenera</span></p>
 
     <!-- Nawigacja między latami -->
     <div class="year-navigation flex items-center gap-4 col-span-1">
@@ -111,7 +111,7 @@ const changeYear = (direction: 'prev' | 'next') => {
     </p>
 
     <!-- Wybór emaila tylko jeśli `trainerMail` nie został przekazany -->
-    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0">
+    <div v-else class="email-selector col-span-2 flex gap-4 p-4 pl-0 items-center">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
       <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>

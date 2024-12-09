@@ -50,7 +50,7 @@ watch(selectedYear, () => {
 <template>
   <div class="groupClassesMonthly col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Ilość zajęć grupowych miesięcznie - <span class="font-normal text-slate-500">StatisticStore.groupClassesMonthly</span>
+      Ilość zajęć grupowych miesięcznie - <span class="font-normal text-slate-500">Bez podziału na trenerów</span>
     </p>
 
     <!-- Nawigacja między latami i wybór roku -->
