@@ -2,8 +2,12 @@
 
 useHead({
   htmlAttrs: {
-    'data-theme': 'light' // Dodaj niestandardowy atrybut, aby wskazać tryb jasny
+    'data-theme': 'light' 
   }
+});
+
+definePageMeta({
+  middleware: 'auth',
 });
 
 </script>
@@ -11,7 +15,7 @@ useHead({
 <template>
     <div>
         <NuxtPage />
-        <!-- TODO: przykrywa pozostałe elementy strony czyniąc je nieklikalnymi -->
+        
         <UNotifications />
     </div>
   </template>

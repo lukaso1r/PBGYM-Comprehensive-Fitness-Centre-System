@@ -1,5 +1,8 @@
 <script setup lang="ts">
 
+// definePageMeta({
+//   middleware: 'auth',
+// });
 
 const zero = ref(0);
 
@@ -11,7 +14,7 @@ const zero = ref(0);
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
 
-    <main class="basis-4/5 mt-4 grid gird-cols-2 gap-8 ">
+    <main v-if="checkPermission(['STATISTICS'])"  class="basis-4/5 mt-4 grid gird-cols-2 gap-8 ">
 
         <div class="smallCards col-span-2 grid grid-cols-4 justify-start gap-8">
 
@@ -38,9 +41,9 @@ const zero = ref(0);
 
         <WorkerComponentsStatisticsGroupClassesMonthly />
 
-        <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail />
+        <WorkerComponentsStatisticsMonthlyGroupClassesByTrainerEmail  v-if="checkPermission(['TRAINER_MANAGEMENT'])"/>
 
-        <WorkerComponentsStatisticsGroupClassesMonthlyByEmail />
+        <WorkerComponentsStatisticsGroupClassesMonthlyByEmail  v-if="checkPermission(['TRAINER_MANAGEMENT'])"/>
 
         <WorkerComponentsStatisticsPaymentSumMonthly />
 
@@ -50,7 +53,7 @@ const zero = ref(0);
 
         <WorkerComponentsStatisticsGymEntriesMonthly />
 
-        <WorkerComponentsStatisticsGymEntriesMonthlyByEmail />
+        <WorkerComponentsStatisticsGymEntriesMonthlyByEmail  v-if="checkPermission(['MEMBER_MANAGEMENT'])"/>
 
 
         <WorkerComponentsStatisticsPaymentSumDaily />
@@ -61,12 +64,15 @@ const zero = ref(0);
 
         <WorkerComponentsStatisticsGymEntriesDaily />
 
-        <WorkerComponentsStatisticsDailyGymMinutesByEmail />
+        <WorkerComponentsStatisticsDailyGymMinutesByEmail  v-if="checkPermission(['MEMBER_MANAGEMENT'])"/>
 
         <WorkerComponentsStatisticsMemberRegistrationsDaily />
 
 
     </main>
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
 
     
 </div>

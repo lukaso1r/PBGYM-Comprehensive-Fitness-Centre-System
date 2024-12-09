@@ -49,9 +49,9 @@ const toggleModal = (choosenOption: string) => {
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
     <!-- TODO: poprawić margines -->
-    <main class="min-h-screen content-start basis-4/5 mt-4 grid grid-cols-3 items-stretch justify-start gap-8">
+    <main  v-if="checkPermission(['ADMIN'])"  class="min-h-screen content-start basis-4/5 mt-4 grid grid-cols-3 items-stretch justify-start gap-8">
         
-        <div class="active-pass w-full col-span-1 flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div  v-if="checkPermission(['ADMIN'])"  class="active-pass w-full col-span-1 flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <div>
                 <h1 class="text-xl font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Pracownik: </span>{{worker?.name}} {{worker?.surname}}</h1>
                 <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Stanowisko: </span>{{worker?.position}}</p>
@@ -64,7 +64,7 @@ const toggleModal = (choosenOption: string) => {
             </div>
         </div>
 
-        <div class="active-pass w-full col-span-1 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div  v-if="checkPermission(['ADMIN'])"  class="active-pass w-full col-span-1 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <ul>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Data urodzenia: </span>{{worker?.birthdate}}</li>
                 <li class="text-lg"><span class="text-slate-500 text-base pr-3">Pesel: </span>{{worker?.pesel}}</li>
@@ -76,7 +76,7 @@ const toggleModal = (choosenOption: string) => {
             </div>
         </div>
 
-        <div class="options w-full col-span-1 flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+        <div  v-if="checkPermission(['ADMIN'])"  class="options w-full col-span-1 flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4  items-start" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <UButton
                     icon="i-material-symbols-account-box"
                     size="sm"
@@ -118,7 +118,11 @@ const toggleModal = (choosenOption: string) => {
 
         
 
-    </main> 
+    </main>
+    
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
 
 </div>
 

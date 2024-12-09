@@ -109,7 +109,7 @@ const test = () => {
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
     <!-- TODO: poprawić margines -->
-    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+    <main  v-if="checkPermission(['PASS_MANAGEMENT'])"  class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
               
         <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Aktualna oferta karnetów</h1>
@@ -276,6 +276,10 @@ const test = () => {
 
         </div>
     </main>
+
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
     
 </div>
 

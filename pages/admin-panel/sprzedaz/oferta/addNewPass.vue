@@ -13,7 +13,7 @@ const setOfferType = (type: string) => {
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
 
-    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
+    <main  v-if="checkPermission(['PASS_MANAGEMENT'])" class="min-h-screen content-start basis-4/5 mt-4 flex flex-col flex-wrap items-start justify-start gap-8">
 
         <div class="w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Formularz dodawania nowego karnetu</h1>
@@ -28,6 +28,10 @@ const setOfferType = (type: string) => {
         <WorkerComponentsOfferAddSpecialOffer v-if="offerType==='special'"/>
 
     </main>
+
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
 </div>
 
 </template>

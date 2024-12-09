@@ -193,7 +193,6 @@ const closeShowTrainerOfferModal = () => {
                 </div>
             </template>
             
-
             <template #footer>
                 <div class="flex flex-row justify-end gap-5">
                     <UButton label="Zamknij" @click="closeShowTrainerOfferModal" color="gray" icon="i-material-symbols-cancel" />

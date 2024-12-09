@@ -145,7 +145,7 @@ const toggleAddClassesModal = () => {
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
     <!-- TODO: poprawić margines -->
-    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+    <main  v-if="checkPermission(['TRAINER_MANAGEMENT'])"  class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
         
         <div class="flex flex-row flex-wrap lg:min-w-[79vw] lg:max-w-[79vw] gap-8">
             <div class="trainerCardInfo w-max flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
@@ -380,6 +380,10 @@ const toggleAddClassesModal = () => {
         
 
     </main> 
+
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
 
 </div>
 

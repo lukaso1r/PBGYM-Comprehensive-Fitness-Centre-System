@@ -96,8 +96,8 @@ const filteredRows = computed(() => {
 <div class="flex flex-row bg-[#F5F7F8] items-start pb-10">
     <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
   
-    <!-- TODO: poprawić margines -->
-    <main class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+
+    <main v-if="checkPermission(['BLOG'])" class="min-h-screen content-start basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
         
         <div class="members-panel-title w-max lg:max-w-[79vw] flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
             <h1 class="text-xl font-semibold">Panel zarządzania blogiem</h1>
@@ -106,37 +106,41 @@ const filteredRows = computed(() => {
         </div>
 
           
-<div class="w-full lg:max-w-[79vw] bg-white rounded-lg p-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-        <UInput v-model="q" placeholder="Wyszukaj wpis..." />
-    </div>  
-    <UTable class="w-full" :columns="columns" :rows="filteredRows">
-            
-        <template #postDate-data="{ row }">
-            <p>{{ dateWithTimeString(new Date(row.postDate)) }}</p>
-        </template>
-        <template #actions-data="{ row }">
-            <div class="flex flex-row gap-2">
-                <UButton label="Edytuj" color="blue" icon="i-material-symbols-edit" @click="actionModal('edit', row)" />
-                <UButton label="Usuń" color="red" icon="i-material-symbols-delete" @click="actionModal('delete', row)" />
-            </div>
-        </template>
-        <template #title-data="{ row }">
-            <p>{{ row.title.slice(0,30)}}...</p>
-        </template>
-        <template #content-data="{ row }">
-            <p>{{ row.content.slice(0,50)}}...</p>
-        </template>
-        <template #empty-state>
-            <div class="flex flex-col items-center justify-center py-6 gap-3">
-                <span class="italic text-sm">Brak wpisów</span>
-            </div>
-        </template>
+        <div class="w-full lg:max-w-[79vw] bg-white rounded-lg p-4" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
+            <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                <UInput v-model="q" placeholder="Wyszukaj wpis..." />
+            </div>  
+            <UTable class="w-full" :columns="columns" :rows="filteredRows">
+                    
+                <template #postDate-data="{ row }">
+                    <p>{{ dateWithTimeString(new Date(row.postDate)) }}</p>
+                </template>
+                <template #actions-data="{ row }">
+                    <div class="flex flex-row gap-2">
+                        <UButton label="Edytuj" color="blue" icon="i-material-symbols-edit" @click="actionModal('edit', row)" />
+                        <UButton label="Usuń" color="red" icon="i-material-symbols-delete" @click="actionModal('delete', row)" />
+                    </div>
+                </template>
+                <template #title-data="{ row }">
+                    <p>{{ row.title.slice(0,30)}}...</p>
+                </template>
+                <template #content-data="{ row }">
+                    <p>{{ row.content.slice(0,50)}}...</p>
+                </template>
+                <template #empty-state>
+                    <div class="flex flex-col items-center justify-center py-6 gap-3">
+                        <span class="italic text-sm">Brak wpisów</span>
+                    </div>
+                </template>
+                
+            </UTable>
+        </div>
         
-    </UTable>
-</div>
-        
-    </main> 
+    </main>
+    
+    <div v-else>
+        <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+    </div>
 </div>
 
 <UModal 

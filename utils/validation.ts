@@ -83,6 +83,13 @@ export const validateCardCVC = (cvc: string) => {
     return true
 }
 
+export const validateIdCardNumber = (idCardNumber: string) => {
+    if (!(/^[A-Z]{3}\d{6}$/.test(idCardNumber)) && idCardNumber !== '') {
+        return false
+    }
+    return true
+}
+
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export const isObjectEmpty = (obj: any) => {
     return Object.keys(obj).length === 0

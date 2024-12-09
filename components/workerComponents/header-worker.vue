@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import type { LoggedWorkerData } from "~/types";
+
 const router = useRouter()
 const route = useRoute()
 
@@ -54,8 +56,7 @@ const logout = () => {
             </div>
         </div>
 
-        <div class="fastInformationRow w-full flex flex-row gap-7 py-3">
-
+        <div v-if="checkPermission(['STATISTICS'])" class="fastInformationRow w-full flex flex-row gap-7 py-3">
             <div class="fastInfoCard flex flex-col bg-white rounded-xl gap-4 py-3 px-5 justify-between ">
                 <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
                     <div v-if="statisticsStore.paymentSumToday">

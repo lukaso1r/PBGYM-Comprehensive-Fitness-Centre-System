@@ -6,6 +6,10 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import type { FormError, FormSubmitEvent } from '#ui/types'
 
+// definePageMeta({
+//   middleware: 'auth',
+// });
+
 const showAddWorkerModal = ref(false)
 const option = ref('')
 const store = useWorkerStore()
@@ -92,6 +96,7 @@ const validate = (newWorker: NewWorkerData): FormError[] => {
   if (!newWorker.name) errors.push({ path: 'name', message: 'Wymagane' })
   if (!newWorker.surname) errors.push({ path: 'surname', message: 'Wymagane' })
   if (!newWorker.idCardNumber) errors.push({ path: 'idCardNumber', message: 'Wymagane' })
+  if (!validateIdCardNumber(newWorker.idCardNumber) || !newWorker.idCardNumber) errors.push({ path: 'idCardNumber', message: 'Niepoprawny numer dowodu' })
   if (!newWorker.pesel) errors.push({ path: 'pesel', message: 'Wymagane' })
   if (!validatePesel(newWorker.pesel) || !newWorker.pesel) errors.push({ path: 'pesel', message: 'Niepoprawny pesel' })
   if (!newWorker.phoneNumber) errors.push({ path: 'phoneNumber', message: 'Wymagane' })
@@ -118,15 +123,15 @@ const validate = (newWorker: NewWorkerData): FormError[] => {
   <workerComponents-navabar-worker class="basis-1/5 max-w-[350px] -mt-48 px-6"></workerComponents-navabar-worker>
 
   <!-- TODO: poprawić margines -->
-  <main class="basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
+  <main v-if="checkPermission(['ADMIN'])"  class="basis-4/5 mt-4 flex flex-row flex-wrap items-start justify-start gap-8">
     <div class="active-pass w-max flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-2" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
       <h1 class="text-xl font-semibold">Panel zarządzania pracownikami</h1>
       <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać pracownikami zarejestrowanymi w systemie.</p>
     </div>
 
-    <WorkerComponentsWorkerList :showButton="false"/>
+    <WorkerComponentsWorkerList  v-if="checkPermission(['ADMIN'])" :showButton="false"/>
 
-    <UButton color="blue" icon="i-heroicons-user-plus" size="md" @click="toggleModal">Dodaj pracownika</UButton>
+    <UButton  v-if="checkPermission(['ADMIN'])"  color="blue" icon="i-heroicons-user-plus" size="md" @click="toggleModal">Dodaj pracownika</UButton>
 
     <UModal 
           v-model="showAddWorkerModal"
@@ -306,6 +311,10 @@ const validate = (newWorker: NewWorkerData): FormError[] => {
       </UCard>
     </UModal>
   </main>
+
+  <div v-else>
+    <p class="text-red-500">Brak uprawnień do przeglądania tej strony</p>
+</div>
 </div>
 
 </template>

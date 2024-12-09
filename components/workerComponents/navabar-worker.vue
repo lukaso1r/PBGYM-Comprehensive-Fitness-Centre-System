@@ -1,47 +1,51 @@
 <script setup lang="ts">
 
 const items = [
-    {
-        label: 'Kokpit',
-        icon: 'i-ic-sharp-home',
-        defaultOpen: true,
-        slot: 'kokpit',
-        color: 'blue',
-        class: 'py-4 hover:bg-sky-100'        
-    },
-    {
-        label: 'Aktualności',
-        icon: 'i-ic-round-layers',
-        defaultOpen: false,
-        slot: 'aktualnosci',
-        color: 'orange',
-        class: 'py-4 hover:bg-sky-100'        
-    },
-    {
-        label: 'Zarządzanie',
-        icon: 'i-icon-park-outline-switch-button',
-        defaultOpen: false,
-        slot: 'zarzadzanie',
-        color: 'sky',
-        class: 'py-4 hover:bg-sky-100'        
-    },
-    {
-        label: 'Sprzedaż',
-        icon: 'i-ic-sharp-local-grocery-store',
-        defaultOpen: false,
-        slot: 'sprzedaz',
-        color: 'emerald',
-        class: 'py-4 hover:bg-sky-100'        
-    },
-    {
-        label: 'Statystyki',
-        icon: 'i-material-symbols-query-stats',
-        defaultOpen: false,
-        slot: 'stats',
-        color: 'rose',
-        class: 'py-4 hover:bg-sky-100', 
-    }
-]
+  {
+    label: 'Kokpit',
+    icon: 'i-ic-sharp-home',
+    defaultOpen: true,
+    slot: 'kokpit',
+    color: 'blue',
+    class: 'py-4 hover:bg-sky-100',
+  },
+  {
+    label: 'Aktualności',
+    icon: 'i-ic-round-layers',
+    defaultOpen: false,
+    slot: 'aktualnosci',
+    color: 'orange',
+    class: 'py-4 hover:bg-sky-100',
+    visible: checkPermission(['BLOG']),
+  },
+  {
+    label: 'Zarządzanie',
+    icon: 'i-icon-park-outline-switch-button',
+    defaultOpen: false,
+    slot: 'zarzadzanie',
+    color: 'sky',
+    class: 'py-4 hover:bg-sky-100',
+    visible: checkPermission(['ADMIN', 'MEMBER_MANAGEMENT', 'TRAINER_MANAGEMENT', 'GROUP_CLASS_MANAGEMENT']),
+  },
+  {
+    label: 'Sprzedaż',
+    icon: 'i-ic-sharp-local-grocery-store',
+    defaultOpen: false,
+    slot: 'sprzedaz',
+    color: 'emerald',
+    class: 'py-4 hover:bg-sky-100',
+    visible: checkPermission(['PASS_MANAGEMENT']),
+  },
+  {
+    label: 'Statystyki',
+    icon: 'i-material-symbols-query-stats',
+    defaultOpen: false,
+    slot: 'stats',
+    color: 'rose',
+    class: 'py-4 hover:bg-sky-100',
+    visible: checkPermission(['STATISTICS']),
+  },
+];
 
 const settings = [
     {
@@ -63,7 +67,8 @@ const settings = [
         color:'gray',
         variant: 'ghost',
         content: 'Lorem ipsum dolor sit amet',
-        class: 'py-4 hover:bg-purple-100 '
+        class: 'py-4 hover:bg-purple-100 ',
+        visible: checkPermission(['ADMIN']),
         
     }
 ]
@@ -78,54 +83,54 @@ const settings = [
             <hr/>
             <div class="navigationContainer flex flex-col gap-y-0">
                 <!-- TODO: change text color to black -->
-                <UAccordion :items="items" size="sm" variant="ghost">
-                    <template #kokpit >
-                        <NuxtLink to="/admin-panel" >
-                            <p class="hover:text-blue-500 pl-9">Start</p>
-                        </NuxtLink>
+                <UAccordion :items="items.filter(item => item.visible !== false)" size="sm" variant="ghost">
+                    <template #kokpit>
+                      <NuxtLink to="/admin-panel">
+                        <p class="hover:text-blue-500 pl-9">Start</p>
+                      </NuxtLink>
                     </template>
-                    
-                    <template #zarzadzanie >
-                        <NuxtLink to="/admin-panel/zarzadzanie/pracownicy" >
-                            <p class="hover:text-blue-500 pl-9">Pracownicy</p>
-                        </NuxtLink>
-                        <NuxtLink to="/admin-panel/zarzadzanie/klienci" >
-                            <p class="hover:text-blue-500 pl-9">Klienci</p>
-                        </NuxtLink>
-                        <NuxtLink to="/admin-panel/zarzadzanie/trenerzy" >
-                            <p class="hover:text-blue-500 pl-9">Trenerzy</p>
-                        </NuxtLink>
-                        <NuxtLink to="/admin-panel/zarzadzanie/zajecia" >
-                            <p class="hover:text-blue-500 pl-9">Zajęcia</p>
-                        </NuxtLink>
+                  
+                    <template #zarzadzanie>
+                      <NuxtLink to="/admin-panel/zarzadzanie/pracownicy" v-if="checkPermission(['ADMIN'])">
+                        <p class="hover:text-blue-500 pl-9">Pracownicy</p>
+                      </NuxtLink>
+                      <NuxtLink to="/admin-panel/zarzadzanie/klienci" v-if="checkPermission(['MEMBER_MANAGEMENT'])">
+                        <p class="hover:text-blue-500 pl-9">Klienci</p>
+                      </NuxtLink>
+                      <NuxtLink to="/admin-panel/zarzadzanie/trenerzy" v-if="checkPermission(['TRAINER_MANAGEMENT'])">
+                        <p class="hover:text-blue-500 pl-9">Trenerzy</p>
+                      </NuxtLink>
+                      <NuxtLink to="/admin-panel/zarzadzanie/zajecia" v-if="checkPermission(['GROUP_CLASS_MANAGEMENT'])">
+                        <p class="hover:text-blue-500 pl-9">Zajęcia</p>
+                      </NuxtLink>
                     </template>
-
-                    <template #stats >
-                        <NuxtLink to="/admin-panel/statystyki" >
-                            <p class="hover:text-blue-500 pl-9">Statystyki</p>
-                        </NuxtLink>
+                  
+                    <template #stats>
+                      <NuxtLink to="/admin-panel/statystyki" v-if="checkPermission(['STATISTICS'])">
+                        <p class="hover:text-blue-500 pl-9">Statystyki</p>
+                      </NuxtLink>
                     </template>
-
-                    <template #sprzedaz >
-                        <NuxtLink to="/admin-panel/sprzedaz/oferta" >
-                            <p class="hover:text-blue-500 pl-9">Aktualne oferty</p>
-                        </NuxtLink>
-                        <NuxtLink to="/admin-panel/sprzedaz/oferta/addNewPass" >
-                            <p class="hover:text-blue-500 pl-9">Dodaj nową ofertę</p>
-                        </NuxtLink>
+                  
+                    <template #sprzedaz>
+                      <NuxtLink to="/admin-panel/sprzedaz/oferta" v-if="checkPermission(['PASS_MANAGEMENT'])">
+                        <p class="hover:text-blue-500 pl-9">Aktualne oferty</p>
+                      </NuxtLink>
+                      <NuxtLink to="/admin-panel/sprzedaz/oferta/addNewPass" v-if="checkPermission(['PASS_MANAGEMENT'])">
+                        <p class="hover:text-blue-500 pl-9">Dodaj nową ofertę</p>
+                      </NuxtLink>
                     </template>
-
-                    <template #aktualnosci >
-                        <NuxtLink to="/admin-panel/blog" >
-                            <p class="hover:text-blue-500 pl-9">Aktualności</p>
-                        </NuxtLink>
-                    </template> 
-                </UAccordion>  
+                  
+                    <template #aktualnosci>
+                      <NuxtLink to="/admin-panel/blog" v-if="checkPermission(['BLOG'])">
+                        <p class="hover:text-blue-500 pl-9">Aktualności</p>
+                      </NuxtLink>
+                    </template>
+                </UAccordion>
                 
                 <hr/>
                 
                 <p class="pt-4 pl-2 text-slate-600">Serwis</p>
-                <UAccordion :items="settings" color="primary"
+                <UAccordion :items="settings.filter(item => item.visible !== false)" color="primary"
                     variant="soft"
                     size="sm"
                     class="my-2"
@@ -137,7 +142,7 @@ const settings = [
                     </template>
                     <template #sysLogs>
                         <div>
-                            <NuxtLink to="/admin-panel/adminLogs" >
+                            <NuxtLink to="/admin-panel/adminLogs" v-if="checkPermission(['ADMIN'])">
                                 <p class="hover:text-blue-500 pl-9">Dziennik zdarzeń</p>
                             </NuxtLink>
                         </div>

@@ -90,7 +90,7 @@ const test = () => {
             </UForm>
         </div>
 
-        <div class="changeEmailContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4"
+        <div v-if="checkPermission(['ADMIN'])"  class="changeEmailContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4"
             v-show="loggedWorkerData?.permissions.includes('ADMIN')"
         >
             <span class="font-semibold text-lg">Zmiana adresu email</span>
@@ -108,9 +108,7 @@ const test = () => {
             </UForm>
         </div>
 
-        <div class="changeMemberDetailsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4"
-            v-show="loggedWorkerData?.permissions.includes('ADMIN')"
-        >    
+        <div v-if="checkPermission(['ADMIN'])" class="changeMemberDetailsContainer flex flex-col rounded-lg p-4 bg-white flex-nowrap gap-4">    
             <span class="font-semibold text-lg">Zmiana danych adresowych</span>
             <h3 class="[word-spacing:4px] font-medium">Użyj poniższego formularza aby zmienić swoje dane adresowe.</h3>
             
@@ -148,6 +146,8 @@ const test = () => {
         </div>
 
     </main>
+
+    
 </div>
 
 

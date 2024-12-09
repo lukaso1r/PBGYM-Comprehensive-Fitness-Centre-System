@@ -23,7 +23,7 @@ const test = () => {
 
     <div class="flex flex-row flex-nowrap gap-8">
       
-      <WorkerComponentsStatisticsPaymentSumDaily class="w-3/4" />
+      <WorkerComponentsStatisticsPaymentSumDaily v-if="checkPermission(['STATISTICS'])" class="w-3/4" />
 
       <div class="total-entrance-amount flex flex-col rounded-lg p-8 bg-[url('/images/worker/aktualizacja.png')] gap-4 basis-2/5 text-white justify-end bg-cover bg-right-bottom " style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
         <p class="text-2xl font-semibold drop-shadow-xl">Aktualizacja 10 Paź. 2024</p>
@@ -34,8 +34,10 @@ const test = () => {
 
     <div class="flex flex-row gap-8 basis-full items-start">
 
-      
-    <WorkerComponentsWorkerList :showButton="true"/>
+      <template v-if="checkPermission(['ADMIN'])">
+        <WorkerComponentsWorkerList :showButton="true"/>
+      </template>
+    
       
     </div>
 

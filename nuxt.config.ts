@@ -8,6 +8,10 @@ export default defineNuxtConfig({
     }
   },
 
+  router: {
+    middleware: ['auth.global'],
+  },
+
   build: {
     transpile: ['@vuepic/vue-datepicker']
   },
