@@ -45,9 +45,11 @@ onMounted( async () => {
         <div class="col-span-3 rounded-xl " >
             <div class="trainersListGrid grid grid-cols-1 gap-8">
                 <div v-for="trainer in trainerStore.allTrainersWithOffers" :key="trainer.trainerInfo.id" :trainer="trainer">
+                    <!-- TODO: DODAĆ FILTROWANIE PO VISIBLE ITP -->
                     <div class="trainer-card-info border-2 border-slate-300 rounded-lg shadow-lg">
                         <div class="trainer-card flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center ">
-                            <img src="/images/worker/komar.jpg" class="rounded-full w-48" alt=""/>
+                            <img v-if="trainer.trainerInfo?.photo" :src="trainer.trainerInfo?.photo" alt="Podgląd zdjęcia" class="mt-2 lg:max-w-48 object-cover rounded" />
+                                <span v-else>Brak zdjęcia</span>
                             <div>
                                 <h1 class="text-3xl font-semibold">{{trainer.trainerInfo?.name}} {{trainer.trainerInfo?.surname}}</h1>
                                 <p class="text-lg">Białystok PB-GYM</p>

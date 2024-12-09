@@ -7,9 +7,6 @@ const trainerStore = useTrainerStore();
 const groupClassesStore = useGroupClassesStore();
 const statisticsStore = useStatisticsStore();
 
-const selectedTrue = ref(false)
-const selected = ref(true)
-
 const defaultLoginData = useCookie<DefaultLoginData>('defaultLoginData');
 const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData');
 
@@ -21,7 +18,7 @@ onMounted( async () => {
     await groupClassesStore.getGroupClassesUpcomingByTrainerEmail(loggedTrainerData.value.email);
     await groupClassesStore.getGroupClassesHistoricalByTrainerEmail(loggedTrainerData.value.email);
     await statisticsStore.getMonthlyGroupClassesByTrainerEmail(loginStore.loggedTrainerData.email);
-    
+    await trainerStore.getTrainerByEmail(loggedTrainerData.value.email);
     
 })
 
@@ -40,10 +37,10 @@ onMounted( async () => {
             <p class="text-slate-500">Możesz z tego miejsca przeglądać i zarządzać wykonywanymi usługami.</p>
         </div>
 
-
         <div class="trainer-card-info col-span-2">
             <div class="trainer-card flex flex-row rounded-lg p-4 bg-white flex-nowrap gap-10 items-center" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
-                <img src="/images/worker/komar.jpg" class="rounded-full w-48" alt=""/>
+                <img v-if="trainerStore?.trainerData.photo" :src="trainerStore?.trainerData.photo" alt="Podgląd zdjęcia" class="mt-2 lg:max-w-48 object-cover rounded" />
+                <span v-else>Brak zdjęcia</span>
                 <div>
                     <h1 class="text-3xl font-semibold">{{loggedTrainerData?.name}} {{loggedTrainerData?.surname}}</h1>
                     <p class="text-lg">Białystok PB-GYM</p>

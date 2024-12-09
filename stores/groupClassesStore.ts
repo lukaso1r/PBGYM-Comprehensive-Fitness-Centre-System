@@ -232,7 +232,6 @@ export const useGroupClassesStore = defineStore('groupClassesStore', () => {
         }
     }
 
-    // TO FIX URL KOMAR ZEPSUŁ I NIE MOŻNA DODAĆ DO ZAJĘĆ GRUPOWYCH
     const postEnrollMemberToGroupClass = async (groupClassId: number, memberEmail: string) => {
         // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         let response: any;

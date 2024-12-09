@@ -4,7 +4,8 @@ import type { TrainerData } from '~/types';
 
 const trainerStore = useTrainerStore();
 
-const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData');const groupClassesStore = useGroupClassesStore();
+const loggedTrainerData = useCookie<TrainerData>('loggedTrainerData');
+const groupClassesStore = useGroupClassesStore();
 
 
 onMounted( async () => {

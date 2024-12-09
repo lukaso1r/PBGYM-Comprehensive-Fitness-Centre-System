@@ -301,7 +301,7 @@ export interface TrainerData {
         postalCode: string
     },
     description: string,
-    photo: string[],
+    photo?: string,
     gender: string,
     visible: boolean,
     trainerTags: string[]
@@ -329,7 +329,7 @@ export interface TrainerDataToEdit {
         postalCode: string;
     };
     description: string;
-    photo: string[];
+    photo?: string;
     visible: boolean;
     trainerTags: string[];
 }
@@ -351,7 +351,7 @@ export interface TrainerWithOffers {
         surname: string;
         phoneNumber: string;
         description: string;
-        photo: string[];
+        photo?: string;
         gender: string;
         trainerTags: string[];
     };
@@ -387,7 +387,7 @@ export interface GroupClassWithTrainer {
         surname: string;
         phoneNumber: string;
         description: string;
-        photo: string[];
+        photo?: string;
         gender: string;
         trainerTags: string[];
     };

@@ -87,7 +87,6 @@ export const useLoginStore = defineStore('login', () => {
                         break;
                     }
                     case 'Trainer': {
-                        // TODO: fetch trainer data
                         console.log('/trainer');
                         const { data, error } = await useFetch<TrainerData>(`${backendUrl}/trainers/${userToLoginCredentials.value.email}`, {
                             headers: {
@@ -96,14 +95,22 @@ export const useLoginStore = defineStore('login', () => {
                             },
                             method: 'GET'
                         });
+                    
                         if (error.value) {
-                            toast.add({title: 'Błąd', description: 'Błąd pobierania danych trenera'});
+                            toast.add({ title: 'Błąd', description: 'Błąd pobierania danych trenera' });
                             console.error('Error:', error.value);
                             alert('Błąd pobierania danych trenera');
                         } else if (data.value) {
-                            loggedTrainerData.value = data.value;
-                            toast.add({title: 'Sukces', description: 'Zalogowano pomyślnie'});
-                            console.log('Dane z serwera loogedTrainerData:', toRaw(loggedTrainerData.value));
+                                               
+                            const { photo, ...trainerDataWithoutPhoto } = data.value;
+                            loggedTrainerData.value = {
+                                ...trainerDataWithoutPhoto,
+                                photo: '' 
+                            };
+                    
+                            await nextTick();
+                            toast.add({ title: 'Sukces', description: 'Zalogowano pomyślnie' });
+                            console.log('Dane z serwera loggedTrainerData:', toRaw(loggedTrainerData.value));
                             navigateTo('/trainer');
                         } else {
                             console.error('Brak danych w odpowiedzi');

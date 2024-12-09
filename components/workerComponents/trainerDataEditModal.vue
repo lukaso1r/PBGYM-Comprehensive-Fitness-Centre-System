@@ -16,7 +16,6 @@ const props = defineProps<{
 const emit = defineEmits(['update:showTrainerDataEditModal']);
 
 
-
 const { createTrainerObject } = useObjectFactory();
 const trainerStore = useTrainerStore();
 
@@ -106,6 +105,29 @@ const closeshowTrainerDataEditModal = () => {
 const test = () => {
     console.log('test', trainerTags.value.map(tag => tag.value));
 }
+
+// PHOTO UPLOAD
+const onPhotoChange = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.files) {
+    const file = input.files[0];
+
+    // Sprawdzenie formatu pliku
+    if (!file.type.startsWith('image/jpeg') && !file.type.startsWith('image/png')) {
+      alert('Proszę wybrać plik w formacie .jpg lub .png');
+      return;
+    }
+
+    // Konwersja pliku na Base64
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      trainerDataToEdit.value.photo = base64String;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
 
 
 
@@ -198,7 +220,19 @@ const test = () => {
                             <UFormGroup label="Nowy kod pocztowy" name="postalCode" required>
                                 <UInput v-model="trainerDataToEdit.address.postalCode" type="text" placeholder="Twój nowy kod pocztowy"  />
                             </UFormGroup>
+
+                            <!-- pole które umożliwi dodanie zdjęcia w formacie .jpg lub .png i następnie zapisze te zdjęcie jako string   "photo": string, -->
+
+                            <UFormGroup label="Zdjęcie trenera" name="photo">
+                                <input type="file" accept="image/jpeg, image/png" @change="onPhotoChange" class="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer focus:outline-none" />
+                            </UFormGroup>
                         </div>
+
+                        <div v-if="trainerDataToEdit.photo && trainerDataToEdit.photo.length">
+                            <p class="font-semibold">Podgląd zdjęcia:</p>
+                            <img :src="trainerDataToEdit.photo" alt="Podgląd zdjęcia" class="mt-2 lg:max-w-48 object-cover rounded" />
+                        </div>
+                          
 
                         <div class="grid grid-cols-3 gap-5 pt-8 items-end  p-6 border-2" >
                             <h4 class="col-span-3 text-xl font-semibold">Dane trenerskie</h4>

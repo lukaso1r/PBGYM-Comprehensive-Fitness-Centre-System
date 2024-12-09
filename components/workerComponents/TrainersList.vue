@@ -222,7 +222,10 @@ const selectOffer = (row: any) => {
                         </tr>
                         <tr>
                             <td class="font-bold pr-8 pb-2">Zdjęcie</td>
-                            <td>{{ selectedRow.photo }}</td>
+                            <td>
+                                <img v-if="selectedRow?.photo" :src="selectedRow?.photo" alt="Podgląd zdjęcia" class="mt-2 lg:max-w-48 object-cover rounded" />
+                                <span v-else>Brak zdjęcia</span>
+                            </td>
                         </tr>
                         <tr>
                             <td class="font-bold pr-8 pb-2">Płeć</td>

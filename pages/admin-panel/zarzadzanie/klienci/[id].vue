@@ -95,7 +95,6 @@ const test = () => {
                         <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Email: </span>{{membersManagmentStore.memberByEmail?.email}}</p>
                         <p class="font-semibold"><span class="text-slate-500 text-base font-normal pr-3">Telefon: </span>{{membersManagmentStore.memberByEmail?.phoneNumber}}</p>
                     </div>
-                    <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
                 </div>
         
                 <div class="active-pass col-span-1 w-full flex flex-col rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
@@ -106,12 +105,12 @@ const test = () => {
                             <span class="text-slate-500 text-base pr-3">
                                 Adres: </span>
                                 {{membersManagmentStore.memberByEmail?.address?.city 
-                                + ' ' 
+                                + ', ' 
                                 + membersManagmentStore.memberByEmail?.address?.streetName 
-                                + ' ' 
+                                + ', ' 
                                 + membersManagmentStore.memberByEmail?.address?.buildingNumber 
                                 + (membersManagmentStore.memberByEmail?.address?.apartmentNumber ? ('/' + membersManagmentStore.memberByEmail?.address?.apartmentNumber) : ' ') 
-                                + ' ' 
+                                + ', ' 
                                 +  membersManagmentStore.memberByEmail?.address?.postalCode }}
                         </li>
                         <li class="text-lg min-w-max mt-3">

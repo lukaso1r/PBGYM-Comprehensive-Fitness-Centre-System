@@ -167,7 +167,7 @@ const toggleAddClassesModal = () => {
                         @click="editTrainerData('login')"
                     />
                 </div>
-                <img src="/images/worker/komar.jpg" class="rounded-full w-32" alt=""/>
+                <img :src="trainerStore.trainerData?.photo" class="rounded-full w-36" alt=""/>
             </div>
 
             <div class="trainer-info w-max max-w-1/2 flex flex-col  rounded-lg p-4 bg-white flex-nowrap justify-between" style="box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);">
