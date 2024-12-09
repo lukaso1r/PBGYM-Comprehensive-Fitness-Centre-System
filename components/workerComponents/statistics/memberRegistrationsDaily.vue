@@ -69,11 +69,11 @@ watch([selectedYear, selectedMonth], () => {
 <template>
   <div class="memberRegistrationsDaily col-span-2 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Rejestracje członków dziennie - <span class="font-normal text-slate-500">StatisticStore.memberRegistrationsDaily</span>
+      Rejestracje członków dziennie
     </p>
     
     <!-- Wybierz rok i miesiąc -->
-    <div class="month-selector col-span-2 flex items-center gap-4 p-4">
+    <div class="month-selector col-span-2 flex items-center gap-4">
       <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
       <select id="yearSelect" v-model="selectedYear">
         <option v-for="year in [2024, 2025]" :key="year" :value="year">{{ year }}</option>

@@ -73,7 +73,7 @@ const changeYear = (direction: 'prev' | 'next') => {
     <p class="font-semibold text-lg col-span-2">Wejścia na siłownię miesięcznie</p>
 
     <!-- Nawigacja między latami -->
-    <div class="year-navigation flex items-center gap-4">
+    <div class="year-navigation flex items-center gap-4 col-span-2">
       <div class="flex flex-row w-fit items-center">
         <label for="yearSelect" class="font-semibold">Wybierz rok:</label>
         <select id="yearSelect" v-model="selectedYear" class="rounded px-2 py-1">

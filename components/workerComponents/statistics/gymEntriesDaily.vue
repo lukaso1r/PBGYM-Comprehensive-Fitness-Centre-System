@@ -69,7 +69,7 @@ watch([selectedYear, selectedMonth], () => {
 <template>
   <div class="gymEntriesDaily col-span-2 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Wejścia na siłownię dziennie - <span class="font-normal text-slate-500">StatisticStore.gymEntriesDaily</span>
+      Wejścia na siłownię dziennie
     </p>
     
     <!-- Wybierz rok i miesiąc -->

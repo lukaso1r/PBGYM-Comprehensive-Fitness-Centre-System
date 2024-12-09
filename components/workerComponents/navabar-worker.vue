@@ -40,7 +40,6 @@ const items = [
         slot: 'stats',
         color: 'rose',
         class: 'py-4 hover:bg-sky-100', 
-        to: '/admin-panel/statystyki'     
     }
 ]
 

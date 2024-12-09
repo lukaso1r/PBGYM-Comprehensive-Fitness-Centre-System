@@ -46,7 +46,7 @@ const changeYear = (direction: 'prev' | 'next') => {
 <template>
   <div class="memberRegistrationsMonthly col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Rejestracje członków miesięcznie - <span class="font-normal text-slate-500">StatisticStore.memberRegistrationsMonthly</span>
+      Rejestracje członków miesięcznie
     </p>
     
     <!-- Nawigacja między latami -->

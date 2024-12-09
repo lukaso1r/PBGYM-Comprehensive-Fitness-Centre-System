@@ -117,7 +117,7 @@ const changeMonth = (direction: 'prev' | 'next') => {
 <template>
   <div class="dailyGymMinutesByEmail col-span-2 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Minuty na siłowni - <span class="font-normal text-slate-500">{{ selectedYear }} / {{ selectedMonth }}</span>
+      Minuty na siłowni<span v-if="!memberEmail" class="font-normal text-slate-500"> -  z możliwością wyboru klienta</span>
     </p>
 
     <!-- Nawigacja między miesiącami i wybór miesiąca oraz roku -->
@@ -143,12 +143,12 @@ const changeMonth = (direction: 'prev' | 'next') => {
     </div>
 
     <!-- Informacja o użytkowniku, jeśli przekazano `memberMail` -->
-    <p v-if="memberEmail!=''" class="font-semibold col-span-2">
+    <p v-if="memberEmail" class="font-semibold col-span-2">
       Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
     </p>
 
     <!-- Wybór emaila tylko jeśli `memberMail` nie został przekazany -->
-    <div v-else class="email-selector col-span-2 flex gap-4 p-4">
+    <div v-else class="email-selector col-span-2 flex gap-4">
       <label for="emailSelect" class="font-semibold">Wybierz email:</label>
       <select id="emailSelect" v-model="selectedEmail" class="rounded px-2 py-1">
         <option v-for="email in allEmails" :key="email" :value="email">{{ email }}</option>

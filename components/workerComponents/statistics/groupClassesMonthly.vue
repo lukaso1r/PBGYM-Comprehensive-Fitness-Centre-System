@@ -54,7 +54,7 @@ watch(selectedYear, () => {
     </p>
 
     <!-- Nawigacja między latami i wybór roku -->
-    <div class="year-navigation col-span-2 flex gap-4 px-4 flex-row items-center">
+    <div class="year-navigation col-span-2 flex gap-4 flex-row items-center">
       
       <div>
         <label for="yearSelect" class="font-semibold">Wybierz rok:</label>

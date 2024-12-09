@@ -9,9 +9,9 @@ onMounted(() => {
 
 <template>
     <div class="fastInfoCard gymEntriesToday blockCustom flex flex-col justify-between ">
-        <div class="fastInfoCardInnerRow flex w-full gap-10 items-center">
+        <div class="fastInfoCardInnerRow flex w-full gap-10 items-center  justify-between">
             <div v-if="statisticStore.gymEntriesToday">
-                <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Liczba wejść na siłownię dzisiaj <span class="text-slate-300 text-xs">statisticStore.gymEntriesToday</span></h3>
+                <h3 class="text-gray-500 text-sm font-semibold tracking-wide pb-1">Liczba wejść na siłownię dzisiaj</h3>
                 <span class="font-bold text-lg">{{statisticStore.gymEntriesToday.split(';')[0]}}</span>                    
             </div>
             <div class="flex flex-row justify-center place-items-center bg-blue-800  rounded-full p-1 aspect-square ">

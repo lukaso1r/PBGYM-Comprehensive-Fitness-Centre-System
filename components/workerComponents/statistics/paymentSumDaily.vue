@@ -70,7 +70,7 @@ watch([selectedYear, selectedMonth], () => {
 <template>
   <div class="paymentSumDaily col-span-2 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Suma płatności dziennie - <span class="font-normal text-slate-500">StatisticStore.paymentSumDaily</span>
+      Suma płatności dziennie
     </p>
     
     <!-- Wybierz rok i miesiąc -->

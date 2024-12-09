@@ -10,7 +10,7 @@ onMounted(() => {
 <template>
     <div class="trainerCount smallStatsCard blockCustom col-span-1 grid grid-cols-2 items-center">
         <div class="col-span-1">
-            <p class=" text-sm font-semibold tracking-wide pb-1">Ilość osób na siłowni teraz <span class="text-slate-300 text-xs">statisticStore.liveMemberCount</span></p>
+            <p class=" text-sm font-semibold tracking-wide pb-1">Ilość osób na siłowni teraz</p>
             <div v-if="statisticStore.liveMemberCount!=null" class="font-bold text-lg">
                 {{ statisticStore.liveMemberCount }}
             </div>                    

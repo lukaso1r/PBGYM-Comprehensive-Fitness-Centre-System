@@ -13,25 +13,26 @@ const zero = ref(0);
 
     <main class="basis-4/5 mt-4 grid gird-cols-2 gap-8 ">
 
-        <div class="smallCards col-span-2 grid grid-cols-3 justify-start  gap-8">
-            
-            <WorkerComponentsStatisticsSmallCardsActivePassesCount />
-
-            <WorkerComponentsStatisticsSmallCardsTrainerCount />
+        <div class="smallCards col-span-2 grid grid-cols-4 justify-start gap-8">
 
             <WorkerComponentsStatisticsSmallCardsGroupClassesToday />
 
             <WorkerComponentsStatisticsSmallCardsPaymentSumToday />
 
             <WorkerComponentsStatisticsSmallCardsPassesRegistrationsToday />
-
+            
             <WorkerComponentsStatisticsSmallCardsMemberRegistrationsToday />
 
-            <WorkerComponentsStatisticsSmallCardsGymEntriesToday />
+            <WorkerComponentsStatisticsSmallCardsActivePassesCount />
+
+            <WorkerComponentsStatisticsSmallCardsTrainerCount />
 
             <WorkerComponentsStatisticsSmallCardsMemberCount />
 
             <WorkerComponentsStatisticsSmallCardsLiveMemberCount />
+
+            <WorkerComponentsStatisticsSmallCardsGymEntriesToday />
+
 
         </div>
 

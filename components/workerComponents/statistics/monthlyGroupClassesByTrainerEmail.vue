@@ -87,7 +87,7 @@ const changeYear = (direction: 'prev' | 'next') => {
 
 <template>
   <div class="monthlyGroupClassesByTrainerEmail col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
-    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe zrealizowane miesięcznie - <span class="font-normal text-slate-500">Z możliwością wyboru trenera</span></p>
+    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe zrealizowane miesięcznie <span v-if="!trainerMail" class="font-normal text-slate-500"> - Z możliwością wyboru trenera</span></p>
 
     <!-- Nawigacja między latami -->
     <div class="year-navigation flex items-center gap-4 col-span-1">

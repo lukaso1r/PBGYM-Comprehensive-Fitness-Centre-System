@@ -69,7 +69,7 @@ watch([selectedYear, selectedMonth], () => {
 <template>
   <div class="passesRegistrationsDaily col-span-2 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
     <p class="font-semibold text-lg">
-      Rejestracje karnetów dziennie - <span class="font-normal text-slate-500">StatisticStore.passesRegistrationsDaily</span>
+      Rejestracje karnetów dziennie
     </p>
     
     <!-- Wybór miesiąca i roku -->

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
 import { BarChart } from '@/components/ui/chart-bar';
 
 const props = defineProps<{ memberEmail?: string }>();
@@ -30,12 +31,12 @@ const years = Array.from({ length: 7 }, (_, i) => currentYear - 5 + i);
 const fetchData = async () => {
   if (selectedEmail.value) {
     isLoading.value = true;
-    await statisticStore.getGroupClassesMonthlyByEmail(selectedEmail.value);
+    await statisticStore.getGroupClassesMonthlyByEmail(selectedEmail.value, selectedYear.value);
     isLoading.value = false;
   }
 };
 
-// Obserwowanie zmiany `props.memberEmail` i pobieranie danych
+// Obserwacja zmian `props.memberEmail` i pobieranie danych
 watch(
   () => props.memberEmail,
   (newEmail) => {
@@ -47,12 +48,11 @@ watch(
   { immediate: true }
 );
 
-// Pobieranie danych po zmianie roku
-watch(selectedYear, fetchData);
+// Obserwacja zmian `selectedEmail` i `selectedYear`
+watch([selectedEmail, selectedYear], fetchData, { immediate: true });
 
-onMounted(() => {
-  fetchData
-});
+// Pobieranie danych po zamontowaniu komponentu
+onMounted(fetchData);
 
 // Przekształcenie danych na format wykresu
 const groupClassesMonthlyByEmail = computed(() => {
@@ -83,7 +83,7 @@ const changeYear = (direction: 'prev' | 'next') => {
 
 <template>
   <div class="groupClassesMonthlyByEmail col-span-1 blockCustomShadow grid grid-cols-1 rounded-lg p-4 bg-white gap-4">
-    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe miesięcznie - <span class="font-normal text-slate-500">Z możliwością wyboru klienta</span></p>
+    <p class="font-semibold text-lg col-span-2">Zajęcia grupowe miesięcznie <span v-if="!memberEmail" class="font-normal text-slate-500">- Z możliwością wyboru klienta</span></p>
 
     <!-- Nawigacja między latami -->
     <div class="year-navigation flex items-center gap-4">
@@ -102,7 +102,7 @@ const changeYear = (direction: 'prev' | 'next') => {
     </div>
 
     <!-- Wyświetl e-mail klienta, jeśli został przekazany w props -->
-    <p v-if="memberEmail" class="font-semibold col-span-2">
+    <p v-if="props.memberEmail" class="font-semibold col-span-2">
       Dane dla użytkownika: <span class="text-blue-600">{{ selectedEmail }}</span>
     </p>
 

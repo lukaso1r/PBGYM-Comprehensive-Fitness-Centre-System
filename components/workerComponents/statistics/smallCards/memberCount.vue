@@ -14,7 +14,7 @@ onMounted(() => {
 
     <div class="activePassesCount smallStatsCard blockCustom col-span-1 grid grid-cols-2 items-center">
         <div class="col-span-1">
-            <p class=" text-sm font-semibold tracking-wide pb-1">Ilość zarejestrowanych klientów <span class="text-slate-300 text-xs">statisticStore.memberCount</span></p>
+            <p class=" text-sm font-semibold tracking-wide pb-1">Ilość zarejestrowanych klientów</p>
             <div v-if="statisticStore.memberCount!=null" class="font-bold text-lg">
                 {{ statisticStore.memberCount }}
             </div>                    
