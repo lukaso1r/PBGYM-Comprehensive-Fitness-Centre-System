@@ -2,7 +2,7 @@ import type { Worker, DefaultLoginData, ChangeWorkerPasswordData, NewWorkerData,
 
 export const useWorkerStore = defineStore('workerStore', () => {
     const allWorkers = useState<Worker[]>(() => ([]));
-    const permissionList = <string[]>['ADMIN', 'STATISTICS', 'USER_MANAGEMENT', 'NEWSLETTER', 'PASS_MANAGEMENT', 'GROUP_CLASSES_MANAGEMENT', 'BLOG', 'SHOP_MANAGEMENT']
+    const permissionList = <string[]>['ADMIN', 'STATISTICS', 'MEMBER_MANAGEMENT', 'TRAINER_MANAGEMENT', 'PASS_MANAGEMENT', 'GROUP_CLASSES_MANAGEMENT', 'BLOG']
     const loginStore = useLoginStore();
 
     const toast = useToast()
