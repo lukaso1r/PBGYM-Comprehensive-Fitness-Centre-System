@@ -8,17 +8,17 @@
     <img src="/public/images/home-banner/blob4.svg" alt="" class="absolute bottom-0 left-0 -z-50">
 
     <div class=" flex flex-row z-99 w-[90%] mx-auto align-middle justify-center min-h-[100vh]">
-        <div class="btn-container flex flex-col gap-10 w-1/2 pl-20 align-middle justify-center">
-            <h1 class="font-bold text-6xl leading-snug">Miejsce gdzie Twoje cele stają się rzeczywistością!</h1>
+        <div class="btn-container flex flex-col gap-10 w-[65%] pl-20 align-middle justify-center">
+            <h1 class="font-bold text-6xl leading-snug">Miejsce gdzie Twoje <br /> cele stają się rzeczywistością!</h1>
             <p>Nasza misja to nie tylko budowanie sylwetki, ale również kształtowanie zdrowego stylu życia i pozytywnego nastawienia. </p>
             <div class="btn-container flex flex-row gap-4">
                 <UButton label="Zobacz film o naszej siłowni" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" icon="i-ic-round-play-arrow" />
-                <UButton label="Dowiedz się więcej" class="bg-[#2878FF] text-lg text-[#f1f6ff] font-bold px-6 py-2 hover:bg-[#2060cc]"/>
+                <UButton @click="scrollDown" label="Dowiedz się więcej" class="bg-[#2878FF] text-lg text-[#f1f6ff] font-bold px-6 py-2 hover:bg-[#2060cc]"/>
             </div>
         </div>
 
         <div class="col2 flex flex-col justify-center align-middle">
-            <img src="/public/images/home-banner/Group 27.png" alt="" class="z-99 w-[90%]" >
+            <img src="/public/images/main.png" alt="" class="z-99 w-[85%]" >
         </div>
     </div>
 
@@ -29,7 +29,7 @@
     </div>
 
 
-    <div id=" promo-section" class="my-28 mx-[10%] ">
+    <div id="promo-section" class="my-28 mx-[10%] ">
         <div id="onas" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 w-fit mx-auto tracking-widest rounded-lg ">Wszystko czego szukasz</div>
         <h2 class="font-bold text-4xl text-center py-5">Centrum fitness, Twój profil</h2>
         <p class="text-xl text-center py-1 pb-10">Nie musisz już się zastanawiać nad tym, jak kupisz karnet, gdzie zarejestrujesz się na zajęcia sportowe. Wszystko znajdziesz w naszym systemie</p>
@@ -212,7 +212,7 @@
         <div id="opinion-box" class="flex flex-row gap-[7%] justify-between mt-10 w-[80%] mx-auto">
             <UCard class="w-[30%] mt-12">
                 <template #header>
-                <img src="/public/images/home-opinions/person1.png" alt="">
+                <img src="/public/images/person1.jpg" alt="" class="rounded-full w-14" >
                 </template>
             
                 <p>To miejsce zmieniło moje podejście do treningu. Wcześniej bałem się siłowni, ale tutaj czuję się komfortowo i doceniany. Trenerzy są profesjonalni i zawsze chętni do udzielenia pomocy. </p>
@@ -222,22 +222,22 @@
             </UCard>
             <UCard class="w-[30%] mb-12">
                 <template #header>
-                <img src="/public/images/home-opinions/person2.png" alt="">
+                <img src="/public/images/person2.jpg" alt="" class="rounded-full w-14" >
                 </template>
             
-                <p>Jestem zachwycony tą siłownią! Sprzęt jest nowoczesny, sale są czyste, a trenerzy naprawdę zaangażowani w pomoc swoim podopiecznym. </p>
+                <p>Jestem zachwycona tą siłownią! Sprzęt jest nowoczesny, sale są czyste, a trenerzy naprawdę zaangażowani w pomoc swoim podopiecznym. </p>
                 <template #footer>
-                <p>--- Max Verstappen</p>
+                <p>--- Max Nowakowska</p>
                 </template>
             </UCard>
             <UCard class="w-[30%] mt-12">
                 <template #header>
-                <img src="/public/images/home-opinions/person3.png" alt="">
+                <img src="/public/images/person3.jpg" alt="" class="rounded-full w-14" >
                 </template>
             
                 <p>Siłownia, która przekracza moje oczekiwania! Bardzo miło zaskoczyła mnie atmosfera - panuje tutaj przyjazna rywalizacja i wzajemne wsparcie. </p>
                 <template #footer>
-                <p>--- Magdalena Maria Monika</p>
+                <p>--- Kamil Ślimak</p>
                 </template>
             </UCard>
         </div>
@@ -254,7 +254,7 @@
         <p class="z-10 text-center w-3/5 mx-auto">Dołącz do naszej społeczności i poczuj motywację, która pobudzi Cię do działania każdego dnia. Razem osiągniemy więcej niż kiedykolwiek moglibyśmy osiągnąć sami. </p>
         <div class="z-10 single-story flex flex-row justify-center w-2/3 mx-auto shadow-2xl rounded-[30px] overflow-hidden">
             <div class="col1 w-1/2 z-10">
-                <img src="/public/images/home-history/image 32.png" alt="">
+                <img src="/public/images/last.jpg" alt="">
             </div>
             <div class="col2 w-1/2 flex flex-col justify-center gap-10 pl-9 pr-20 z-10 bg-white">
                 <h5 class="font-bold text-gray-500 text-3xl z-10">--Kamil</h5>
