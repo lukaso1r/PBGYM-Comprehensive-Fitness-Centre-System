@@ -37,19 +37,7 @@ const items = [
     }
 ]
 
-const instructions = [
-    {
-        label: 'Instrukcje *WIP*',
-        icon: 'i-ic-baseline-integration-instructions',
-        defaultOpen: false,
-        slot: 'insctruction',
-        color:'purple',
-        variant: 'soft',
-        content: 'Lorem ipsum dolor sit amet',
-        class: 'py-4 hover:bg-purple-100 '
-        
-    },
-]
+
 
 </script>
 
@@ -76,19 +64,7 @@ const instructions = [
                     Twoje statystyki
                 </UButton>
                
-                <hr/>
-                <UAccordion :items="instructions" color="primary"
-                    variant="soft"
-                    size="sm"
-                    class="my-2"
-                    >
-                    <template #insctruction>
-                        <div>
-                            <p>Tu instrukcje</p>
-
-                        </div>
-                    </template>
-                </UAccordion>  
+                 
                 
             </div>
             

@@ -49,17 +49,6 @@ const items = [
 
 const settings = [
     {
-        label: 'Instrukcje  *WIP*',
-        icon: 'i-ic-baseline-integration-instructions',
-        defaultOpen: false,
-        slot: 'insctruction',
-        color:'gray',
-        variant: 'ghost',
-        content: 'Lorem ipsum dolor sit amet',
-        class: 'py-4 hover:bg-purple-100 '
-        
-    },
-    {
         label: 'Dziennik zdarzeń',
         icon: 'i-ic-baseline-format-align-left',
         defaultOpen: false,
@@ -135,11 +124,6 @@ const settings = [
                     size="sm"
                     class="my-2"
                     >
-                    <template #Konto>
-                        <div>
-                            <p>Tu instrukcje</p>
-                        </div>
-                    </template>
                     <template #sysLogs>
                         <div>
                             <NuxtLink to="/admin-panel/adminLogs" v-if="checkPermission(['ADMIN'])">
