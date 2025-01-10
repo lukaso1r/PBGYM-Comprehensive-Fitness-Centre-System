@@ -7,22 +7,22 @@ import type {  MemberToRegisterData } from '~/types'
 
 const store = useRegisterStore()
 
-const repeatPassword = ref('Test123!')
+const repeatPassword = ref('')
 const memberToRegisterData = useState<MemberToRegisterData>(() => ({
-    email: "test@test.pl",
-    password: "Test123!",
-    name: 'Lukasz',
-    surname: 'Szukasz',
-    birthdate: '2001-09-11',
+    email: "",
+    password: "",
+    name: '',
+    surname: '',
+    birthdate: '',
     gender: '',
-    pesel: '54016842342',
-    phoneNumber: '741852963',
+    pesel: '',
+    phoneNumber: '',
     address: {
-        city: 'Białystok',
-        streetName: 'Genewska',
-        buildingNumber: '21',
-        apartmentNumber: 33,
-        postalCode: '14-123'
+        city: '',
+        streetName: '',
+        buildingNumber: '',
+        apartmentNumber: 0,
+        postalCode: ''
     }
 }))
 
@@ -129,7 +129,7 @@ const validateGender = () => {
                     <UInput v-model="repeatPassword" type="password" placeholder="Powtórzone hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B]" :disabled="!(memberToRegisterData.password===repeatPassword) || !validatePassword() || !validateEmail() ">
+                <UButton type="submit" class="bg-[#203983] hover:bg-[#617F9B] disabled:bg-gray-400" :disabled="!(memberToRegisterData.password===repeatPassword) || !validatePassword() || !validateEmail() || memberToRegisterData.password.length===0 || memberToRegisterData.email.length===0">
                     Zarejestruj
                 </UButton>
             </UForm>
