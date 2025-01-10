@@ -9,7 +9,7 @@
 
     <div class=" flex flex-row z-99 w-[90%] mx-auto align-middle justify-center min-h-[100vh]">
         <div class="btn-container flex flex-col gap-10 w-[65%] pl-20 align-middle justify-center">
-            <h1 class="font-bold text-6xl leading-snug">Miejsce gdzie Twoje <br /> cele stają się rzeczywistością!</h1>
+            <h1 class="font-bold text-5xl leading-snug">Miejsce gdzie Twoje <br /> cele stają się rzeczywistością!</h1>
             <p>Nasza misja to nie tylko budowanie sylwetki, ale również kształtowanie zdrowego stylu życia i pozytywnego nastawienia. </p>
             <div class="btn-container flex flex-row gap-4">
                 <UButton label="Zobacz film o naszej siłowni" class="bg-[#f1f6ff] text-lg text-[#2878FF] font-bold px-6 py-2 hover:bg-[#bed5ff]" icon="i-ic-round-play-arrow" />
@@ -17,8 +17,8 @@
             </div>
         </div>
 
-        <div class="col2 flex flex-col justify-center align-middle">
-            <img src="/public/images/main.png" alt="" class="z-99 w-[85%]" >
+        <div class="col2 flex flex-col justify-center items-center">
+            <img src="/public/images/main.png" alt="" class="z-99 w-[68%]" >
         </div>
     </div>
 

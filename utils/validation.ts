@@ -239,3 +239,11 @@ export const validateGroupClassData = (data: EditableGroupClassData) => {
     
     return errors
 }
+
+// export const validateMemberToRegisterData = (data: MemberToRegisterData) => {
+//     const errors: FormError<string>[] = []
+//     if (!data.email) errors.push({ path: 'email', message: 'Email jest wymagany' })
+//     if (!validateEmail(data.email)) errors.push({ path: 'email', message: 'Email jest nieprawidłowy' })
+
+//     return errors
+// }

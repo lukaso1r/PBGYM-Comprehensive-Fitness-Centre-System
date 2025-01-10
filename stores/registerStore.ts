@@ -30,14 +30,20 @@ export const useRegisterStore = defineStore('register', () => {
             if(data.status === 201) {
                 status.value = "success";
                 console.log("Z register store register(): status", status.value)
+                loginStore.userToLoginCredentials = {
+                    email: memberToRegister.value.email,
+                    password: memberToRegister.value.password
+                };
+                loginStore.login();
+            }else if(data.status === 409){
+                status.value = "conflict";
+                console.log("Z register store register(): status", status.value)
+                toast.add({title: 'Błąd', description: 'Użytkownik o podanym adresie email już istnieje.'});
             }
+            
         }
         await registerMember();
-        loginStore.userToLoginCredentials = {
-            email: memberToRegister.value.email,
-            password: memberToRegister.value.password
-        };
-        loginStore.login();
+        
         clearData();
     };
 

@@ -78,12 +78,6 @@ const items = (row: any) => [
             icon: 'i-heroicons-pencil-square-20-solid',
             to: { name: 'admin-panel-zarzadzanie-klienci-id', params: { id: row.email } }
         }
-    ], 
-    [
-        {
-            label: 'Deaktywuj WIP',
-            icon: 'i-ic-baseline-cancel'
-        }
     ]
 ]
 

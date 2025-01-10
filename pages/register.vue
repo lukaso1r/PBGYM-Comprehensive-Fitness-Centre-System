@@ -54,6 +54,12 @@ const onSubmitFirstForm = () => {
 }
 
 const onSubmitSecondForm = () => {
+    console.log("memberToRegisterData.value",memberToRegisterData.value)
+    console.log("date", date.value)
+    if(!date.value){
+        alert('Podaj datę urodzenia')
+        return
+    }
     store.memberToRegister = {
         ...memberToRegisterData.value,
         birthdate: birthdate.value
@@ -109,17 +115,17 @@ const validateGender = () => {
 
             <!-- TODO: create more optimal validation -->
             <UForm v-if="registerStep===1" id="firstRegisterForm" class="space-y-4" :state="memberToRegisterData" @submit="onSubmitFirstForm">
-                <UFormGroup label="Email" required :error="!validateEmail()">
+                <UFormGroup label="Email" required :error="!validateEmail()" name="email">
                     <p v-show="!validateEmail()" class="text-red-500 py-1 text-sm">Wprowadź prawidłowy adres email</p>
                     <UInput v-model="memberToRegisterData.email" type="text" placeholder="Twój adres email" icon="i-heroicons-envelope" />
                 </UFormGroup>
 
-                <UFormGroup label="Hasło" required :error="!validatePassword()">
+                <UFormGroup label="Hasło" required :error="!validatePassword()" name="password">
                     <p v-show="!validatePassword()" class="text-red-500 py-1 text-sm">Hasło musi mieć conajmniej 8 znaków, w tym liczbę i znak specjalny</p>
                     <UInput v-model="memberToRegisterData.password" type="password" placeholder="Twoje hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
-                <UFormGroup label="Powtórz hasło" required :error="memberToRegisterData.password!==repeatPassword">
+                <UFormGroup label="Powtórz hasło" required :error="memberToRegisterData.password!==repeatPassword" name="repeatPassword">
                     <UInput v-model="repeatPassword" type="password" placeholder="Powtórzone hasło" icon="i-heroicons-lock-closed" />
                 </UFormGroup>
 
@@ -128,13 +134,13 @@ const validateGender = () => {
                 </UButton>
             </UForm>
 
-            <UForm v-if="registerStep===2" id="secondRegisterForm" class="space-y-4 flex flex-col items-start" :state="memberToRegisterData" @submit="onSubmitSecondForm">
+            <UForm v-if="registerStep===2" id="secondRegisterForm" class="space-y-4 flex flex-col items-start" :state="memberToRegisterData" @submit="onSubmitSecondForm" :validate="validateMemberToRegister">
                 <div class="flex flex-row gap-2">
-                    <UFormGroup label="Imię"  required>
+                    <UFormGroup label="Imię" name="name" required >
                         <UInput v-model="memberToRegisterData.name" type="text" placeholder="Twoje Imię"  />
                     </UFormGroup>
                     
-                    <UFormGroup label="Nazwisko"  required>
+                    <UFormGroup label="Nazwisko"  required name="surname">
                         <UInput v-model="memberToRegisterData.surname" type="text" placeholder="Twoje Nazwisko" />
                     </UFormGroup>
 
@@ -164,36 +170,36 @@ const validateGender = () => {
 
                 <div class="flex flex-row gap-2">
                     <!-- TODO: hide arrows -->
-                    <UFormGroup label="Numer telefonu" required>
+                    <UFormGroup label="Numer telefonu" required name="phoneNumber">
                         <UInput v-model="memberToRegisterData.phoneNumber" type="number" placeholder="Twój numer telefonu"  />
                     </UFormGroup>
 
-                    <UFormGroup label="Pesel"  required>
+                    <UFormGroup label="Pesel"  required name="pesel">
                         <UInput v-model="memberToRegisterData.pesel" type="number" placeholder="Twój pesel"  />
                     </UFormGroup>
                 </div>
                 
                 <div class="flex flex-row gap-2">
-                    <UFormGroup label="Dane adresowe"  required>
+                    <UFormGroup label="Dane adresowe"  required name="city">
                         <UInput v-model="memberToRegisterData.address.city" type="text" placeholder="Miasto"  />
                     </UFormGroup>
                     
                     <!-- NOT-TODO: ;)) 🤭🤟-->
-                    <UFormGroup label="&nbsp;" >
+                    <UFormGroup label="&nbsp;" name="streetName">
                         <UInput v-model="memberToRegisterData.address.streetName" type="text" placeholder="Ulica"  />
                     </UFormGroup>
                 </div>    
 
                 <div class="flex flex-row gap-2">
-                    <UFormGroup >
+                    <UFormGroup name="buildingNumber">
                         <UInput v-model="memberToRegisterData.address.buildingNumber" type="text" placeholder="Numer budynku"  />
                     </UFormGroup>
                     
-                    <UFormGroup >
-                        <UInput v-model="memberToRegisterData.address.apartmentNumber" type="text" placeholder="Numer mieszkania"  />
+                    <UFormGroup name="apartmentNumber">
+                        <UInput v-model="memberToRegisterData.address.apartmentNumber" type="text" placeholder="Numer mieszkania"   />
                     </UFormGroup>
                     
-                    <UFormGroup >
+                    <UFormGroup name="postalCode">
                         <UInput v-model="memberToRegisterData.address.postalCode" type="text" placeholder="Kod pocztowy"  />
                     </UFormGroup>
                 </div>

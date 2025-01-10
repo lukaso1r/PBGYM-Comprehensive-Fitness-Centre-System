@@ -321,7 +321,6 @@ const test = () => {
         
 
     </div>
-    membersManagmentStore.memberByEmail.email{{membersManagmentStore.memberByEmail.email}}
 
 </template>
 
